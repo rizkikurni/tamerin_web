@@ -8,6 +8,8 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\UserPreferenceController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
 
 Route::inertia('/', 'welcome')->name('home');
 
@@ -47,3 +49,8 @@ Route::middleware('auth')->group(function (): void {
         Route::patch('/preferences', [UserPreferenceController::class, 'update'])->name('preferences.update');
     });
 });
+
+// untuk tampilan
+Route::get('/dashboard', function () {
+    return Inertia::render('dashboard');
+})->name('dashboard');

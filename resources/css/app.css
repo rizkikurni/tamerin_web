@@ -9,3 +9,88 @@
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 }
+
+:root {
+    --background: #f3f4f6;
+
+    --surface: #ffffff;
+    --surface-muted: #f7f7f8;
+
+    --foreground: #171717;
+    --foreground-secondary: #525252;
+    --muted-foreground: #8a8a8a;
+
+    --border: #e5e7eb;
+    --border-strong: #d4d4d4;
+
+    --primary: #5b7cfa;
+    --primary-foreground: #ffffff;
+    --primary-soft: #e9eeff;
+
+    --secondary: #79b8f3;
+    --secondary-soft: #eef5ff;
+
+    --accent: #62c6c1;
+    --accent-soft: #e9f8f6;
+
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+}
+
+.dark {
+    --background: #111315;
+
+    --surface: #191c1f;
+    --surface-muted: #22262a;
+
+    --foreground: #f5f5f5;
+    --foreground-secondary: #c8c8c8;
+    --muted-foreground: #8f9499;
+
+    --border: #2c3136;
+    --border-strong: #3a4046;
+
+    --primary-foreground: #ffffff;
+
+    --primary-soft: #252c4a;
+    --secondary-soft: #23303c;
+    --accent-soft: #203735;
+}
+
+@theme inline {
+    --color-background: var(--background);
+
+    --color-surface: var(--surface);
+    --color-surface-muted: var(--surface-muted);
+
+    --color-foreground: var(--foreground);
+    --color-foreground-secondary: var(--foreground-secondary);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-border: var(--border);
+    --color-border-strong: var(--border-strong);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary-soft: var(--primary-soft);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-soft: var(--secondary-soft);
+
+    --color-accent: var(--accent);
+    --color-accent-soft: var(--accent-soft);
+
+    --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-danger: var(--danger);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+
+    transition:
+        background-color 200ms ease,
+        color 200ms ease;
+}
