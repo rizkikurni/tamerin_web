@@ -58,6 +58,31 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'status' => fn (): ?string => session('status'),
             ],
+            'theme' => function () use ($request): ?array {
+                $user = $request->user();
+
+                if (! $user instanceof User) {
+                    return null;
+                }
+
+                $preference = $user->preference;
+
+                if (! $preference) {
+                    return null;
+                }
+
+                $hasCustom = $preference->primary_hex || $preference->secondary_hex || $preference->accent_hex;
+
+                return [
+                    'mode' => $preference->theme_mode->value,
+                    'preset' => $preference->theme_preset->value,
+                    'customColors' => $hasCustom ? [
+                        'primary' => $preference->primary_hex ?? '#5B7CFA',
+                        'secondary' => $preference->secondary_hex ?? '#79B8F3',
+                        'accent' => $preference->accent_hex ?? '#62C6C1',
+                    ] : null,
+                ];
+            },
         ];
     }
 }

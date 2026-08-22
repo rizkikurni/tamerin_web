@@ -10,7 +10,6 @@ use App\Http\Controllers\Settings\UserPreferenceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-
 Route::inertia('/', 'welcome')->name('home');
 
 Route::middleware('guest')->group(function (): void {

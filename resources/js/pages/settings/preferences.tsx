@@ -1,111 +1,54 @@
-import { Form, Head, usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 
-import { update } from '@/actions/App/Http/Controllers/Settings/UserPreferenceController';
-import {
-    SelectField,
-    StatusMessage,
-    SubmitButton,
-    TextField,
-} from '@/components/form-controls';
-import SettingsLayout from '@/layouts/settings-layout';
+import ThemeSettings from '@/components/settings/theme-settings';
+import AppLayout from '@/layouts/app-layout';
 
-type PreferencesData = {
-    theme_mode: string;
-    theme_preset: string;
-    primary_hex: string | null;
-    secondary_hex: string | null;
-    accent_hex: string | null;
-    timezone: string;
-};
+interface PreferencesPageProps {
+    preferences?: {
+        theme_mode: string;
+        theme_preset: string;
+        primary_hex: string | null;
+        secondary_hex: string | null;
+        accent_hex: string | null;
+        timezone: string;
+    };
+}
 
-export default function Preferences({
-    preferences,
-    themeModes,
-    themePresets,
-}: {
-    preferences: PreferencesData;
-    themeModes: string[];
-    themePresets: string[];
-}) {
+export default function Preferences({ preferences }: PreferencesPageProps) {
     const { flash } = usePage().props;
 
     return (
-        <SettingsLayout
+        <AppLayout
             title="Preferensi"
             description="Atur tampilan dan zona waktu akun Anda."
+            breadcrumbs={[
+                { label: 'Pengaturan', href: '/settings/profile' },
+                { label: 'Preferensi' },
+            ]}
+            currentPath="/settings"
         >
             <Head title="Preferensi" />
-            <StatusMessage message={flash.status} />
 
-            <Form {...update.form()} className="grid gap-4">
-                {({ errors, processing }) => (
-                    <>
-                        <SelectField
-                            label="Mode tema"
-                            name="theme_mode"
-                            defaultValue={preferences.theme_mode}
-                            required
-                            error={errors.theme_mode}
-                        >
-                            {themeModes.map((mode) => (
-                                <option key={mode} value={mode}>
-                                    {mode}
-                                </option>
-                            ))}
-                        </SelectField>
-                        <SelectField
-                            label="Preset tema"
-                            name="theme_preset"
-                            defaultValue={preferences.theme_preset}
-                            required
-                            error={errors.theme_preset}
-                        >
-                            {themePresets.map((preset) => (
-                                <option key={preset} value={preset}>
-                                    {preset}
-                                </option>
-                            ))}
-                        </SelectField>
-
-                        <div className="grid gap-4 sm:grid-cols-3">
-                            <TextField
-                                label="Warna utama"
-                                name="primary_hex"
-                                placeholder="#0284C7"
-                                defaultValue={preferences.primary_hex ?? ''}
-                                error={errors.primary_hex}
-                            />
-                            <TextField
-                                label="Warna kedua"
-                                name="secondary_hex"
-                                placeholder="#0F172A"
-                                defaultValue={preferences.secondary_hex ?? ''}
-                                error={errors.secondary_hex}
-                            />
-                            <TextField
-                                label="Warna aksen"
-                                name="accent_hex"
-                                placeholder="#10B981"
-                                defaultValue={preferences.accent_hex ?? ''}
-                                error={errors.accent_hex}
-                            />
-                        </div>
-
-                        <TextField
-                            label="Zona waktu"
-                            name="timezone"
-                            defaultValue={preferences.timezone}
-                            placeholder="Asia/Jakarta"
-                            required
-                            error={errors.timezone}
-                        />
-
-                        <SubmitButton processing={processing}>
-                            Simpan preferensi
-                        </SubmitButton>
-                    </>
+            <div className="mx-auto max-w-3xl space-y-4">
+                {flash?.status === 'preferences-updated' && (
+                    <div className="rounded-2xl bg-success/10 p-4 text-sm font-medium text-success">
+                        Preferensi tema berhasil disimpan ke database.
+                    </div>
                 )}
-            </Form>
-        </SettingsLayout>
+
+                <div className="rounded-3xl border border-border bg-surface p-6">
+                    <div className="mb-6">
+                        <h2 className="text-lg font-semibold text-foreground">
+                            Tampilan
+                        </h2>
+                        <p className="mt-0.5 text-sm text-muted-foreground">
+                            Pilih mode, tema, dan warna yang nyaman untukmu.
+                        </p>
+                    </div>
+
+                    <ThemeSettings />
+                </div>
+            </div>
+        </AppLayout>
     );
 }

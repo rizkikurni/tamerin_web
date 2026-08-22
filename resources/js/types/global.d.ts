@@ -1,4 +1,5 @@
 import type { Auth } from '@/types/auth';
+import type { ThemePreferences } from '@/types/theme';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +16,7 @@ declare module '@inertiajs/core' {
             flash: {
                 status: string | null;
             };
+            theme?: ThemePreferences | null;
             [key: string]: unknown;
         };
     }

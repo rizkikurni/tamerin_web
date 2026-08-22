@@ -1,29 +1,49 @@
+import type { ReactNode } from 'react';
+
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
 interface SummaryCardProps {
     title: string;
     value: string;
-    description?: string;
+    comparison?: string;
+    icon?: ReactNode;
+    iconBg?: string;
 }
 
 export default function SummaryCard({
     title,
     value,
-    description,
+    comparison,
+    icon,
+    iconBg = 'bg-primary-soft',
 }: SummaryCardProps) {
     return (
-        <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
-                {title}
-            </p>
+        <Card className="transition-shadow duration-200 hover:shadow-md">
+            <CardContent className="flex items-start gap-4">
+                {icon && (
+                    <div
+                        className={cn(
+                            'flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl',
+                            iconBg,
+                        )}
+                    >
+                        {icon}
+                    </div>
+                )}
 
-            <p className="mt-2 text-2xl font-semibold">
-                {value}
-            </p>
-
-            {description && (
-                <p className="mt-1 text-sm text-gray-500">
-                    {description}
-                </p>
-            )}
-        </div>
+                <div className="min-w-0 flex-1">
+                    <p className="text-sm text-muted-foreground">{title}</p>
+                    <p className="mt-1 text-xl font-semibold text-foreground">
+                        {value}
+                    </p>
+                    {comparison && (
+                        <p className="mt-0.5 text-xs text-muted-foreground">
+                            {comparison}
+                        </p>
+                    )}
+                </div>
+            </CardContent>
+        </Card>
     );
 }
