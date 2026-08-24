@@ -34,7 +34,7 @@ export default function ErrorState({
                 )}
             </div>
 
-            <h3 className="mt-3 text-sm font-semibold text-foreground">
+            <h3 className="mt-3 text-sm font-medium text-foreground">
                 {title}
             </h3>
 

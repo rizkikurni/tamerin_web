@@ -61,10 +61,10 @@ export default function NetWorthCard() {
     return (
         <Card variant="soft">
             <CardHeader>
-                <h3 className="text-base font-semibold text-foreground">
+                <h3 className="text-base font-medium text-foreground">
                     Kekayaan Bersih
                 </h3>
-                <p className="mt-2 text-2xl font-bold text-foreground">
+                <p className="mt-2 text-2xl font-medium text-foreground">
                     {formatRupiah(netWorthData.total)}
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">

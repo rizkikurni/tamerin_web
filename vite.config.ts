@@ -13,7 +13,7 @@ export default defineConfig({
             refresh: true,
             fonts: [
                 bunny('Poppins', {
-                    weights: [400, 500, 600, 700],
+                    weights: [300, 400, 500],
                 }),
             ],
         }),

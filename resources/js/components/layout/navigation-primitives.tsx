@@ -1,0 +1,272 @@
+import { PiggyBank } from 'lucide-react';
+import type {
+    AnchorHTMLAttributes,
+    ButtonHTMLAttributes,
+    ReactNode,
+} from 'react';
+
+import { cn } from '@/lib/utils';
+import { dashboard } from '@/routes';
+
+import type { NavigationItem } from './navigation-config';
+
+interface BrandLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+    iconClassName?: string;
+}
+
+export function BrandLink({
+    className,
+    iconClassName,
+    ...props
+}: BrandLinkProps) {
+    return (
+        <a
+            href={dashboard.url()}
+            aria-label="Tamerin"
+            className={cn(
+                'flex h-11 w-11 items-center justify-center rounded-full',
+                'border-2 border-primary/40 bg-primary text-primary-foreground',
+                'shadow-[0_2px_4px_rgba(15,23,42,0.10)]',
+                'transition-all duration-200 ease-out',
+                'hover:-translate-y-[1px] hover:brightness-105',
+                'hover:shadow-[0_6px_12px_rgba(15,23,42,0.16)]',
+                className,
+            )}
+            {...props}
+        >
+            <PiggyBank className={cn('h-5 w-5', iconClassName)} />
+        </a>
+    );
+}
+
+interface HeaderActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    icon: ReactNode;
+    label: string;
+}
+
+export function HeaderActionButton({
+    icon,
+    label,
+    className,
+    ...props
+}: HeaderActionButtonProps) {
+    return (
+        <button
+            type="button"
+            aria-label={label}
+            title={label}
+            className={cn(
+                'flex h-11 w-11 items-center justify-center rounded-full',
+                'border-[1.5px] border-x-2 border-border-strong/70',
+                'border-x-border-strong/70 bg-background/80',
+                'text-muted-foreground shadow-[0_1px_3px_rgba(15,23,42,0.04)]',
+                'transition-all duration-200',
+                'hover:-translate-y-[1px] hover:border-white/80',
+                'hover:border-x-primary/30 hover:text-foreground',
+                'hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+                'hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.04)]',
+                className,
+            )}
+            {...props}
+        >
+            {icon}
+        </button>
+    );
+}
+
+interface NavigationLinkProps {
+    item: NavigationItem;
+    active: boolean;
+}
+
+function getNavigationIconClass(active: boolean, className?: string): string {
+    return cn(
+        'group relative flex h-11 w-11 items-center justify-center',
+        'rounded-full border-2 transition-all duration-200 ease-out',
+        active
+            ? [
+                  '-translate-y-[1px] border-white/80 border-x-primary/30',
+                  'bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+                  'text-primary',
+                  'shadow-[0_4px_10px_rgba(15,23,42,0.10),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.05)]',
+              ]
+            : [
+                  'border-border-strong/70 bg-background/80',
+                  'text-muted-foreground',
+                  'shadow-[0_1px_3px_rgba(15,23,42,0.04)]',
+                  'hover:-translate-y-[1px] hover:border-white/80',
+                  'hover:border-x-primary/30 hover:text-primary',
+                  'hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+                  'hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.04)]',
+              ],
+        className,
+    );
+}
+
+interface NavigationTooltipProps {
+    label: string;
+    placement: 'right' | 'top';
+}
+
+function NavigationTooltip({ label, placement }: NavigationTooltipProps) {
+    return (
+        <span
+            aria-hidden="true"
+            className={cn(
+                'pointer-events-none absolute z-50 whitespace-nowrap',
+                'rounded-xl border border-border-strong/60 bg-surface/95',
+                'px-3 py-2 text-xs font-normal text-foreground',
+                'opacity-0 shadow-[0_6px_18px_rgba(15,23,42,0.12)]',
+                'backdrop-blur-xl transition-all duration-150',
+                placement === 'right'
+                    ? [
+                          'top-1/2 left-full ml-3 translate-x-1 -translate-y-1/2',
+                          'group-hover:translate-x-0 group-hover:opacity-100',
+                          'group-focus-visible:translate-x-0 group-focus-visible:opacity-100',
+                      ]
+                    : [
+                          'bottom-full left-1/2 mb-3 -translate-x-1/2 translate-y-1',
+                          'group-hover:translate-y-0 group-hover:opacity-100',
+                          'group-focus-visible:translate-y-0 group-focus-visible:opacity-100',
+                      ],
+            )}
+        >
+            {label}
+        </span>
+    );
+}
+
+export function HeaderNavigationLink({ item, active }: NavigationLinkProps) {
+    const Icon = item.icon;
+
+    return (
+        <a
+            href={item.href}
+            aria-current={active ? 'page' : undefined}
+            className={cn(
+                'inline-flex h-11 items-center gap-2 rounded-full px-4',
+                'border border-transparent text-sm font-normal',
+                'transition-all duration-200',
+                active
+                    ? [
+                          'relative -translate-y-[1px] overflow-hidden',
+                          'border-x-2 border-white/80 border-x-primary/30',
+                          'bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+                          'text-foreground',
+                          'shadow-[0_4px_10px_rgba(15,23,42,0.10),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.05)]',
+                      ]
+                    : [
+                          'border-2 border-border-strong/70',
+                          'bg-background/80 text-foreground',
+                          'shadow-[0_1px_3px_rgba(15,23,42,0.04)]',
+                          'hover:-translate-y-[1px] hover:border-x-primary/30',
+                          'hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+                          'hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1)]',
+                      ],
+            )}
+        >
+            <Icon className="h-4 w-4" />
+            {item.label}
+        </a>
+    );
+}
+
+export function SidebarNavigationLink({ item, active }: NavigationLinkProps) {
+    const Icon = item.icon;
+
+    return (
+        <a
+            href={item.href}
+            aria-label={item.label}
+            aria-current={active ? 'page' : undefined}
+            className={getNavigationIconClass(active)}
+        >
+            <Icon className="h-[18px] w-[18px]" />
+            <NavigationTooltip label={item.label} placement="right" />
+        </a>
+    );
+}
+
+export function MobileNavigationLink({ item, active }: NavigationLinkProps) {
+    const Icon = item.icon;
+
+    return (
+        <a
+            href={item.href}
+            aria-label={item.label}
+            aria-current={active ? 'page' : undefined}
+            className={getNavigationIconClass(active, 'justify-self-center')}
+        >
+            <Icon className="h-[18px] w-[18px]" />
+            <NavigationTooltip label={item.label} placement="top" />
+        </a>
+    );
+}
+
+interface MobileMenuToggleProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    icon: ReactNode;
+    openIcon: ReactNode;
+    label: string;
+    open: boolean;
+}
+
+export function MobileMenuToggle({
+    icon,
+    openIcon,
+    label,
+    open,
+    className,
+    ...props
+}: MobileMenuToggleProps) {
+    return (
+        <button
+            type="button"
+            aria-label={label}
+            aria-expanded={open}
+            className={getNavigationIconClass(
+                open,
+                cn('justify-self-center', className),
+            )}
+            {...props}
+        >
+            {open ? openIcon : icon}
+            <NavigationTooltip label={label} placement="top" />
+        </button>
+    );
+}
+
+interface MobilePrimaryActionProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    icon: ReactNode;
+    label: string;
+}
+
+export function MobilePrimaryAction({
+    icon,
+    label,
+    className,
+    ...props
+}: MobilePrimaryActionProps) {
+    return (
+        <button
+            type="button"
+            aria-label={label}
+            className={cn(
+                'group relative flex h-14 w-14 -translate-y-3 items-center justify-center',
+                'justify-self-center rounded-full border-2 border-primary/40',
+                'bg-primary text-primary-foreground',
+                'shadow-[0_7px_16px_rgba(15,23,42,0.18)]',
+                'transition-all duration-200 ease-out',
+                'hover:-translate-y-4 hover:border-primary/60',
+                'hover:brightness-105',
+                'hover:shadow-[0_10px_20px_rgba(15,23,42,0.22)]',
+                'active:-translate-y-2.5',
+                'active:shadow-[0_4px_10px_rgba(15,23,42,0.14)]',
+                className,
+            )}
+            {...props}
+        >
+            {icon}
+            <NavigationTooltip label={label} placement="top" />
+        </button>
+    );
+}

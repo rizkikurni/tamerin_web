@@ -110,7 +110,7 @@ function ColorInput({ label, value, onChange }: ColorInputProps) {
                     className={cn(
                         'h-9 flex-1 rounded-xl border border-border bg-surface px-3',
                         'text-sm text-foreground',
-                        'outline-none transition-colors',
+                        'transition-colors outline-none',
                         'focus:border-primary focus:ring-2 focus:ring-primary/20',
                     )}
                 />
@@ -124,15 +124,13 @@ function ColorInput({ label, value, onChange }: ColorInputProps) {
 function LivePreview() {
     return (
         <div className="space-y-3">
-            <p className="text-xs font-medium text-muted-foreground">
-                Preview
-            </p>
+            <p className="text-xs font-medium text-muted-foreground">Preview</p>
 
             <div className="rounded-2xl border border-border bg-background p-4">
                 {/* Mini dashboard preview */}
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-foreground">
+                        <span className="text-sm font-medium text-foreground">
                             Dashboard
                         </span>
                         <Button size="sm">Tombol Primary</Button>
@@ -144,7 +142,7 @@ function LivePreview() {
                                 <p className="text-xs text-muted-foreground">
                                     Total Saldo
                                 </p>
-                                <p className="mt-1 text-sm font-semibold text-foreground">
+                                <p className="mt-1 text-sm font-medium text-foreground">
                                     Rp12.500.000
                                 </p>
                             </CardContent>
@@ -155,7 +153,7 @@ function LivePreview() {
                                 <p className="text-xs text-muted-foreground">
                                     Pemasukan
                                 </p>
-                                <p className="mt-1 text-sm font-semibold text-success">
+                                <p className="mt-1 text-sm font-medium text-success">
                                     Rp5.000.000
                                 </p>
                             </CardContent>
@@ -286,7 +284,7 @@ export default function ThemeSettings() {
         <div className="space-y-6">
             {/* Mode Selector */}
             <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className="text-sm font-medium text-foreground">
                     Mode Tampilan
                 </h3>
 
@@ -336,7 +334,7 @@ export default function ThemeSettings() {
                                 </div>
 
                                 {isActive && (
-                                    <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
+                                    <div className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
                                         <Check className="h-3 w-3 text-primary-foreground" />
                                     </div>
                                 )}
@@ -348,7 +346,7 @@ export default function ThemeSettings() {
 
             {/* Preset Selector */}
             <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className="text-sm font-medium text-foreground">
                     Tema Warna
                 </h3>
 
@@ -360,9 +358,7 @@ export default function ThemeSettings() {
                             <button
                                 key={option.value}
                                 type="button"
-                                onClick={() =>
-                                    handlePresetChange(option.value)
-                                }
+                                onClick={() => handlePresetChange(option.value)}
                                 className={cn(
                                     'relative flex flex-col items-center gap-2.5 rounded-2xl border p-4',
                                     'transition-all duration-200',
@@ -408,7 +404,7 @@ export default function ThemeSettings() {
                                 </span>
 
                                 {isActive && (
-                                    <div className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary">
+                                    <div className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary">
                                         <Check className="h-2.5 w-2.5 text-primary-foreground" />
                                     </div>
                                 )}
@@ -421,7 +417,7 @@ export default function ThemeSettings() {
             {/* Custom Colors — only shown when custom preset selected */}
             {preset === 'custom' && (
                 <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-foreground">
+                    <h3 className="text-sm font-medium text-foreground">
                         Warna Kustom
                     </h3>
                     <p className="text-xs text-muted-foreground">
@@ -454,11 +450,7 @@ export default function ThemeSettings() {
 
             {/* Actions: Save & Reset */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleReset}
-                >
+                <Button variant="ghost" size="sm" onClick={handleReset}>
                     <RotateCcw className="h-4 w-4" />
                     Reset ke default
                 </Button>

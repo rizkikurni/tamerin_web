@@ -1,8 +1,4 @@
-import {
-    ArrowDownLeft,
-    ArrowLeftRight,
-    ArrowUpRight,
-} from 'lucide-react';
+import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight } from 'lucide-react';
 
 import Badge from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -130,7 +126,7 @@ export default function RecentTransactions() {
         <Card variant="solid">
             <CardHeader>
                 <div className="flex items-center justify-between">
-                    <h3 className="text-base font-semibold text-foreground">
+                    <h3 className="text-base font-medium text-foreground">
                         Transaksi Terakhir
                     </h3>
                     <a
@@ -151,10 +147,10 @@ export default function RecentTransactions() {
                                 <th className="pb-2.5 font-medium">Tanggal</th>
                                 <th className="pb-2.5 font-medium">Kategori</th>
                                 <th className="pb-2.5 font-medium">Akun</th>
-                                <th className="pb-2.5 font-medium text-right">
+                                <th className="pb-2.5 text-right font-medium">
                                     Nominal
                                 </th>
-                                <th className="pb-2.5 font-medium text-right">
+                                <th className="pb-2.5 text-right font-medium">
                                     Status
                                 </th>
                             </tr>

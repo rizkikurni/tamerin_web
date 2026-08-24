@@ -73,7 +73,7 @@ export function SubmitButton({
         <button
             type="submit"
             disabled={processing}
-            className="rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
             {...props}
         >
             {processing ? 'Memproses...' : children}

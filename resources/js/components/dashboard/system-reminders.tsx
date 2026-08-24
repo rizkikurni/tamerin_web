@@ -87,11 +87,11 @@ export default function SystemReminders() {
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <h3 className="text-base font-semibold text-foreground">
+                        <h3 className="text-base font-medium text-foreground">
                             Pengingat
                         </h3>
                         {reminders.length > 0 && (
-                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-danger text-[10px] font-bold text-white">
+                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-danger text-[10px] font-medium text-white">
                                 {reminders.length}
                             </span>
                         )}
@@ -121,10 +121,7 @@ export default function SystemReminders() {
                                 )}
                             >
                                 <Icon
-                                    className={cn(
-                                        'h-4 w-4',
-                                        config.iconClass,
-                                    )}
+                                    className={cn('h-4 w-4', config.iconClass)}
                                 />
                             </div>
 

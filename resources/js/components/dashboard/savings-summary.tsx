@@ -40,7 +40,7 @@ export default function SavingsSummary() {
         <Card variant="glass">
             <CardHeader>
                 <div className="flex items-center justify-between">
-                    <h3 className="text-base font-semibold text-foreground">
+                    <h3 className="text-base font-medium text-foreground">
                         Target Tabungan
                     </h3>
                     <a
@@ -75,7 +75,7 @@ export default function SavingsSummary() {
                                     </div>
                                 </div>
 
-                                <span className="text-sm font-semibold text-foreground">
+                                <span className="text-sm font-medium text-foreground">
                                     {percentage}%
                                 </span>
                             </div>

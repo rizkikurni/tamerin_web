@@ -69,10 +69,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
                 {label}
             </p>
             {payload.map((entry) => (
-                <p
-                    key={entry.name}
-                    className="text-xs text-muted-foreground"
-                >
+                <p key={entry.name} className="text-xs text-muted-foreground">
                     <span
                         className="mr-1.5 inline-block h-2 w-2 rounded-full"
                         style={{ backgroundColor: entry.color }}
@@ -97,7 +94,7 @@ export default function CashFlowChart() {
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <h3 className="text-base font-semibold text-foreground">
+                        <h3 className="text-base font-medium text-foreground">
                             Arus Kas
                         </h3>
                         <p className="mt-0.5 text-xs text-muted-foreground">

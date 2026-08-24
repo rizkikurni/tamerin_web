@@ -34,7 +34,7 @@ export default function SummaryCard({
 
                 <div className="min-w-0 flex-1">
                     <p className="text-sm text-muted-foreground">{title}</p>
-                    <p className="mt-1 text-xl font-semibold text-foreground">
+                    <p className="mt-1 text-xl font-medium text-foreground">
                         {value}
                     </p>
                     {comparison && (

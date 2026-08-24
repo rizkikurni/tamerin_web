@@ -1,59 +1,16 @@
+import { X } from 'lucide-react';
 import { useState } from 'react';
 
+import MobileMoreMenu from './mobile-more-menu';
 import {
-    CreditCard,
-    Home,
-    Menu,
-    Plus,
-    Wallet,
-    X,
-    BarChart3,
-    Bell,
-    Landmark,
-    Package,
-    PiggyBank,
-    Settings,
-    Tag,
-    Target,
-    TrendingUp,
-    HandCoins,
-} from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
-
-import { cn } from '@/lib/utils';
-
-interface BottomTab {
-    label: string;
-    icon: LucideIcon;
-    href: string;
-    isFab?: boolean;
-}
-
-const bottomTabs: BottomTab[] = [
-    { label: 'Dashboard', icon: Home, href: '/dashboard' },
-    { label: 'Transaksi', icon: CreditCard, href: '/transactions' },
-    { label: 'Tambah', icon: Plus, href: '#add-transaction', isFab: true },
-    { label: 'Budget', icon: Wallet, href: '/budgets' },
-    { label: 'Lainnya', icon: Menu, href: '#more' },
-];
-
-interface MoreMenuItem {
-    label: string;
-    icon: LucideIcon;
-    href: string;
-}
-
-const moreMenuItems: MoreMenuItem[] = [
-    { label: 'Akun Keuangan', icon: Landmark, href: '/accounts' },
-    { label: 'Kategori', icon: Tag, href: '/categories' },
-    { label: 'Target Tabungan', icon: Target, href: '/savings' },
-    { label: 'Investasi', icon: TrendingUp, href: '/investments' },
-    { label: 'Aset', icon: Package, href: '/assets' },
-    { label: 'Utang & Piutang', icon: HandCoins, href: '/debts' },
-    { label: 'Pengingat', icon: Bell, href: '/reminders' },
-    { label: 'Laporan', icon: BarChart3, href: '/reports' },
-    { label: 'Pengaturan', icon: Settings, href: '/settings/profile' },
-];
+    isNavigationPathActive,
+    mobileBottomNavigationItems,
+} from './navigation-config';
+import {
+    MobileMenuToggle,
+    MobileNavigationLink,
+    MobilePrimaryAction,
+} from './navigation-primitives';
 
 interface MobileNavigationProps {
     currentPath?: string;
@@ -64,141 +21,61 @@ export default function MobileNavigation({
 }: MobileNavigationProps) {
     const [moreOpen, setMoreOpen] = useState(false);
 
-    function isActive(href: string): boolean {
-        if (href.startsWith('#')) return false;
-        return currentPath.startsWith(href);
-    }
-
     return (
         <>
-            {/* Bottom Sheet Overlay */}
-            {moreOpen && (
-                <div
-                    className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-                    onClick={() => setMoreOpen(false)}
-                    aria-hidden="true"
-                />
-            )}
+            <MobileMoreMenu
+                currentPath={currentPath}
+                open={moreOpen}
+                onClose={() => setMoreOpen(false)}
+            />
 
-            {/* Bottom Sheet */}
-            <div
-                className={cn(
-                    'fixed inset-x-0 bottom-0 z-50 lg:hidden',
-                    'transform transition-transform duration-300 ease-in-out',
-                    moreOpen ? 'translate-y-0' : 'translate-y-full',
-                )}
-            >
-                <div className="mx-2 mb-[calc(4rem+env(safe-area-inset-bottom)+0.5rem)] rounded-2xl border border-border bg-surface p-4 shadow-xl">
-                    <div className="mb-3 flex items-center justify-between">
-                        <h3 className="text-sm font-semibold text-foreground">
-                            Menu Lainnya
-                        </h3>
-                        <button
-                            type="button"
-                            onClick={() => setMoreOpen(false)}
-                            className="rounded-full p-1 text-muted-foreground transition-colors hover:bg-surface-muted hover:text-foreground"
-                            aria-label="Tutup menu"
-                        >
-                            <X className="h-5 w-5" />
-                        </button>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-2">
-                        {moreMenuItems.map((item) => {
-                            const Icon = item.icon;
-                            const active = isActive(item.href);
+            <nav className="fixed right-3 bottom-[calc(env(safe-area-inset-bottom)+12px)] left-3 z-50 h-16 rounded-[22px] border border-white/70 bg-surface/90 px-2 shadow-[0_8px_24px_rgba(15,23,42,0.10),inset_0_1px_0_rgba(255,255,255,0.90),inset_0_-1px_0_rgba(15,23,42,0.03)] backdrop-blur-xl lg:hidden">
+                <div className="grid h-full grid-cols-5 items-center">
+                    {mobileBottomNavigationItems.map((navigationItem) => {
+                        if (navigationItem.kind === 'action') {
+                            const Icon = navigationItem.icon;
 
                             return (
-                                <a
-                                    key={item.label}
-                                    href={item.href}
-                                    className={cn(
-                                        'flex flex-col items-center gap-1.5 rounded-xl px-2 py-3',
-                                        'text-xs font-medium transition-colors',
-                                        active
-                                            ? 'bg-primary-soft text-primary'
-                                            : 'text-foreground-secondary hover:bg-surface-muted',
-                                    )}
-                                >
-                                    <Icon className="h-5 w-5" />
-                                    <span className="text-center leading-tight">
-                                        {item.label}
-                                    </span>
-                                </a>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-
-            {/* Bottom Tab Bar */}
-            <nav
-                className={cn(
-                    'fixed inset-x-0 bottom-0 z-50 lg:hidden',
-                    'border-t border-border bg-surface',
-                    'pb-[env(safe-area-inset-bottom)]',
-                )}
-            >
-                <div className="flex items-center justify-around px-2 py-1.5">
-                    {bottomTabs.map((tab) => {
-                        const Icon = tab.icon;
-                        const active = isActive(tab.href);
-
-                        if (tab.isFab) {
-                            return (
-                                <button
-                                    key={tab.label}
-                                    type="button"
-                                    className={cn(
-                                        'flex h-12 w-12 items-center justify-center',
-                                        'rounded-full bg-primary text-primary-foreground',
-                                        'shadow-md transition-all duration-200',
-                                        'hover:opacity-90 active:scale-95',
-                                        '-mt-4',
-                                    )}
-                                    aria-label={tab.label}
-                                >
-                                    <Icon className="h-6 w-6" />
-                                </button>
+                                <MobilePrimaryAction
+                                    key={navigationItem.label}
+                                    label={navigationItem.label}
+                                    icon={<Icon className="h-7 w-7" />}
+                                />
                             );
                         }
 
-                        if (tab.href === '#more') {
+                        if (navigationItem.kind === 'menu') {
+                            const Icon = navigationItem.icon;
+
                             return (
-                                <button
-                                    key={tab.label}
-                                    type="button"
-                                    onClick={() => setMoreOpen(!moreOpen)}
-                                    className={cn(
-                                        'flex flex-col items-center gap-0.5 px-3 py-1.5',
-                                        'text-[10px] font-medium transition-colors',
-                                        moreOpen
-                                            ? 'text-primary'
-                                            : 'text-muted-foreground',
-                                    )}
-                                    aria-label="Menu lainnya"
-                                >
-                                    <Icon className="h-5 w-5" />
-                                    <span>{tab.label}</span>
-                                </button>
+                                <MobileMenuToggle
+                                    key={navigationItem.label}
+                                    label={navigationItem.label}
+                                    open={moreOpen}
+                                    onClick={() =>
+                                        setMoreOpen(
+                                            (currentOpen) => !currentOpen,
+                                        )
+                                    }
+                                    icon={
+                                        <Icon className="h-[18px] w-[18px]" />
+                                    }
+                                    openIcon={
+                                        <X className="h-[18px] w-[18px]" />
+                                    }
+                                />
                             );
                         }
 
                         return (
-                            <a
-                                key={tab.label}
-                                href={tab.href}
-                                className={cn(
-                                    'flex flex-col items-center gap-0.5 px-3 py-1.5',
-                                    'text-[10px] font-medium transition-colors',
-                                    active
-                                        ? 'text-primary'
-                                        : 'text-muted-foreground',
+                            <MobileNavigationLink
+                                key={navigationItem.item.label}
+                                item={navigationItem.item}
+                                active={isNavigationPathActive(
+                                    currentPath,
+                                    navigationItem.item.href,
                                 )}
-                            >
-                                <Icon className="h-5 w-5" />
-                                <span>{tab.label}</span>
-                            </a>
+                            />
                         );
                     })}
                 </div>

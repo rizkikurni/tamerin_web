@@ -49,7 +49,7 @@ export default function InvestmentSummary() {
         <Card variant="glass">
             <CardHeader>
                 <div className="flex items-center justify-between">
-                    <h3 className="text-base font-semibold text-foreground">
+                    <h3 className="text-base font-medium text-foreground">
                         Investasi
                     </h3>
                     <a
@@ -59,7 +59,7 @@ export default function InvestmentSummary() {
                         Lihat semua
                     </a>
                 </div>
-                <p className="mt-1 text-lg font-semibold text-foreground">
+                <p className="mt-1 text-lg font-medium text-foreground">
                     {formatRupiah(totalValue)}
                 </p>
             </CardHeader>

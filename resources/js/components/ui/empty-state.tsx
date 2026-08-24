@@ -35,7 +35,7 @@ export default function EmptyState({
                 )}
             </div>
 
-            <h3 className="mt-4 text-base font-semibold text-foreground">
+            <h3 className="mt-4 text-base font-medium text-foreground">
                 {title}
             </h3>
 
@@ -49,7 +49,7 @@ export default function EmptyState({
                 <ol className="mt-4 space-y-1.5 text-left text-sm text-muted-foreground">
                     {steps.map((step, index) => (
                         <li key={step} className="flex items-start gap-2">
-                            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-semibold text-primary">
+                            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-medium text-primary">
                                 {index + 1}
                             </span>
                             <span>{step}</span>
@@ -91,7 +91,7 @@ export function NoResultState({
                 <FolderOpen className="h-6 w-6 text-muted-foreground" />
             </div>
 
-            <h3 className="mt-3 text-sm font-semibold text-foreground">
+            <h3 className="mt-3 text-sm font-medium text-foreground">
                 {title}
             </h3>
 

@@ -25,7 +25,7 @@ export default function SettingsLayout({
                     <div>
                         <Link
                             href={home()}
-                            className="text-lg font-bold text-sky-700 dark:text-sky-400"
+                            className="text-lg font-medium text-sky-700 dark:text-sky-400"
                         >
                             Tamerin
                         </Link>
@@ -71,7 +71,7 @@ export default function SettingsLayout({
 
                     <section className="grid content-start gap-6 rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-900">
                         <div className="grid gap-1">
-                            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+                            <h1 className="text-2xl font-medium text-slate-900 dark:text-white">
                                 {title}
                             </h1>
                             <p className="text-sm text-slate-600 dark:text-slate-400">

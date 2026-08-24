@@ -1,6 +1,5 @@
-import { useState } from 'react';
-
 import { CalendarDays, ChevronDown, FileText, Plus } from 'lucide-react';
+import { useState } from 'react';
 
 import Button from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -34,18 +33,9 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
 
     return (
         <div className="space-y-4">
-            {/* Greeting */}
-            {/* <div className="space-y-2 text-2xl">
-                <p className="font-thin">Poppins Thin 100</p>
-                <p className="font-extralight">Poppins ExtraLight 200</p>
-                <p className="font-light">Poppins Light 300</p>
-                <p className="font-normal">Poppins Regular 400</p>
-                <p className="font-medium">Poppins Medium 500</p>
-                <p className="font-semibold">Poppins SemiBold 600</p>
-            </div> */}
             <div>
-                <h2 className="font-regular text-2xl text-foreground">
-                    Selamat datang, {userName} 👋
+                <h2 className="text-2xl font-medium text-foreground">
+                    Selamat datang, {userName}
                 </h2>
                 <p className="mt-1 text-sm font-light text-muted-foreground">
                     Ringkasan kondisi keuanganmu
@@ -96,7 +86,7 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
                                     >
                                         ←
                                     </button>
-                                    <span className="text-sm font-semibold text-foreground">
+                                    <span className="text-sm font-medium text-foreground">
                                         {selectedYear}
                                     </span>
                                     <button

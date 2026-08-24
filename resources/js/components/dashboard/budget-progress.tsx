@@ -66,7 +66,7 @@ export default function BudgetProgress() {
         <Card variant="glass">
             <CardHeader>
                 <div className="flex items-center justify-between">
-                    <h3 className="text-base font-semibold text-foreground">
+                    <h3 className="text-base font-medium text-foreground">
                         Budget
                     </h3>
                     <a
@@ -95,10 +95,7 @@ export default function BudgetProgress() {
                                 </Badge>
                             </div>
 
-                            <Progress
-                                value={budget.spent}
-                                max={budget.limit}
-                            />
+                            <Progress value={budget.spent} max={budget.limit} />
 
                             <div className="flex items-center justify-between text-xs text-muted-foreground">
                                 <span>

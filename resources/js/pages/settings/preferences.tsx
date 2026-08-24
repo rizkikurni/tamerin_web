@@ -38,7 +38,7 @@ export default function Preferences({ preferences }: PreferencesPageProps) {
 
                 <div className="rounded-3xl border border-border bg-surface p-6">
                     <div className="mb-6">
-                        <h2 className="text-lg font-semibold text-foreground">
+                        <h2 className="text-lg font-medium text-foreground">
                             Tampilan
                         </h2>
                         <p className="mt-0.5 text-sm text-muted-foreground">
