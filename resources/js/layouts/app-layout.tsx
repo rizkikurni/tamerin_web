@@ -22,29 +22,32 @@ export default function AppLayout({
     currentPath = '/dashboard',
 }: AppLayoutProps) {
     return (
-        <div className="flex min-h-screen bg-background">
-            {/* Sidebar — desktop only */}
-            <Sidebar currentPath={currentPath} />
+        <div className="min-h-screen bg-background">
+            <div className="flex min-h-screen">
+                {/* Sidebar — desktop only */}
+                <Sidebar currentPath={currentPath} />
 
-            {/* Main Area */}
-            <div className="flex flex-1 flex-col">
-                {/* Header */}
-                <AppHeader
-                    title={title}
-                    description={description}
-                    breadcrumbs={breadcrumbs}
-                >
-                    {headerActions}
-                </AppHeader>
+                {/* Main Area */}
+                <div className="flex flex-1 flex-col min-w-0">
+                    {/* Header */}
+                    <AppHeader
+                        title={title}
+                        description={description}
+                        breadcrumbs={breadcrumbs}
+                        currentPath={currentPath}
+                    >
+                        {headerActions}
+                    </AppHeader>
 
-                {/* Page Content */}
-                <main className="flex-1 p-4 pb-20 lg:p-6 lg:pb-6">
-                    {children}
-                </main>
+                    {/* Page Content */}
+                    <main className="flex-1 bg-background p-4 pb-20 lg:p-6 lg:pb-6">
+                        {children}
+                    </main>
+                </div>
+
+                {/* Mobile Navigation — mobile only */}
+                <MobileNavigation currentPath={currentPath} />
             </div>
-
-            {/* Mobile Navigation — mobile only */}
-            <MobileNavigation currentPath={currentPath} />
         </div>
     );
 }

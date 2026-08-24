@@ -35,11 +35,19 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
     return (
         <div className="space-y-4">
             {/* Greeting */}
+            {/* <div className="space-y-2 text-2xl">
+                <p className="font-thin">Poppins Thin 100</p>
+                <p className="font-extralight">Poppins ExtraLight 200</p>
+                <p className="font-light">Poppins Light 300</p>
+                <p className="font-normal">Poppins Regular 400</p>
+                <p className="font-medium">Poppins Medium 500</p>
+                <p className="font-semibold">Poppins SemiBold 600</p>
+            </div> */}
             <div>
-                <h2 className="text-2xl font-semibold text-foreground">
+                <h2 className="font-regular text-2xl text-foreground">
                     Selamat datang, {userName} 👋
                 </h2>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-sm font-light text-muted-foreground">
                     Ringkasan kondisi keuanganmu
                 </p>
             </div>
@@ -76,7 +84,7 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
                                 aria-hidden="true"
                             />
 
-                            <div className="absolute left-0 top-full z-50 mt-2 w-72 rounded-2xl border border-border bg-surface p-4 shadow-lg">
+                            <div className="absolute top-full left-0 z-50 mt-2 w-72 rounded-2xl border border-border bg-surface p-4 shadow-lg">
                                 {/* Year navigation */}
                                 <div className="mb-3 flex items-center justify-between">
                                     <button

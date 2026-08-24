@@ -49,49 +49,7 @@ export default function Dashboard() {
         >
             {/* Background Glow */}
             <div className="relative overflow-hidden">
-                <div className="pointer-events-none absolute inset-0 -z-0">
-                    {/* Glow kiri atas */}
-                    <div
-                        className="
-                            absolute
-                            -left-40
-                            -top-40
-                            h-[500px]
-                            w-[500px]
-                            rounded-full
-                            bg-blue-400/20
-                            blur-[120px]
-                        "
-                    />
-
-                    {/* Glow kanan tengah */}
-                    <div
-                        className="
-                            absolute
-                            -right-40
-                            top-[30%]
-                            h-[550px]
-                            w-[550px]
-                            rounded-full
-                            bg-blue-300/20
-                            blur-[130px]
-                        "
-                    />
-
-                    {/* Glow bawah */}
-                    <div
-                        className="
-                            absolute
-                            bottom-0
-                            left-[20%]
-                            h-[450px]
-                            w-[450px]
-                            rounded-full
-                            bg-indigo-300/15
-                            blur-[120px]
-                        "
-                    />
-                </div>
+                
 
                 {/* Dashboard Content */}
                 <div className="relative z-10 space-y-6">

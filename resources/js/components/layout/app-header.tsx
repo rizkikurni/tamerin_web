@@ -1,7 +1,15 @@
+import {
+    BarChart3,
+    Bell,
+    CreditCard,
+    Home,
+    LogOut,
+    Search,
+    Settings,
+    User,
+} from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-
-import { ChevronRight, LogOut, Settings, User } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
@@ -10,13 +18,25 @@ interface AppHeaderProps {
     description?: string;
     breadcrumbs?: { label: string; href?: string }[];
     children?: ReactNode;
+    currentPath?: string;
 }
+
+interface NavTab {
+    label: string;
+    href: string;
+    icon: React.ComponentType<{ className?: string }>;
+}
+
+const navTabs: NavTab[] = [
+    { label: 'Dashboard', href: '/dashboard', icon: Home },
+    { label: 'Transaksi', href: '/transactions', icon: CreditCard },
+    { label: 'Laporan', href: '/reports', icon: BarChart3 },
+];
 
 function UserMenu() {
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    // Dummy user data — akan diganti di Fase 8
     const user = {
         name: 'Rizki',
         email: 'rizki@tamerin.id',
@@ -24,31 +44,54 @@ function UserMenu() {
     };
 
     return (
-        <div className="relative" ref={menuRef}>
-            <button
-                type="button"
-                onClick={() => setOpen(!open)}
-                className={cn(
-                    'flex items-center gap-2 rounded-xl px-2 py-1.5',
-                    'transition-colors duration-200',
-                    'hover:bg-surface-muted',
-                )}
-                aria-label="User menu"
-            >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-                    {user.initials}
-                </div>
+        <div className="relative z-50" ref={menuRef}>
+            {/* User Button */}
+           <button
+    type="button"
+    onClick={() => setOpen((prev) => !prev)}
+    className={cn(
+        'flex h-11 w-11 items-center justify-center',
+        'rounded-full',
 
-                <span className="hidden text-sm font-medium text-foreground md:block">
-                    {user.name}
-                </span>
-            </button>
+        // Warna utama
+        'bg-primary',
+        'text-xs font-semibold text-primary-foreground',
+
+        // Border normal
+        'border-2 border-primary/40',
+
+        // Posisi & shadow normal
+        'translate-y-0',
+        'shadow-[0_2px_4px_rgba(15,23,42,0.10)]',
+
+        // Animasi
+        'transition-all duration-200 ease-out',
+
+        // HOVER → benar-benar TERANGKAT
+        'hover:-translate-y-0.5',
+        'hover:brightness-105',
+        'hover:border-primary/60',
+        'hover:shadow-[0_7px_14px_rgba(15,23,42,0.20)]',
+
+        // Saat menu terbuka tetap terangkat
+        open && [
+            '-translate-y-0.5',
+            'brightness-105',
+            'border-primary/60',
+            'shadow-[0_7px_14px_rgba(15,23,42,0.20)]',
+        ],
+    )}
+    aria-label="User menu"
+    aria-expanded={open}
+>
+    {user.initials}
+</button>
 
             {open && (
                 <>
-                    {/* Backdrop */}
+                    {/* Klik di luar */}
                     <div
-                        className="fixed inset-0 z-40"
+                        className="fixed inset-0 z-50"
                         onClick={() => setOpen(false)}
                         aria-hidden="true"
                     />
@@ -56,16 +99,20 @@ function UserMenu() {
                     {/* Dropdown */}
                     <div
                         className={cn(
-                            'absolute right-0 top-full z-50 mt-2',
-                            'w-56 rounded-2xl border border-border bg-surface p-1.5',
-                            'shadow-lg',
-                            'animate-in fade-in slide-in-from-top-2',
+                            'absolute top-full right-0 z-50 mt-4',
+                            'w-56 rounded-2xl',
+                            'border border-border-strong/60',
+                            'bg-surface/95 p-1.5',
+                            'backdrop-blur-xl',
+
+                            'shadow-[0_10px_30px_rgba(15,23,42,0.12)]',
                         )}
                     >
-                        <div className="border-b border-border px-3 py-2.5 mb-1.5">
+                        <div className="mb-1.5 border-b border-border px-3 py-2.5">
                             <p className="text-sm font-medium text-foreground">
                                 {user.name}
                             </p>
+
                             <p className="text-xs text-muted-foreground">
                                 {user.email}
                             </p>
@@ -92,9 +139,6 @@ function UserMenu() {
                         <button
                             type="button"
                             className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-danger transition-colors hover:bg-danger/10"
-                            onClick={() => {
-                                // Akan diintegrasikan di Fase 8
-                            }}
                         >
                             <LogOut className="h-4 w-4" />
                             Keluar
@@ -105,68 +149,98 @@ function UserMenu() {
         </div>
     );
 }
-
 export { UserMenu };
 
 export default function AppHeader({
-    title,
-    description,
-    breadcrumbs,
-    children,
+    currentPath = '/dashboard',
 }: AppHeaderProps) {
     return (
-        <header className="border-b border-border bg-surface px-6 py-4">
-            <div className="flex items-start justify-between gap-4">
-                {/* Left: Breadcrumbs + Title */}
-                <div className="min-w-0 flex-1">
-                    {/* Breadcrumbs */}
-                    {breadcrumbs && breadcrumbs.length > 0 && (
-                        <nav
-                            aria-label="Breadcrumb"
-                            className="mb-1.5 flex items-center gap-1 text-xs text-muted-foreground"
-                        >
-                            {breadcrumbs.map((crumb, index) => (
-                                <span
-                                    key={crumb.label}
-                                    className="flex items-center gap-1"
-                                >
-                                    {index > 0 && (
-                                        <ChevronRight className="h-3 w-3" />
-                                    )}
+        <header className="shadow-[ 0_8px_24px_rgba(15,23,42,0.07), inset_0_1px_0_rgba(255,255,255,0.90), inset_0_-1px_0_rgba(15,23,42,0.03) ] before:bg-[linear-gradient( 180deg, rgba(255,255,255,0.55)_0%, rgba(255,255,255,0.18)_45%, rgba(15,23,42,0.025)_100% )] sticky top-3 z-30 mx-4 mb-4 overflow-visible rounded-[22px] border border-white/60 bg-surface/90 backdrop-blur-xl transition-colors duration-200 before:pointer-events-none before:absolute before:inset-0 after:pointer-events-none after:absolute after:inset-x-4 after:top-0 after:h-px after:bg-white/90">
+            <div className="relative z-10 mx-2 flex h-16 items-center justify-between gap-4">
+                {/* Left: Pill Navigation Tabs */}
+                <nav className="flex items-center gap-2">
+                    {navTabs.map((tab) => {
+                        const Icon = tab.icon;
+                        const active = currentPath.startsWith(tab.href);
 
-                                    {crumb.href ? (
-                                        <a
-                                            href={crumb.href}
-                                            className="transition-colors hover:text-foreground"
-                                        >
-                                            {crumb.label}
-                                        </a>
-                                    ) : (
-                                        <span className="text-foreground-secondary">
-                                            {crumb.label}
-                                        </span>
-                                    )}
-                                </span>
-                            ))}
-                        </nav>
-                    )}
+                        return (
+                            <a
+                                key={tab.label}
+                                href={tab.href}
+                                className={cn(
+                                    'inline-flex h-11 items-center gap-2 rounded-full px-4',
+                                    'text-sm font-normal',
+                                    'border border-transparent',
+                                    'transition-all duration-200',
 
-                    {/* Title */}
-                    <h1 className="truncate text-xl font-semibold text-foreground">
-                        {title}
-                    </h1>
+                                    active
+                                        ? [
+                                              'relative overflow-hidden',
 
-                    {/* Description */}
-                    {description && (
-                        <p className="mt-0.5 text-sm text-muted-foreground">
-                            {description}
-                        </p>
-                    )}
-                </div>
+                                              // Border
+                                              'border border-white/80',
+                                              'border-x-2 border-x-primary/30',
 
-                {/* Right: Page actions + User menu */}
-                <div className="flex shrink-0 items-center gap-3">
-                    {children}
+                                              // Gradient permukaan
+                                              'bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+
+                                              'text-foreground',
+
+                                              // Efek timbul + highlight bagian atas
+                                              'shadow-[0_4px_10px_rgba(15,23,42,0.10),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.05)]',
+
+                                              // Sedikit naik
+                                              '-translate-y-[1px]',
+                                          ]
+                                        : [
+                                              // NORMAL
+                                              'border-2 border-border-strong/70',
+                                              'bg-background/80',
+                                              'text-foreground',
+
+                                              // shadow sangat tipis, border yang jadi utama
+                                              'shadow-[0_1px_3px_rgba(15,23,42,0.04)]',
+
+                                              // HOVER
+                                              'hover:border-x-2',
+                                              'hover:border-x-primary/30',
+
+                                              'hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+
+                                              'hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1)]',
+
+                                              'hover:-translate-y-[1px]',
+                                          ],
+                                )}
+                            >
+                                <Icon className="h-4 w-4" />
+                                {tab.label}
+                            </a>
+                        );
+                    })}
+
+                    {/* Search */}
+                    <button
+                        type="button"
+                        className="ml-1 flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-x-2 border-border-strong/70 border-x-border-strong/70 bg-background/80 text-muted-foreground shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-[1px] hover:border-white/80 hover:border-x-primary/30 hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)] hover:text-foreground hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.04)]"
+                        aria-label="Cari"
+                    >
+                        <Search className="h-4 w-4" />
+                    </button>
+                </nav>
+
+                {/* Right: Notification + User */}
+                <div className="flex items-center gap-2">
+                    {/* Notification Bell */}
+                    <button
+                        type="button"
+                        className="flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-x-2 border-border-strong/70 border-x-border-strong/70 bg-background/80 text-muted-foreground shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-[1px] hover:border-white/80 hover:border-x-primary/30 hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)] hover:text-foreground hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.04)]"
+                        aria-label="Notifikasi"
+                    >
+                        <Bell className="h-[17px] w-[17px]" />
+                    </button>
+
+                    {/* User Avatar */}
                     <UserMenu />
                 </div>
             </div>
