@@ -60,12 +60,9 @@ export default function Register() {
                 )}
             </Form>
 
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-sm text-foreground-secondary">
                 Sudah punya akun?{' '}
-                <Link
-                    href={login()}
-                    className="text-sky-700 hover:underline dark:text-sky-400"
-                >
+                <Link href={login()} className="text-primary hover:underline">
                     Masuk
                 </Link>
             </p>

@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -12,13 +12,11 @@
 }
 
 :root {
-    --background: #e4e6e7;
-    /* --background: #f5f7fa; */
+    color-scheme: light;
 
-    /* --surface: #ffffff; */
+    --background: #e4e6e7;
     --surface: #f5f5f5;
     --surface-muted: #f8f9fb;
-
     --surface-tinted: #eef1f6;
 
     --foreground: #1a1a2e;
@@ -30,39 +28,122 @@
 
     --primary: #5b7cfa;
     --primary-foreground: #ffffff;
-    --primary-soft: #eef1ff;
+    --primary-soft: color-mix(in srgb, var(--primary) 11%, white);
 
     --secondary: #79b8f3;
-    --secondary-soft: #eef5ff;
+    --secondary-soft: color-mix(in srgb, var(--secondary) 11%, white);
 
     --accent: #62c6c1;
-    --accent-soft: #e9f8f6;
+    --accent-soft: color-mix(in srgb, var(--accent) 12%, white);
 
     --success: #22c55e;
     --warning: #f59e0b;
     --danger: #ef4444;
+
+    --glass-border: rgba(255, 255, 255, 0.64);
+    --glass-border-strong: rgba(255, 255, 255, 0.9);
+    --glass-highlight: rgba(255, 255, 255, 0.9);
+    --glass-gradient: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.55) 0%,
+        rgba(255, 255, 255, 0.18) 45%,
+        rgba(15, 23, 42, 0.025) 100%
+    );
+    --glass-shadow:
+        0 8px 24px rgba(15, 23, 42, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -1px 0 rgba(15, 23, 42, 0.03);
+    --glass-shadow-hover:
+        0 10px 28px rgba(15, 23, 42, 0.09),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 0 rgba(15, 23, 42, 0.025);
+    --popup-shadow:
+        0 16px 40px rgba(15, 23, 42, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    --tooltip-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+    --control-gradient: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.98) 0%,
+        rgba(255, 255, 255, 0.92) 45%,
+        rgba(235, 238, 242, 0.82) 100%
+    );
+    --control-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    --control-shadow-hover:
+        0 3px 8px rgba(15, 23, 42, 0.09), inset 0 1px 0 rgba(255, 255, 255, 1),
+        inset 0 -1px 0 rgba(15, 23, 42, 0.04);
+    --control-shadow-active:
+        0 4px 10px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 1),
+        inset 0 -1px 0 rgba(15, 23, 42, 0.05);
+    --brand-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+    --brand-shadow-hover: 0 7px 16px rgba(15, 23, 42, 0.18);
+    --floating-action-shadow: 0 7px 16px rgba(15, 23, 42, 0.18);
+    --floating-action-shadow-hover: 0 10px 20px rgba(15, 23, 42, 0.22);
+    --floating-action-shadow-active: 0 4px 10px rgba(15, 23, 42, 0.14);
+    --scrim: rgba(15, 23, 42, 0.25);
 }
 
 .dark {
-    --background: #111416;
+    color-scheme: dark;
 
-    --surface: #191c1f;
-    --surface-muted: #22262a;
+    --background: #0f1216;
 
-    --surface-tinted: #202a38;
+    --surface: #181d22;
+    --surface-muted: #22282f;
 
-    --foreground: #f5f5f5;
-    --foreground-secondary: #c8c8c8;
-    --muted-foreground: #8f9499;
+    --surface-tinted: #1d2938;
 
-    --border: #2c3136;
-    --border-strong: #3a4046;
+    --foreground: #f4f7fb;
+    --foreground-secondary: #c6cdd5;
+    --muted-foreground: #939ca7;
+
+    --border: #2b333c;
+    --border-strong: #3b4652;
 
     --primary-foreground: #ffffff;
 
-    --primary-soft: #252c4a;
-    --secondary-soft: #23303c;
-    --accent-soft: #203735;
+    --primary-soft: color-mix(in srgb, var(--primary) 20%, var(--surface));
+    --secondary-soft: color-mix(in srgb, var(--secondary) 18%, var(--surface));
+    --accent-soft: color-mix(in srgb, var(--accent) 18%, var(--surface));
+
+    --glass-border: rgba(255, 255, 255, 0.09);
+    --glass-border-strong: rgba(255, 255, 255, 0.17);
+    --glass-highlight: rgba(255, 255, 255, 0.14);
+    --glass-gradient: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.065) 0%,
+        rgba(255, 255, 255, 0.018) 46%,
+        rgba(0, 0, 0, 0.16) 100%
+    );
+    --glass-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.075),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.28);
+    --glass-shadow-hover:
+        0 14px 34px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.11),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+    --popup-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --tooltip-shadow: 0 8px 22px rgba(0, 0, 0, 0.46);
+    --control-gradient: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.09) 0%,
+        rgba(255, 255, 255, 0.035) 48%,
+        rgba(0, 0, 0, 0.14) 100%
+    );
+    --control-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --control-shadow-hover:
+        0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.09),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.28);
+    --control-shadow-active:
+        0 5px 14px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.32);
+    --brand-shadow: 0 3px 8px rgba(0, 0, 0, 0.36);
+    --brand-shadow-hover: 0 8px 18px rgba(0, 0, 0, 0.48);
+    --floating-action-shadow: 0 8px 20px rgba(0, 0, 0, 0.44);
+    --floating-action-shadow-hover: 0 12px 26px rgba(0, 0, 0, 0.54);
+    --floating-action-shadow-active: 0 5px 12px rgba(0, 0, 0, 0.4);
+    --scrim: rgba(0, 0, 0, 0.58);
 }
 
 @theme inline {

@@ -41,7 +41,7 @@ export default function ForgotPassword() {
 
             <Link
                 href={login()}
-                className="text-sm text-sky-700 hover:underline dark:text-sky-400"
+                className="text-sm text-primary hover:underline"
             >
                 Kembali ke halaman masuk
             </Link>

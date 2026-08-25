@@ -3,18 +3,7 @@ import { Head, usePage } from '@inertiajs/react';
 import ThemeSettings from '@/components/settings/theme-settings';
 import AppLayout from '@/layouts/app-layout';
 
-interface PreferencesPageProps {
-    preferences?: {
-        theme_mode: string;
-        theme_preset: string;
-        primary_hex: string | null;
-        secondary_hex: string | null;
-        accent_hex: string | null;
-        timezone: string;
-    };
-}
-
-export default function Preferences({ preferences }: PreferencesPageProps) {
+export default function Preferences() {
     const { flash } = usePage().props;
 
     return (
@@ -36,7 +25,7 @@ export default function Preferences({ preferences }: PreferencesPageProps) {
                     </div>
                 )}
 
-                <div className="rounded-3xl border border-border bg-surface p-6">
+                <div className="rounded-[22px] border border-[var(--glass-border)] bg-surface/90 p-6 shadow-[var(--glass-shadow)] backdrop-blur-xl">
                     <div className="mb-6">
                         <h2 className="text-lg font-medium text-foreground">
                             Tampilan

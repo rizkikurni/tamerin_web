@@ -46,12 +46,12 @@ export default function Login() {
                             error={errors.password}
                         />
 
-                        <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <label className="flex items-center gap-2 text-sm text-foreground-secondary">
                             <input
                                 name="remember"
                                 type="checkbox"
                                 value="1"
-                                className="h-4 w-4 rounded border-slate-300 text-sky-600"
+                                className="h-4 w-4 rounded border-border accent-primary"
                             />
                             Ingat saya
                         </label>
@@ -66,13 +66,13 @@ export default function Login() {
             <div className="flex flex-wrap justify-between gap-3 text-sm">
                 <Link
                     href={forgotPassword()}
-                    className="text-sky-700 hover:underline dark:text-sky-400"
+                    className="text-primary hover:underline"
                 >
                     Lupa kata sandi?
                 </Link>
                 <Link
                     href={register()}
-                    className="text-sky-700 hover:underline dark:text-sky-400"
+                    className="text-primary hover:underline"
                 >
                     Buat akun
                 </Link>

@@ -1,8 +1,13 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useLayoutEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import { getThemeColors } from '@/lib/themes';
-import type { ThemeColors, ThemeMode, ThemePreferences, ThemePreset } from '@/types/theme';
+import { getReadableForeground, getThemeColors } from '@/lib/themes';
+import type {
+    ThemeColors,
+    ThemeMode,
+    ThemePreferences,
+    ThemePreset,
+} from '@/types/theme';
 
 interface ThemeContextValue {
     mode: ThemeMode;
@@ -35,16 +40,6 @@ export default function ThemeProvider({
         preferences?.customColors,
     );
 
-    useEffect(() => {
-        if (preferences) {
-            setMode(preferences.mode);
-            setPreset(preferences.preset);
-            if (preferences.customColors) {
-                setCustomColors(preferences.customColors);
-            }
-        }
-    }, [preferences]);
-
     const applyMode = (selectedMode: ThemeMode) => {
         const root = document.documentElement;
 
@@ -58,9 +53,10 @@ export default function ThemeProvider({
         }
 
         root.classList.toggle('dark', resolvedMode === 'dark');
+        root.style.colorScheme = resolvedMode;
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const root = document.documentElement;
 
         const colors = getThemeColors(preset, customColors);
@@ -68,9 +64,13 @@ export default function ThemeProvider({
         root.style.setProperty('--primary', colors.primary);
         root.style.setProperty('--secondary', colors.secondary);
         root.style.setProperty('--accent', colors.accent);
+        root.style.setProperty(
+            '--primary-foreground',
+            getReadableForeground(colors.primary),
+        );
     }, [preset, customColors]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
         const updateTheme = () => {

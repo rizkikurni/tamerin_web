@@ -4,19 +4,33 @@ import { cn } from '@/lib/utils';
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
     children: ReactNode;
+    variant?: 'default' | 'navbar';
 }
 
 interface BaseProps extends HTMLAttributes<HTMLDivElement> {
     children: ReactNode;
 }
 
-export function Card({ children, className, ...props }: CardProps) {
+export function Card({
+    children,
+    className,
+    variant = 'default',
+    ...props
+}: CardProps) {
     return (
         <div
             className={cn(
                 'rounded-2xl border border-border bg-surface',
-                'shadow-[0_1px_3px_rgba(0,0,0,0.04)]',
+                'shadow-[var(--control-shadow)]',
                 'transition-colors duration-200',
+                variant === 'navbar' && [
+                    'relative overflow-hidden rounded-[22px]',
+                    'border-[var(--glass-border)] bg-surface/90 backdrop-blur-xl',
+                    'shadow-[var(--glass-shadow)]',
+                    'before:pointer-events-none before:absolute before:inset-0 before:rounded-[22px]',
+                    'before:[background-image:var(--glass-gradient)]',
+                    'after:pointer-events-none after:absolute after:inset-x-4 after:top-0 after:h-px after:bg-[var(--glass-highlight)]',
+                ],
                 className,
             )}
             {...props}
@@ -28,7 +42,7 @@ export function Card({ children, className, ...props }: CardProps) {
 
 export function CardHeader({ children, className, ...props }: BaseProps) {
     return (
-        <div className={cn('p-5 pb-0', className)} {...props}>
+        <div className={cn('relative z-10 p-5 pb-0', className)} {...props}>
             {children}
         </div>
     );
@@ -36,7 +50,7 @@ export function CardHeader({ children, className, ...props }: BaseProps) {
 
 export function CardContent({ children, className, ...props }: BaseProps) {
     return (
-        <div className={cn('p-5', className)} {...props}>
+        <div className={cn('relative z-10 p-5', className)} {...props}>
             {children}
         </div>
     );

@@ -17,12 +17,12 @@ export default function Sidebar({ currentPath = '/dashboard' }: SidebarProps) {
             className={cn(
                 'sticky top-3 z-20 ml-3 hidden lg:flex',
                 'h-[calc(100vh-24px)] w-[72px] flex-col items-center',
-                'overflow-visible rounded-[22px] border border-white/60',
+                'overflow-visible rounded-[22px] border border-[var(--glass-border)]',
                 'bg-surface/90 py-3 backdrop-blur-xl',
-                'shadow-[0_8px_24px_rgba(15,23,42,0.07),inset_0_1px_0_rgba(255,255,255,0.90),inset_0_-1px_0_rgba(15,23,42,0.03)]',
+                'shadow-[var(--glass-shadow)]',
             )}
         >
-            <BrandLink className="mb-5 rounded-[14px] shadow-[0_2px_5px_rgba(15,23,42,0.10)]" />
+            <BrandLink className="mb-5 rounded-[14px]" />
 
             <nav className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1 px-2">
                 {sidebarNavigationGroups.map((group, groupIndex) => (

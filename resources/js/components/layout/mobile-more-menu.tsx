@@ -26,18 +26,18 @@ function MobileMoreMenuLink({ item, active }: MobileMoreMenuLinkProps) {
                 'text-[11px] font-normal transition-all duration-200 ease-out',
                 active
                     ? [
-                          '-translate-y-[1px] border-white/80 text-primary',
-                          'bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
-                          'shadow-[0_4px_10px_rgba(15,23,42,0.09)]',
+                          '-translate-y-[1px] border-[var(--glass-border-strong)] text-primary',
+                          'bg-surface-muted/95 [background-image:var(--control-gradient)]',
+                          'shadow-[var(--control-shadow-active)]',
                       ]
                     : [
                           'border-border-strong/60 bg-background/60',
                           'text-foreground-secondary',
-                          'shadow-[0_1px_3px_rgba(15,23,42,0.035)]',
+                          'shadow-[var(--control-shadow)]',
                           'hover:-translate-y-[1px] hover:border-primary/25',
-                          'hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+                          'hover:bg-surface-muted/95 hover:[background-image:var(--control-gradient)]',
                           'hover:text-primary',
-                          'hover:shadow-[0_4px_10px_rgba(15,23,42,0.08)]',
+                          'hover:shadow-[var(--control-shadow-hover)]',
                       ],
             )}
         >
@@ -62,7 +62,7 @@ export default function MobileMoreMenu({
         <>
             <div
                 className={cn(
-                    'fixed inset-0 z-40 bg-black/25 backdrop-blur-[2px] lg:hidden',
+                    'fixed inset-0 z-40 bg-[var(--scrim)] backdrop-blur-[2px] lg:hidden',
                     'transition-all duration-300',
                     open
                         ? 'pointer-events-auto opacity-100'
@@ -84,8 +84,8 @@ export default function MobileMoreMenu({
             >
                 <div
                     className={cn(
-                        'rounded-[26px] border border-white/70 bg-surface/95 p-3',
-                        'shadow-[0_16px_40px_rgba(15,23,42,0.14),inset_0_1px_0_rgba(255,255,255,0.90)]',
+                        'rounded-[26px] border border-[var(--glass-border)] bg-surface/95 p-3',
+                        'shadow-[var(--popup-shadow)]',
                         'backdrop-blur-xl',
                     )}
                 >
@@ -110,11 +110,11 @@ export default function MobileMoreMenu({
                                 'flex h-10 w-10 items-center justify-center rounded-full',
                                 'border-[1.5px] border-border-strong/70 bg-background/80',
                                 'text-muted-foreground',
-                                'shadow-[0_1px_3px_rgba(15,23,42,0.04)]',
+                                'shadow-[var(--control-shadow)]',
                                 'transition-all duration-200 ease-out',
                                 'hover:-translate-y-[1px] hover:border-primary/30',
                                 'hover:text-foreground',
-                                'hover:shadow-[0_3px_8px_rgba(15,23,42,0.09)]',
+                                'hover:shadow-[var(--control-shadow-hover)]',
                             )}
                             aria-label="Tutup menu"
                         >

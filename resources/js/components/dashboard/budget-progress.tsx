@@ -1,6 +1,6 @@
 import Badge from '@/components/ui/badge';
-import Progress from '@/components/ui/progress';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import Progress from '@/components/ui/progress';
 
 // Dummy data — akan diganti di Fase 8
 const budgets = [
@@ -45,9 +45,18 @@ type BudgetStatus = 'safe' | 'warning' | 'reached' | 'over';
 function getBudgetStatus(spent: number, limit: number): BudgetStatus {
     const percentage = (spent / limit) * 100;
 
-    if (percentage > 100) return 'over';
-    if (percentage >= 100) return 'reached';
-    if (percentage >= 80) return 'warning';
+    if (percentage > 100) {
+        return 'over';
+    }
+
+    if (percentage >= 100) {
+        return 'reached';
+    }
+
+    if (percentage >= 80) {
+        return 'warning';
+    }
+
     return 'safe';
 }
 
@@ -63,7 +72,7 @@ const statusConfig: Record<
 
 export default function BudgetProgress() {
     return (
-        <Card variant="glass">
+        <Card variant="navbar">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <h3 className="text-base font-medium text-foreground">

@@ -46,7 +46,7 @@ export default function InvestmentSummary() {
     const totalValue = investments.reduce((sum, inv) => sum + inv.value, 0);
 
     return (
-        <Card variant="glass">
+        <Card variant="navbar">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <h3 className="text-base font-medium text-foreground">

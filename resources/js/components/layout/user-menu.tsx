@@ -43,14 +43,14 @@ export default function UserMenu() {
                     'flex h-11 w-11 translate-y-0 items-center justify-center',
                     'rounded-full border-2 border-primary/40 bg-primary',
                     'text-xs font-medium text-primary-foreground',
-                    'shadow-[0_2px_4px_rgba(15,23,42,0.10)]',
+                    'shadow-[var(--brand-shadow)]',
                     'transition-all duration-200 ease-out',
                     'hover:-translate-y-0.5 hover:border-primary/60',
                     'hover:brightness-105',
-                    'hover:shadow-[0_7px_14px_rgba(15,23,42,0.20)]',
+                    'hover:shadow-[var(--brand-shadow-hover)]',
                     open && [
                         '-translate-y-0.5 border-primary/60 brightness-105',
-                        'shadow-[0_7px_14px_rgba(15,23,42,0.20)]',
+                        'shadow-[var(--brand-shadow-hover)]',
                     ],
                 )}
                 aria-label="User menu"
@@ -72,8 +72,8 @@ export default function UserMenu() {
                         role="menu"
                         className={cn(
                             'absolute top-full right-0 z-50 mt-4 w-56 rounded-2xl',
-                            'border border-border-strong/60 bg-surface/95 p-1.5',
-                            'shadow-[0_10px_30px_rgba(15,23,42,0.12)]',
+                            'border border-[var(--glass-border)] bg-surface/95 p-1.5',
+                            'shadow-[var(--popup-shadow)]',
                             'backdrop-blur-xl',
                         )}
                     >

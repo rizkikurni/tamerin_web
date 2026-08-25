@@ -74,7 +74,7 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
                                 aria-hidden="true"
                             />
 
-                            <div className="absolute top-full left-0 z-50 mt-2 w-72 rounded-2xl border border-border bg-surface p-4 shadow-lg">
+                            <div className="absolute top-full left-0 z-50 mt-2 w-72 rounded-2xl border border-[var(--glass-border)] bg-surface/95 p-4 shadow-[var(--popup-shadow)] backdrop-blur-xl">
                                 {/* Year navigation */}
                                 <div className="mb-3 flex items-center justify-between">
                                     <button

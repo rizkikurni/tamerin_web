@@ -123,7 +123,7 @@ function formatRupiah(value: number): string {
 
 export default function RecentTransactions() {
     return (
-        <Card variant="solid">
+        <Card variant="navbar">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <h3 className="text-base font-medium text-foreground">

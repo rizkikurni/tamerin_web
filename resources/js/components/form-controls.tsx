@@ -19,17 +19,15 @@ export function TextField({
     ...props
 }: FieldProps & InputHTMLAttributes<HTMLInputElement>) {
     return (
-        <label className="grid gap-1.5 text-sm font-medium text-slate-700 dark:text-slate-200">
+        <label className="grid gap-1.5 text-sm font-medium text-foreground-secondary">
             <span>{label}</span>
             <input
                 name={name}
-                className={`rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 transition outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:ring-sky-900 ${className}`}
+                className={`rounded-xl border border-border bg-surface px-3 py-2 text-foreground transition outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 ${className}`}
                 {...props}
             />
             {error && (
-                <span className="text-xs font-normal text-red-600">
-                    {error}
-                </span>
+                <span className="text-xs font-normal text-danger">{error}</span>
             )}
         </label>
     );
@@ -43,19 +41,17 @@ export function SelectField({
     ...props
 }: FieldProps & SelectHTMLAttributes<HTMLSelectElement>) {
     return (
-        <label className="grid gap-1.5 text-sm font-medium text-slate-700 dark:text-slate-200">
+        <label className="grid gap-1.5 text-sm font-medium text-foreground-secondary">
             <span>{label}</span>
             <select
                 name={name}
-                className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 transition outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:ring-sky-900"
+                className="rounded-xl border border-border bg-surface px-3 py-2 text-foreground transition outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                 {...props}
             >
                 {children}
             </select>
             {error && (
-                <span className="text-xs font-normal text-red-600">
-                    {error}
-                </span>
+                <span className="text-xs font-normal text-danger">{error}</span>
             )}
         </label>
     );
@@ -73,7 +69,7 @@ export function SubmitButton({
         <button
             type="submit"
             disabled={processing}
-            className="rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
             {...props}
         >
             {processing ? 'Memproses...' : children}
@@ -93,7 +89,7 @@ export function StatusMessage({ message }: { message?: string | null }) {
     };
 
     return (
-        <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+        <p className="rounded-xl bg-success/10 px-3 py-2 text-sm text-success">
             {translatedMessages[message] ?? message}
         </p>
     );

@@ -61,10 +61,12 @@ interface CustomTooltipProps {
 }
 
 function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
-    if (!active || !payload) return null;
+    if (!active || !payload) {
+        return null;
+    }
 
     return (
-        <div className="rounded-xl border border-border bg-surface p-3 shadow-lg">
+        <div className="rounded-xl border border-[var(--glass-border)] bg-surface/95 p-3 shadow-[var(--tooltip-shadow)] backdrop-blur-xl">
             <p className="mb-1.5 text-xs font-medium text-foreground">
                 {label}
             </p>
@@ -90,7 +92,7 @@ export default function CashFlowChart() {
     const data = period === 'daily' ? dailyData : weeklyData;
 
     return (
-        <Card>
+        <Card variant="navbar">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
@@ -112,7 +114,7 @@ export default function CashFlowChart() {
                                 className={cn(
                                     'rounded-lg px-3 py-1.5 text-xs font-medium transition-all',
                                     period === p
-                                        ? 'bg-surface text-foreground shadow-sm'
+                                        ? 'bg-surface text-foreground shadow-[var(--control-shadow)]'
                                         : 'text-muted-foreground hover:text-foreground',
                                 )}
                             >

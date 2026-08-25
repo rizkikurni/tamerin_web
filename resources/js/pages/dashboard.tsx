@@ -49,8 +49,6 @@ export default function Dashboard() {
         >
             {/* Background Glow */}
             <div className="relative overflow-hidden">
-                
-
                 {/* Dashboard Content */}
                 <div className="relative z-10 space-y-6">
                     <DashboardHeader userName="Rizki" />

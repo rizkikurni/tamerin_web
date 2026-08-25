@@ -19,7 +19,10 @@ export default function SummaryCard({
     iconBg = 'bg-primary-soft',
 }: SummaryCardProps) {
     return (
-        <Card className="transition-shadow duration-200 hover:shadow-md">
+        <Card
+            variant="navbar"
+            className="transition-[background-color,border-color,box-shadow] duration-200 ease-out hover:border-[var(--glass-border-strong)] hover:bg-surface/95 hover:shadow-[var(--glass-shadow-hover)]"
+        >
             <CardContent className="flex items-start gap-4">
                 {icon && (
                     <div

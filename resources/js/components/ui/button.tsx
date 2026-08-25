@@ -54,6 +54,7 @@ export default function Button({
                 'focus-visible:ring-2',
                 'focus-visible:ring-primary',
                 'focus-visible:ring-offset-2',
+                'focus-visible:ring-offset-background',
                 'disabled:pointer-events-none',
                 'disabled:opacity-50',
                 variantClasses[variant],

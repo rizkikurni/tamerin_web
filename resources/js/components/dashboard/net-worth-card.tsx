@@ -59,7 +59,7 @@ function formatRupiah(value: number): string {
 
 export default function NetWorthCard() {
     return (
-        <Card variant="soft">
+        <Card variant="navbar">
             <CardHeader>
                 <h3 className="text-base font-medium text-foreground">
                     Kekayaan Bersih

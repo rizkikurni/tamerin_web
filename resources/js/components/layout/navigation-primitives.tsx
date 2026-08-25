@@ -26,10 +26,10 @@ export function BrandLink({
             className={cn(
                 'flex h-11 w-11 items-center justify-center rounded-full',
                 'border-2 border-primary/40 bg-primary text-primary-foreground',
-                'shadow-[0_2px_4px_rgba(15,23,42,0.10)]',
+                'shadow-[var(--brand-shadow)]',
                 'transition-all duration-200 ease-out',
                 'hover:-translate-y-[1px] hover:brightness-105',
-                'hover:shadow-[0_6px_12px_rgba(15,23,42,0.16)]',
+                'hover:shadow-[var(--brand-shadow-hover)]',
                 className,
             )}
             {...props}
@@ -59,12 +59,12 @@ export function HeaderActionButton({
                 'flex h-11 w-11 items-center justify-center rounded-full',
                 'border-[1.5px] border-x-2 border-border-strong/70',
                 'border-x-border-strong/70 bg-background/80',
-                'text-muted-foreground shadow-[0_1px_3px_rgba(15,23,42,0.04)]',
+                'text-muted-foreground shadow-[var(--control-shadow)]',
                 'transition-all duration-200',
-                'hover:-translate-y-[1px] hover:border-white/80',
+                'hover:-translate-y-[1px] hover:border-[var(--glass-border-strong)]',
                 'hover:border-x-primary/30 hover:text-foreground',
-                'hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
-                'hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.04)]',
+                'hover:bg-surface-muted/95 hover:[background-image:var(--control-gradient)]',
+                'hover:shadow-[var(--control-shadow-hover)]',
                 className,
             )}
             {...props}
@@ -85,19 +85,19 @@ function getNavigationIconClass(active: boolean, className?: string): string {
         'rounded-full border-2 transition-all duration-200 ease-out',
         active
             ? [
-                  '-translate-y-[1px] border-white/80 border-x-primary/30',
-                  'bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+                  '-translate-y-[1px] border-[var(--glass-border-strong)] border-x-primary/30',
+                  'bg-surface-muted/95 [background-image:var(--control-gradient)]',
                   'text-primary',
-                  'shadow-[0_4px_10px_rgba(15,23,42,0.10),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.05)]',
+                  'shadow-[var(--control-shadow-active)]',
               ]
             : [
                   'border-border-strong/70 bg-background/80',
                   'text-muted-foreground',
-                  'shadow-[0_1px_3px_rgba(15,23,42,0.04)]',
-                  'hover:-translate-y-[1px] hover:border-white/80',
+                  'shadow-[var(--control-shadow)]',
+                  'hover:-translate-y-[1px] hover:border-[var(--glass-border-strong)]',
                   'hover:border-x-primary/30 hover:text-primary',
-                  'hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
-                  'hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.04)]',
+                  'hover:bg-surface-muted/95 hover:[background-image:var(--control-gradient)]',
+                  'hover:shadow-[var(--control-shadow-hover)]',
               ],
         className,
     );
@@ -116,7 +116,7 @@ function NavigationTooltip({ label, placement }: NavigationTooltipProps) {
                 'pointer-events-none absolute z-50 whitespace-nowrap',
                 'rounded-xl border border-border-strong/60 bg-surface/95',
                 'px-3 py-2 text-xs font-normal text-foreground',
-                'opacity-0 shadow-[0_6px_18px_rgba(15,23,42,0.12)]',
+                'opacity-0 shadow-[var(--tooltip-shadow)]',
                 'backdrop-blur-xl transition-all duration-150',
                 placement === 'right'
                     ? [
@@ -150,18 +150,19 @@ export function HeaderNavigationLink({ item, active }: NavigationLinkProps) {
                 active
                     ? [
                           'relative -translate-y-[1px] overflow-hidden',
-                          'border-x-2 border-white/80 border-x-primary/30',
-                          'bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
+                          'border-x-2 border-[var(--glass-border-strong)] border-x-primary/30',
+                          'bg-surface-muted/95 [background-image:var(--control-gradient)]',
                           'text-foreground',
-                          'shadow-[0_4px_10px_rgba(15,23,42,0.10),inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,23,42,0.05)]',
+                          'shadow-[var(--control-shadow-active)]',
                       ]
                     : [
                           'border-2 border-border-strong/70',
                           'bg-background/80 text-foreground',
-                          'shadow-[0_1px_3px_rgba(15,23,42,0.04)]',
+                          'shadow-[var(--control-shadow)]',
                           'hover:-translate-y-[1px] hover:border-x-primary/30',
-                          'hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.92)_45%,rgba(235,238,242,0.82)_100%)]',
-                          'hover:shadow-[0_3px_8px_rgba(15,23,42,0.09),inset_0_1px_0_rgba(255,255,255,1)]',
+                          'hover:border-[var(--glass-border-strong)] hover:bg-surface-muted/95',
+                          'hover:[background-image:var(--control-gradient)]',
+                          'hover:shadow-[var(--control-shadow-hover)]',
                       ],
             )}
         >
@@ -254,13 +255,13 @@ export function MobilePrimaryAction({
                 'group relative flex h-14 w-14 -translate-y-3 items-center justify-center',
                 'justify-self-center rounded-full border-2 border-primary/40',
                 'bg-primary text-primary-foreground',
-                'shadow-[0_7px_16px_rgba(15,23,42,0.18)]',
+                'shadow-[var(--floating-action-shadow)]',
                 'transition-all duration-200 ease-out',
                 'hover:-translate-y-4 hover:border-primary/60',
                 'hover:brightness-105',
-                'hover:shadow-[0_10px_20px_rgba(15,23,42,0.22)]',
+                'hover:shadow-[var(--floating-action-shadow-hover)]',
                 'active:-translate-y-2.5',
-                'active:shadow-[0_4px_10px_rgba(15,23,42,0.14)]',
+                'active:shadow-[var(--floating-action-shadow-active)]',
                 className,
             )}
             {...props}

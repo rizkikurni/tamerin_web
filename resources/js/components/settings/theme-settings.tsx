@@ -1,12 +1,11 @@
-import { useState } from 'react';
-
 import { router } from '@inertiajs/react';
 import { Check, Monitor, Moon, RotateCcw, Save, Sun } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { useState } from 'react';
 
 import Badge from '@/components/ui/badge';
 import Button from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import Progress from '@/components/ui/progress';
 import { useTheme } from '@/hooks/use-theme';
 import { themePresets } from '@/lib/themes';
@@ -97,7 +96,7 @@ function ColorInput({ label, value, onChange }: ColorInputProps) {
                         className="absolute inset-0 cursor-pointer opacity-0"
                     />
                     <div
-                        className="h-9 w-9 rounded-xl border border-border shadow-sm"
+                        className="h-9 w-9 rounded-xl border border-border shadow-[var(--control-shadow)]"
                         style={{ backgroundColor: value }}
                     />
                 </div>
@@ -216,6 +215,7 @@ export default function ThemeSettings() {
 
     function handleCustomPrimary(value: string) {
         setCustomPrimary(value);
+
         if (preset === 'custom') {
             applyCustomColors(value, customSecondary, customAccent);
         }
@@ -223,6 +223,7 @@ export default function ThemeSettings() {
 
     function handleCustomSecondary(value: string) {
         setCustomSecondary(value);
+
         if (preset === 'custom') {
             applyCustomColors(customPrimary, value, customAccent);
         }
@@ -230,6 +231,7 @@ export default function ThemeSettings() {
 
     function handleCustomAccent(value: string) {
         setCustomAccent(value);
+
         if (preset === 'custom') {
             applyCustomColors(customPrimary, customSecondary, value);
         }
@@ -237,6 +239,7 @@ export default function ThemeSettings() {
 
     function handlePresetChange(newPreset: ThemePreset) {
         setPreset(newPreset);
+
         if (newPreset === 'custom') {
             applyCustomColors(customPrimary, customSecondary, customAccent);
         }
@@ -370,21 +373,21 @@ export default function ThemeSettings() {
                                 {/* Color dots */}
                                 <div className="flex gap-1.5">
                                     <div
-                                        className="h-5 w-5 rounded-full shadow-sm"
+                                        className="h-5 w-5 rounded-full shadow-[var(--control-shadow)]"
                                         style={{
                                             backgroundColor:
                                                 option.colors.primary,
                                         }}
                                     />
                                     <div
-                                        className="h-5 w-5 rounded-full shadow-sm"
+                                        className="h-5 w-5 rounded-full shadow-[var(--control-shadow)]"
                                         style={{
                                             backgroundColor:
                                                 option.colors.secondary,
                                         }}
                                     />
                                     <div
-                                        className="h-5 w-5 rounded-full shadow-sm"
+                                        className="h-5 w-5 rounded-full shadow-[var(--control-shadow)]"
                                         style={{
                                             backgroundColor:
                                                 option.colors.accent,

@@ -1,6 +1,5 @@
 import { Landmark } from 'lucide-react';
 
-import Badge from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -49,7 +48,7 @@ function formatRupiah(value: number): string {
 
 export default function AccountSummary() {
     return (
-        <Card variant="glass">
+        <Card variant="navbar">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <h3 className="text-base font-medium text-foreground">

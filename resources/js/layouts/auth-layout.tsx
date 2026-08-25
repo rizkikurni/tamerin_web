@@ -13,20 +13,20 @@ export default function AuthLayout({
     children: ReactNode;
 }) {
     return (
-        <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-10 dark:bg-slate-950">
-            <section className="grid w-full max-w-md gap-6 rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-900">
+        <main className="flex min-h-screen items-center justify-center bg-background px-4 py-10 text-foreground">
+            <section className="grid w-full max-w-md gap-6 rounded-[22px] border border-[var(--glass-border)] bg-surface/90 p-6 shadow-[var(--glass-shadow)] backdrop-blur-xl">
                 <div className="grid gap-4">
                     <Link
                         href={home()}
-                        className="text-lg font-medium text-sky-700 dark:text-sky-400"
+                        className="text-lg font-medium text-primary"
                     >
                         Tamerin
                     </Link>
                     <div className="grid gap-1">
-                        <h1 className="text-2xl font-medium text-slate-900 dark:text-white">
+                        <h1 className="text-2xl font-medium text-foreground">
                             {title}
                         </h1>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                        <p className="text-sm text-muted-foreground">
                             {description}
                         </p>
                     </div>

@@ -24,7 +24,7 @@ export function Skeleton({ className, ...props }: SkeletonProps) {
 
 export function SummaryCardSkeleton() {
     return (
-        <div className="rounded-3xl border border-border bg-surface p-5 shadow-sm">
+        <div className="rounded-3xl border border-border bg-surface p-5 shadow-[var(--control-shadow)]">
             <div className="flex items-start gap-4">
                 <Skeleton className="h-11 w-11 shrink-0 rounded-2xl" />
                 <div className="flex-1 space-y-2.5">
@@ -41,7 +41,7 @@ export function SummaryCardSkeleton() {
 
 export function ChartSkeleton() {
     return (
-        <div className="rounded-3xl border border-border bg-surface shadow-sm">
+        <div className="rounded-3xl border border-border bg-surface shadow-[var(--control-shadow)]">
             <div className="p-5 pb-0">
                 <div className="flex items-center justify-between">
                     <div className="space-y-2">
@@ -83,7 +83,7 @@ export function ChartSkeleton() {
 
 export function TableSkeleton({ rows = 5 }: { rows?: number }) {
     return (
-        <div className="rounded-3xl border border-border bg-surface shadow-sm">
+        <div className="rounded-3xl border border-border bg-surface shadow-[var(--control-shadow)]">
             <div className="p-5 pb-0">
                 <div className="flex items-center justify-between">
                     <Skeleton className="h-5 w-32" />
@@ -123,7 +123,7 @@ export function TableSkeleton({ rows = 5 }: { rows?: number }) {
 
 export function ListSkeleton({ rows = 4 }: { rows?: number }) {
     return (
-        <div className="rounded-3xl border border-border bg-surface shadow-sm">
+        <div className="rounded-3xl border border-border bg-surface shadow-[var(--control-shadow)]">
             <div className="p-5 pb-0">
                 <Skeleton className="h-5 w-28" />
             </div>
@@ -149,7 +149,7 @@ export function ListSkeleton({ rows = 4 }: { rows?: number }) {
 
 export function BudgetSkeleton({ rows = 4 }: { rows?: number }) {
     return (
-        <div className="rounded-3xl border border-border bg-surface shadow-sm">
+        <div className="rounded-3xl border border-border bg-surface shadow-[var(--control-shadow)]">
             <div className="p-5 pb-0">
                 <div className="flex items-center justify-between">
                     <Skeleton className="h-5 w-16" />
