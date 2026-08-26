@@ -2,117 +2,76 @@ import { TrendingDown, TrendingUp } from 'lucide-react';
 
 import Badge from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { formatDate, formatRupiah } from '@/lib/formatters';
 import { cn } from '@/lib/utils';
+import type { DashboardInvestment } from '@/types';
 
-// Dummy data — akan diganti di Fase 8
-interface Investment {
-    name: string;
-    type: string;
-    value: number;
-    change: number;
-}
-
-const investments: Investment[] = [
-    {
-        name: 'BBCA',
-        type: 'Saham',
-        value: 12500000,
-        change: 3.2,
-    },
-    {
-        name: 'Reksadana Equity',
-        type: 'Reksadana',
-        value: 8000000,
-        change: -1.5,
-    },
-    {
-        name: 'SBN SR020',
-        type: 'Obligasi',
-        value: 4500000,
-        change: 0.8,
-    },
-];
-
-function formatRupiah(value: number): string {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(value);
-}
-
-export default function InvestmentSummary() {
-    const totalValue = investments.reduce((sum, inv) => sum + inv.value, 0);
+export default function InvestmentSummary({
+    investment,
+}: {
+    investment: DashboardInvestment | null;
+}) {
+    const isPositive = (investment?.change ?? 0) >= 0;
 
     return (
-        <Card variant="navbar">
+        <Card variant="navbar" className="h-full">
             <CardHeader>
-                <div className="flex items-center justify-between">
-                    <h3 className="text-base font-medium text-foreground">
-                        Investasi
-                    </h3>
-                    <a
-                        href="/investments"
-                        className="text-xs font-medium text-primary transition-colors hover:text-primary/80"
-                    >
-                        Lihat semua
-                    </a>
-                </div>
-                <p className="mt-1 text-lg font-medium text-foreground">
-                    {formatRupiah(totalValue)}
+                <h3 className="text-base font-medium text-foreground">
+                    Investasi
+                </h3>
+                <p className="mt-0.5 text-xs font-light text-muted-foreground">
+                    Valuasi portofolio yang perlu diperhatikan
                 </p>
             </CardHeader>
-
-            <CardContent className="space-y-3">
-                {investments.map((inv) => {
-                    const isPositive = inv.change >= 0;
-
-                    return (
-                        <div
-                            key={inv.name}
-                            className="flex items-center justify-between"
-                        >
-                            <div className="flex items-center gap-3">
-                                <div
-                                    className={cn(
-                                        'flex h-9 w-9 items-center justify-center rounded-xl',
-                                        isPositive
-                                            ? 'bg-success/10'
-                                            : 'bg-danger/10',
-                                    )}
-                                >
-                                    {isPositive ? (
-                                        <TrendingUp className="h-4 w-4 text-success" />
-                                    ) : (
-                                        <TrendingDown className="h-4 w-4 text-danger" />
-                                    )}
-                                </div>
-
-                                <div>
-                                    <p className="text-sm font-medium text-foreground">
-                                        {inv.name}
-                                    </p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {inv.type}
-                                    </p>
-                                </div>
+            <CardContent>
+                {investment === null ? (
+                    <p className="rounded-2xl border border-dashed border-border p-5 text-center text-sm font-light text-muted-foreground">
+                        Belum ada investasi aktif.
+                    </p>
+                ) : (
+                    <div className="flex items-center justify-between gap-3 rounded-2xl border border-border/70 p-4">
+                        <div className="flex min-w-0 items-center gap-3">
+                            <div
+                                className={cn(
+                                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
+                                    isPositive
+                                        ? 'bg-success/10 text-success'
+                                        : 'bg-danger/10 text-danger',
+                                )}
+                            >
+                                {isPositive ? (
+                                    <TrendingUp className="h-5 w-5" />
+                                ) : (
+                                    <TrendingDown className="h-5 w-5" />
+                                )}
                             </div>
-
-                            <div className="text-right">
-                                <p className="text-sm font-medium text-foreground">
-                                    {formatRupiah(inv.value)}
+                            <div className="min-w-0">
+                                <p className="truncate text-sm font-medium text-foreground">
+                                    {investment.name}
                                 </p>
+                                <p className="text-xs font-light text-muted-foreground">
+                                    {investment.type}
+                                    {investment.valuedOn
+                                        ? ` · ${formatDate(investment.valuedOn)}`
+                                        : ' · Belum dinilai'}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="shrink-0 text-right">
+                            <p className="text-sm font-medium text-foreground">
+                                {formatRupiah(investment.value)}
+                            </p>
+                            {investment.change !== null && (
                                 <Badge
                                     variant={isPositive ? 'success' : 'danger'}
                                 >
                                     {isPositive ? '+' : ''}
-                                    {inv.change}%
+                                    {investment.change}%
                                 </Badge>
-                            </div>
+                            )}
                         </div>
-                    );
-                })}
+                    </div>
+                )}
             </CardContent>
         </Card>
     );

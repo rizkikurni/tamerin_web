@@ -188,6 +188,36 @@ export function SidebarNavigationLink({ item, active }: NavigationLinkProps) {
     );
 }
 
+interface SidebarNavigationButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    icon: ReactNode;
+    label: string;
+    active: boolean;
+    showTooltip?: boolean;
+}
+
+export function SidebarNavigationButton({
+    icon,
+    label,
+    active,
+    showTooltip = true,
+    className,
+    ...props
+}: SidebarNavigationButtonProps) {
+    return (
+        <button
+            type="button"
+            aria-label={label}
+            className={getNavigationIconClass(active, className)}
+            {...props}
+        >
+            {icon}
+            {showTooltip && (
+                <NavigationTooltip label={label} placement="right" />
+            )}
+        </button>
+    );
+}
+
 export function MobileNavigationLink({ item, active }: NavigationLinkProps) {
     const Icon = item.icon;
 

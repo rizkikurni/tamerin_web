@@ -6,12 +6,26 @@ use App\Enums\FinancialAccountStatus;
 use App\Enums\FinancialAccountType;
 use Database\Factories\FinancialAccountFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property string $user_id
+ * @property string $name
+ * @property FinancialAccountType $type
+ * @property int $opening_balance
+ * @property Carbon $opened_on
+ * @property FinancialAccountStatus $status
+ * @property Carbon|null $archived_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable(['name', 'type', 'opening_balance', 'opened_on', 'status', 'archived_at'])]
 class FinancialAccount extends Model
 {
@@ -50,6 +64,12 @@ class FinancialAccount extends Model
     public function obligationSettlements(): HasMany
     {
         return $this->hasMany(ObligationSettlement::class, 'account_id');
+    }
+
+    /** @param Builder<FinancialAccount> $query */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('status', FinancialAccountStatus::Active);
     }
 
     /**

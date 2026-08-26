@@ -1,68 +1,12 @@
 import Badge from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Progress from '@/components/ui/progress';
-
-// Dummy data — akan diganti di Fase 8
-const budgets = [
-    {
-        category: 'Makanan & Minuman',
-        spent: 1200000,
-        limit: 1500000,
-    },
-    {
-        category: 'Transportasi',
-        spent: 680000,
-        limit: 800000,
-    },
-    {
-        category: 'Hiburan',
-        spent: 500000,
-        limit: 500000,
-    },
-    {
-        category: 'Belanja',
-        spent: 1100000,
-        limit: 1000000,
-    },
-    {
-        category: 'Tagihan',
-        spent: 400000,
-        limit: 750000,
-    },
-];
-
-function formatRupiah(value: number): string {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(value);
-}
-
-type BudgetStatus = 'safe' | 'warning' | 'reached' | 'over';
-
-function getBudgetStatus(spent: number, limit: number): BudgetStatus {
-    const percentage = (spent / limit) * 100;
-
-    if (percentage > 100) {
-        return 'over';
-    }
-
-    if (percentage >= 100) {
-        return 'reached';
-    }
-
-    if (percentage >= 80) {
-        return 'warning';
-    }
-
-    return 'safe';
-}
+import { formatRupiah } from '@/lib/formatters';
+import type { DashboardBudget } from '@/types';
 
 const statusConfig: Record<
-    BudgetStatus,
-    { label: string; variant: 'success' | 'warning' | 'danger' | 'muted' }
+    DashboardBudget['status'],
+    { label: string; variant: 'success' | 'warning' | 'danger' }
 > = {
     safe: { label: 'Aman', variant: 'success' },
     warning: { label: 'Mendekati', variant: 'warning' },
@@ -70,56 +14,64 @@ const statusConfig: Record<
     over: { label: 'Melebihi', variant: 'danger' },
 };
 
-export default function BudgetProgress() {
+export default function BudgetProgress({
+    budgets,
+}: {
+    budgets: DashboardBudget[];
+}) {
     return (
-        <Card variant="navbar">
+        <Card variant="navbar" className="h-full">
             <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                     <h3 className="text-base font-medium text-foreground">
                         Budget
                     </h3>
-                    <a
-                        href="/budgets"
-                        className="text-xs font-medium text-primary transition-colors hover:text-primary/80"
-                    >
-                        Lihat semua
-                    </a>
+                    <span className="text-xs font-light text-muted-foreground">
+                        Bulan berjalan
+                    </span>
                 </div>
             </CardHeader>
 
             <CardContent className="space-y-4">
-                {budgets.map((budget) => {
-                    const status = getBudgetStatus(budget.spent, budget.limit);
-                    const config = statusConfig[status];
-                    const remaining = budget.limit - budget.spent;
+                {budgets.length === 0 ? (
+                    <p className="rounded-2xl border border-dashed border-border p-5 text-center text-sm font-light text-muted-foreground">
+                        Belum ada budget pada periode ini.
+                    </p>
+                ) : (
+                    budgets.map((budget) => {
+                        const config = statusConfig[budget.status];
 
-                    return (
-                        <div key={budget.category} className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium text-foreground">
-                                    {budget.category}
-                                </span>
-                                <Badge variant={config.variant}>
-                                    {config.label}
-                                </Badge>
+                        return (
+                            <div key={budget.id} className="space-y-2">
+                                <div className="flex items-center justify-between gap-3">
+                                    <span className="truncate text-sm font-medium text-foreground">
+                                        {budget.category}
+                                    </span>
+                                    <Badge variant={config.variant}>
+                                        {config.label}
+                                    </Badge>
+                                </div>
+
+                                <Progress
+                                    value={budget.spent}
+                                    max={budget.limit}
+                                />
+
+                                <div className="flex items-center justify-between gap-3 text-xs font-light text-muted-foreground">
+                                    <span>
+                                        {formatRupiah(budget.spent)} /{' '}
+                                        {formatRupiah(budget.limit)}
+                                    </span>
+                                    <span className="shrink-0">
+                                        {budget.remaining >= 0
+                                            ? `Sisa ${formatRupiah(budget.remaining)}`
+                                            : `Lebih ${formatRupiah(Math.abs(budget.remaining))}`}
+                                    </span>
+                                </div>
                             </div>
-
-                            <Progress value={budget.spent} max={budget.limit} />
-
-                            <div className="flex items-center justify-between text-xs text-muted-foreground">
-                                <span>
-                                    {formatRupiah(budget.spent)} /{' '}
-                                    {formatRupiah(budget.limit)}
-                                </span>
-                                <span>
-                                    {remaining >= 0
-                                        ? `Sisa ${formatRupiah(remaining)}`
-                                        : `Lebih ${formatRupiah(Math.abs(remaining))}`}
-                                </span>
-                            </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })
+                )}
             </CardContent>
         </Card>
     );

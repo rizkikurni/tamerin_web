@@ -1,127 +1,58 @@
+import { Link } from '@inertiajs/react';
 import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight } from 'lucide-react';
 
 import Badge from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { formatDate, formatRupiah } from '@/lib/formatters';
 import { cn } from '@/lib/utils';
-
-// Dummy data — akan diganti di Fase 8
-type TransactionType = 'income' | 'expense' | 'transfer';
-
-interface Transaction {
-    id: number;
-    date: string;
-    type: TransactionType;
-    category: string;
-    account: string;
-    amount: number;
-    status: 'completed' | 'pending';
-}
-
-const transactions: Transaction[] = [
-    {
-        id: 1,
-        date: '22 Agt',
-        type: 'income',
-        category: 'Gaji',
-        account: 'BCA',
-        amount: 5000000,
-        status: 'completed',
-    },
-    {
-        id: 2,
-        date: '21 Agt',
-        type: 'expense',
-        category: 'Makanan',
-        account: 'GoPay',
-        amount: 85000,
-        status: 'completed',
-    },
-    {
-        id: 3,
-        date: '21 Agt',
-        type: 'expense',
-        category: 'Transportasi',
-        account: 'OVO',
-        amount: 35000,
-        status: 'completed',
-    },
-    {
-        id: 4,
-        date: '20 Agt',
-        type: 'transfer',
-        category: 'Transfer',
-        account: 'BCA → Mandiri',
-        amount: 1000000,
-        status: 'completed',
-    },
-    {
-        id: 5,
-        date: '20 Agt',
-        type: 'expense',
-        category: 'Belanja',
-        account: 'Mandiri',
-        amount: 250000,
-        status: 'pending',
-    },
-    {
-        id: 6,
-        date: '19 Agt',
-        type: 'income',
-        category: 'Freelance',
-        account: 'BCA',
-        amount: 1500000,
-        status: 'completed',
-    },
-    {
-        id: 7,
-        date: '19 Agt',
-        type: 'expense',
-        category: 'Tagihan',
-        account: 'Mandiri',
-        amount: 500000,
-        status: 'completed',
-    },
-];
+import {
+    index as transactionsIndex,
+    show as showTransaction,
+} from '@/routes/transactions';
+import type { DashboardTransaction } from '@/types';
 
 const typeConfig: Record<
-    TransactionType,
+    DashboardTransaction['type'],
     {
         icon: typeof ArrowDownLeft;
         iconClass: string;
-        bgClass: string;
+        backgroundClass: string;
         prefix: string;
     }
 > = {
     income: {
         icon: ArrowDownLeft,
         iconClass: 'text-success',
-        bgClass: 'bg-success/10',
+        backgroundClass: 'bg-success/10',
         prefix: '+',
     },
     expense: {
         icon: ArrowUpRight,
         iconClass: 'text-danger',
-        bgClass: 'bg-danger/10',
+        backgroundClass: 'bg-danger/10',
         prefix: '−',
     },
     transfer: {
         icon: ArrowLeftRight,
         iconClass: 'text-primary',
-        bgClass: 'bg-primary-soft',
+        backgroundClass: 'bg-primary-soft',
         prefix: '',
     },
 };
 
-function formatRupiah(value: number): string {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(value);
+function amountClassName(type: DashboardTransaction['type']): string {
+    return type === 'income'
+        ? 'text-success'
+        : type === 'expense'
+          ? 'text-danger'
+          : 'text-foreground';
 }
 
-export default function RecentTransactions() {
+export default function RecentTransactions({
+    transactions,
+}: {
+    transactions: DashboardTransaction[];
+}) {
     return (
         <Card variant="navbar">
             <CardHeader>
@@ -129,151 +60,183 @@ export default function RecentTransactions() {
                     <h3 className="text-base font-medium text-foreground">
                         Transaksi Terakhir
                     </h3>
-                    <a
-                        href="/transactions"
+                    <Link
+                        href={transactionsIndex.url()}
                         className="text-xs font-medium text-primary transition-colors hover:text-primary/80"
                     >
                         Lihat semua
-                    </a>
+                    </Link>
                 </div>
             </CardHeader>
 
             <CardContent>
-                {/* Desktop Table */}
-                <div className="hidden md:block">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="border-b border-border text-left text-xs text-muted-foreground">
-                                <th className="pb-2.5 font-medium">Tanggal</th>
-                                <th className="pb-2.5 font-medium">Kategori</th>
-                                <th className="pb-2.5 font-medium">Akun</th>
-                                <th className="pb-2.5 text-right font-medium">
-                                    Nominal
-                                </th>
-                                <th className="pb-2.5 text-right font-medium">
-                                    Status
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
-                            {transactions.map((tx) => {
-                                const config = typeConfig[tx.type];
+                {transactions.length === 0 ? (
+                    <p className="rounded-2xl border border-dashed border-border p-5 text-center text-sm font-light text-muted-foreground">
+                        Belum ada transaksi untuk ditampilkan.
+                    </p>
+                ) : (
+                    <>
+                        <div className="hidden overflow-x-auto md:block">
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="border-b border-border text-left text-xs text-muted-foreground">
+                                        <th className="pb-2.5 font-medium">
+                                            Tanggal
+                                        </th>
+                                        <th className="pb-2.5 font-medium">
+                                            Kategori
+                                        </th>
+                                        <th className="pb-2.5 font-medium">
+                                            Akun
+                                        </th>
+                                        <th className="pb-2.5 text-right font-medium">
+                                            Nominal
+                                        </th>
+                                        <th className="pb-2.5 text-right font-medium">
+                                            Status
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-border">
+                                    {transactions.map((transaction) => {
+                                        const config =
+                                            typeConfig[transaction.type];
+                                        const Icon = config.icon;
+
+                                        return (
+                                            <tr key={transaction.id}>
+                                                <td className="py-3 text-sm text-muted-foreground">
+                                                    {formatDate(
+                                                        transaction.date,
+                                                        {
+                                                            day: 'numeric',
+                                                            month: 'short',
+                                                        },
+                                                    )}
+                                                </td>
+                                                <td className="py-3">
+                                                    <Link
+                                                        href={showTransaction.url(
+                                                            transaction.id,
+                                                        )}
+                                                        className="flex items-center gap-2.5 hover:text-primary"
+                                                    >
+                                                        <span
+                                                            className={cn(
+                                                                'flex h-7 w-7 items-center justify-center rounded-lg',
+                                                                config.backgroundClass,
+                                                            )}
+                                                        >
+                                                            <Icon
+                                                                className={cn(
+                                                                    'h-3.5 w-3.5',
+                                                                    config.iconClass,
+                                                                )}
+                                                            />
+                                                        </span>
+                                                        <span className="text-sm font-medium">
+                                                            {transaction.label}
+                                                        </span>
+                                                    </Link>
+                                                </td>
+                                                <td className="py-3 text-sm text-muted-foreground">
+                                                    {transaction.account}
+                                                </td>
+                                                <td
+                                                    className={cn(
+                                                        'py-3 text-right text-sm font-medium',
+                                                        amountClassName(
+                                                            transaction.type,
+                                                        ),
+                                                    )}
+                                                >
+                                                    {config.prefix}
+                                                    {formatRupiah(
+                                                        transaction.amount,
+                                                    )}
+                                                </td>
+                                                <td className="py-3 text-right">
+                                                    <Badge
+                                                        variant={
+                                                            transaction.status ===
+                                                            'posted'
+                                                                ? 'success'
+                                                                : 'muted'
+                                                        }
+                                                    >
+                                                        {transaction.status ===
+                                                        'posted'
+                                                            ? 'Aktif'
+                                                            : 'Dibatalkan'}
+                                                    </Badge>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="space-y-2 md:hidden">
+                            {transactions.map((transaction) => {
+                                const config = typeConfig[transaction.type];
                                 const Icon = config.icon;
 
                                 return (
-                                    <tr key={tx.id}>
-                                        <td className="py-3 text-sm text-muted-foreground">
-                                            {tx.date}
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="flex items-center gap-2.5">
-                                                <div
+                                    <Link
+                                        key={transaction.id}
+                                        href={showTransaction.url(
+                                            transaction.id,
+                                        )}
+                                        className="flex items-center justify-between gap-3 rounded-xl p-2 transition-colors hover:bg-surface-muted"
+                                    >
+                                        <span className="flex min-w-0 items-center gap-3">
+                                            <span
+                                                className={cn(
+                                                    'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl',
+                                                    config.backgroundClass,
+                                                )}
+                                            >
+                                                <Icon
                                                     className={cn(
-                                                        'flex h-7 w-7 items-center justify-center rounded-lg',
-                                                        config.bgClass,
+                                                        'h-4 w-4',
+                                                        config.iconClass,
                                                     )}
-                                                >
-                                                    <Icon
-                                                        className={cn(
-                                                            'h-3.5 w-3.5',
-                                                            config.iconClass,
-                                                        )}
-                                                    />
-                                                </div>
-                                                <span className="text-sm font-medium text-foreground">
-                                                    {tx.category}
+                                                />
+                                            </span>
+                                            <span className="min-w-0">
+                                                <span className="block truncate text-sm font-medium text-foreground">
+                                                    {transaction.label}
                                                 </span>
-                                            </div>
-                                        </td>
-                                        <td className="py-3 text-sm text-muted-foreground">
-                                            {tx.account}
-                                        </td>
-                                        <td
+                                                <span className="block text-xs font-light text-muted-foreground">
+                                                    {formatDate(
+                                                        transaction.date,
+                                                        {
+                                                            day: 'numeric',
+                                                            month: 'short',
+                                                        },
+                                                    )}{' '}
+                                                    · {transaction.account}
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <span
                                             className={cn(
-                                                'py-3 text-right text-sm font-medium',
-                                                tx.type === 'income'
-                                                    ? 'text-success'
-                                                    : tx.type === 'expense'
-                                                      ? 'text-danger'
-                                                      : 'text-foreground',
+                                                'shrink-0 text-sm font-medium',
+                                                amountClassName(
+                                                    transaction.type,
+                                                ),
                                             )}
                                         >
                                             {config.prefix}
-                                            {formatRupiah(tx.amount)}
-                                        </td>
-                                        <td className="py-3 text-right">
-                                            <Badge
-                                                variant={
-                                                    tx.status === 'completed'
-                                                        ? 'success'
-                                                        : 'warning'
-                                                }
-                                            >
-                                                {tx.status === 'completed'
-                                                    ? 'Selesai'
-                                                    : 'Tertunda'}
-                                            </Badge>
-                                        </td>
-                                    </tr>
+                                            {formatRupiah(transaction.amount)}
+                                        </span>
+                                    </Link>
                                 );
                             })}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Mobile Card List */}
-                <div className="space-y-3 md:hidden">
-                    {transactions.map((tx) => {
-                        const config = typeConfig[tx.type];
-                        const Icon = config.icon;
-
-                        return (
-                            <div
-                                key={tx.id}
-                                className="flex items-center justify-between"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div
-                                        className={cn(
-                                            'flex h-9 w-9 items-center justify-center rounded-xl',
-                                            config.bgClass,
-                                        )}
-                                    >
-                                        <Icon
-                                            className={cn(
-                                                'h-4 w-4',
-                                                config.iconClass,
-                                            )}
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <p className="text-sm font-medium text-foreground">
-                                            {tx.category}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
-                                            {tx.date} · {tx.account}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <span
-                                    className={cn(
-                                        'text-sm font-medium',
-                                        tx.type === 'income'
-                                            ? 'text-success'
-                                            : tx.type === 'expense'
-                                              ? 'text-danger'
-                                              : 'text-foreground',
-                                    )}
-                                >
-                                    {config.prefix}
-                                    {formatRupiah(tx.amount)}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </div>
+                        </div>
+                    </>
+                )}
             </CardContent>
         </Card>
     );

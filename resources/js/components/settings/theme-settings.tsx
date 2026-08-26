@@ -3,6 +3,7 @@ import { Check, Monitor, Moon, RotateCcw, Save, Sun } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 
+import { update } from '@/actions/App/Http/Controllers/Settings/UserPreferenceController';
 import Badge from '@/components/ui/badge';
 import Button from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -96,7 +97,7 @@ function ColorInput({ label, value, onChange }: ColorInputProps) {
                         className="absolute inset-0 cursor-pointer opacity-0"
                     />
                     <div
-                        className="h-9 w-9 rounded-xl border border-border shadow-[var(--control-shadow)]"
+                        className="h-9 w-9 rounded-xl border-2 border-border-strong shadow-[var(--control-shadow)]"
                         style={{ backgroundColor: value }}
                     />
                 </div>
@@ -107,10 +108,11 @@ function ColorInput({ label, value, onChange }: ColorInputProps) {
                     placeholder="#000000"
                     maxLength={7}
                     className={cn(
-                        'h-9 flex-1 rounded-xl border border-border bg-surface px-3',
-                        'text-sm text-foreground',
-                        'transition-colors outline-none',
-                        'focus:border-primary focus:ring-2 focus:ring-primary/20',
+                        'h-10 flex-1 rounded-xl border-2 border-border-strong bg-background/70 px-3',
+                        'text-sm text-foreground shadow-[var(--control-shadow)] outline-none',
+                        'transition-[border-color,background-color,box-shadow] duration-200',
+                        'hover:border-primary/40',
+                        'focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/20',
                     )}
                 />
             </div>
@@ -258,7 +260,7 @@ export default function ThemeSettings() {
         setSavedMessage(null);
 
         router.patch(
-            '/settings/preferences',
+            update.url(),
             {
                 theme_mode: mode,
                 theme_preset: preset,

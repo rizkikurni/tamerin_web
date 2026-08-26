@@ -1,4 +1,4 @@
-import { Bell, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -12,6 +12,7 @@ import {
     HeaderActionButton,
     HeaderNavigationLink,
 } from './navigation-primitives';
+import NotificationMenu from './notification-menu';
 import UserMenu from './user-menu';
 
 interface AppHeaderProps {
@@ -23,6 +24,7 @@ interface AppHeaderProps {
 }
 
 export default function AppHeader({
+    children,
     currentPath = '/dashboard',
 }: AppHeaderProps) {
     return (
@@ -63,10 +65,8 @@ export default function AppHeader({
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <HeaderActionButton
-                        label="Notifikasi"
-                        icon={<Bell className="h-[17px] w-[17px]" />}
-                    />
+                    {children}
+                    <NotificationMenu />
                     <UserMenu />
                 </div>
             </div>

@@ -2,10 +2,10 @@ import { cn } from '@/lib/utils';
 
 import {
     isNavigationPathActive,
-    sidebarFooterItems,
     sidebarNavigationGroups,
 } from './navigation-config';
 import { BrandLink, SidebarNavigationLink } from './navigation-primitives';
+import SettingsSidebarMenu from './settings-sidebar-menu';
 
 interface SidebarProps {
     currentPath?: string;
@@ -50,18 +50,7 @@ export default function Sidebar({ currentPath = '/dashboard' }: SidebarProps) {
             <div className="mt-auto w-full px-2 pt-2">
                 <div className="mx-2 mb-2.5 h-px bg-border-strong/50" />
 
-                <div className="flex flex-col items-center gap-1">
-                    {sidebarFooterItems.map((item) => (
-                        <SidebarNavigationLink
-                            key={item.label}
-                            item={item}
-                            active={isNavigationPathActive(
-                                currentPath,
-                                item.href,
-                            )}
-                        />
-                    ))}
-                </div>
+                <SettingsSidebarMenu currentPath={currentPath} />
             </div>
         </aside>
     );

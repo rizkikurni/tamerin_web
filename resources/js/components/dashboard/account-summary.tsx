@@ -1,125 +1,110 @@
-import { Landmark } from 'lucide-react';
+import { Link } from '@inertiajs/react';
+import { Banknote, Landmark, Smartphone } from 'lucide-react';
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { formatRupiah } from '@/lib/formatters';
 import { cn } from '@/lib/utils';
+import { index as accountsIndex } from '@/routes/financial-accounts';
+import type { DashboardAccount } from '@/types';
 
-// Dummy data — akan diganti di Fase 8
-const accounts = [
-    {
-        name: 'BCA',
-        type: 'Bank',
-        balance: 5200000,
-        contribution: 41.6,
-    },
-    {
-        name: 'Mandiri',
-        type: 'Bank',
-        balance: 3800000,
-        contribution: 30.4,
-    },
-    {
-        name: 'GoPay',
-        type: 'E-Wallet',
-        balance: 1500000,
-        contribution: 12.0,
-    },
-    {
-        name: 'OVO',
-        type: 'E-Wallet',
-        balance: 1200000,
-        contribution: 9.6,
-    },
-    {
-        name: 'Kas',
-        type: 'Tunai',
-        balance: 800000,
-        contribution: 6.4,
-    },
+const accountTypeLabels: Record<DashboardAccount['type'], string> = {
+    cash: 'Tunai',
+    bank: 'Bank',
+    e_wallet: 'Dompet digital',
+};
+
+const contributionColors = [
+    'bg-primary',
+    'bg-secondary',
+    'bg-accent',
+    'bg-warning',
+    'bg-muted-foreground',
 ];
 
-function formatRupiah(value: number): string {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(value);
+function AccountIcon({ type }: { type: DashboardAccount['type'] }) {
+    const Icon =
+        type === 'cash' ? Banknote : type === 'bank' ? Landmark : Smartphone;
+
+    return <Icon className="h-4 w-4 text-primary" />;
 }
 
-export default function AccountSummary() {
+export default function AccountSummary({
+    accounts,
+}: {
+    accounts: DashboardAccount[];
+}) {
     return (
-        <Card variant="navbar">
+        <Card variant="navbar" className="h-full">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <h3 className="text-base font-medium text-foreground">
                         Akun Keuangan
                     </h3>
-                    <a
-                        href="/accounts"
+                    <Link
+                        href={accountsIndex.url()}
                         className="text-xs font-medium text-primary transition-colors hover:text-primary/80"
                     >
                         Lihat semua
-                    </a>
+                    </Link>
                 </div>
             </CardHeader>
 
             <CardContent className="space-y-3">
-                {accounts.map((account) => (
-                    <div
-                        key={account.name}
-                        className="flex items-center justify-between"
-                    >
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-soft">
-                                <Landmark className="h-4 w-4 text-primary" />
-                            </div>
-
-                            <div>
-                                <p className="text-sm font-medium text-foreground">
-                                    {account.name}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                    {account.type}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="text-right">
-                            <p className="text-sm font-medium text-foreground">
-                                {formatRupiah(account.balance)}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                                {account.contribution}%
-                            </p>
-                        </div>
-                    </div>
-                ))}
-
-                {/* Contribution bar */}
-                <div className="mt-1 flex h-2 overflow-hidden rounded-full">
-                    {accounts.map((account, index) => {
-                        const colors = [
-                            'bg-primary',
-                            'bg-secondary',
-                            'bg-accent',
-                            'bg-warning',
-                            'bg-muted-foreground',
-                        ];
-
-                        return (
+                {accounts.length === 0 ? (
+                    <p className="rounded-2xl border border-dashed border-border p-5 text-center text-sm font-light text-muted-foreground">
+                        Belum ada akun aktif.
+                    </p>
+                ) : (
+                    <>
+                        {accounts.map((account) => (
                             <div
-                                key={account.name}
-                                className={cn(
-                                    'h-full transition-all',
-                                    colors[index % colors.length],
-                                    index > 0 && 'ml-0.5',
-                                )}
-                                style={{ width: `${account.contribution}%` }}
-                                title={`${account.name}: ${account.contribution}%`}
-                            />
-                        );
-                    })}
-                </div>
+                                key={account.id}
+                                className="flex items-center justify-between gap-3 rounded-xl p-1"
+                            >
+                                <div className="flex min-w-0 items-center gap-3">
+                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft">
+                                        <AccountIcon type={account.type} />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="truncate text-sm font-medium text-foreground">
+                                            {account.name}
+                                        </p>
+                                        <p className="text-xs font-light text-muted-foreground">
+                                            {accountTypeLabels[account.type]}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="shrink-0 text-right">
+                                    <p className="text-sm font-medium text-foreground">
+                                        {formatRupiah(account.balance)}
+                                    </p>
+                                    <p className="text-xs font-light text-muted-foreground">
+                                        {account.contribution}%
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+
+                        <div className="flex h-2 overflow-hidden rounded-full bg-surface-muted">
+                            {accounts.map((account, index) => (
+                                <div
+                                    key={account.id}
+                                    className={cn(
+                                        'h-full transition-all',
+                                        contributionColors[
+                                            index % contributionColors.length
+                                        ],
+                                        index > 0 && 'ml-0.5',
+                                    )}
+                                    style={{
+                                        width: `${Math.max(account.contribution, 0)}%`,
+                                    }}
+                                    title={`${account.name}: ${account.contribution}%`}
+                                />
+                            ))}
+                        </div>
+                    </>
+                )}
             </CardContent>
         </Card>
     );

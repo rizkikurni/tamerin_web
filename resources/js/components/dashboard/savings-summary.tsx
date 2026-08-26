@@ -2,92 +2,58 @@ import { PiggyBank } from 'lucide-react';
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Progress from '@/components/ui/progress';
+import { formatDate, formatRupiah } from '@/lib/formatters';
+import type { DashboardSavingsGoal } from '@/types';
 
-// Dummy data — akan diganti di Fase 8
-const savingsGoals = [
-    {
-        name: 'Dana Darurat',
-        current: 8000000,
-        target: 15000000,
-        deadline: 'Des 2026',
-    },
-    {
-        name: 'Liburan Bali',
-        current: 3500000,
-        target: 5000000,
-        deadline: 'Okt 2026',
-    },
-    {
-        name: 'MacBook Pro',
-        current: 12000000,
-        target: 25000000,
-        deadline: 'Mar 2027',
-    },
-];
-
-function formatRupiah(value: number): string {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(value);
-}
-
-export default function SavingsSummary() {
+export default function SavingsSummary({
+    goal,
+}: {
+    goal: DashboardSavingsGoal | null;
+}) {
     return (
-        <Card variant="navbar">
+        <Card variant="navbar" className="h-full">
             <CardHeader>
-                <div className="flex items-center justify-between">
-                    <h3 className="text-base font-medium text-foreground">
-                        Target Tabungan
-                    </h3>
-                    <a
-                        href="/savings"
-                        className="text-xs font-medium text-primary transition-colors hover:text-primary/80"
-                    >
-                        Lihat semua
-                    </a>
-                </div>
+                <h3 className="text-base font-medium text-foreground">
+                    Target Tabungan
+                </h3>
+                <p className="mt-0.5 text-xs font-light text-muted-foreground">
+                    Target aktif terdekat
+                </p>
             </CardHeader>
-
-            <CardContent className="space-y-4">
-                {savingsGoals.map((goal) => {
-                    const percentage = Math.round(
-                        (goal.current / goal.target) * 100,
-                    );
-
-                    return (
-                        <div key={goal.name} className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-soft">
-                                        <PiggyBank className="h-4 w-4 text-accent" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-medium text-foreground">
-                                            {goal.name}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
-                                            Target: {goal.deadline}
-                                        </p>
-                                    </div>
+            <CardContent>
+                {goal === null ? (
+                    <p className="rounded-2xl border border-dashed border-border p-5 text-center text-sm font-light text-muted-foreground">
+                        Belum ada target tabungan aktif.
+                    </p>
+                ) : (
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-3">
+                            <div className="flex min-w-0 items-center gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft">
+                                    <PiggyBank className="h-5 w-5 text-accent" />
                                 </div>
-
-                                <span className="text-sm font-medium text-foreground">
-                                    {percentage}%
-                                </span>
+                                <div className="min-w-0">
+                                    <p className="truncate text-sm font-medium text-foreground">
+                                        {goal.name}
+                                    </p>
+                                    <p className="text-xs font-light text-muted-foreground">
+                                        {goal.targetDate
+                                            ? `Target ${formatDate(goal.targetDate)}`
+                                            : 'Tanpa batas waktu'}
+                                    </p>
+                                </div>
                             </div>
-
-                            <Progress value={goal.current} max={goal.target} />
-
-                            <div className="flex justify-between text-xs text-muted-foreground">
-                                <span>{formatRupiah(goal.current)}</span>
-                                <span>{formatRupiah(goal.target)}</span>
-                            </div>
+                            <span className="text-sm font-medium text-foreground">
+                                {goal.percentage}%
+                            </span>
                         </div>
-                    );
-                })}
+                        <Progress value={goal.current} max={goal.target} />
+                        <div className="flex justify-between gap-3 text-xs font-light text-muted-foreground">
+                            <span>{formatRupiah(goal.current)}</span>
+                            <span>{formatRupiah(goal.target)}</span>
+                        </div>
+                    </div>
+                )}
             </CardContent>
         </Card>
     );

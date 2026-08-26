@@ -1,14 +1,21 @@
 <?php
 
+use App\Http\Controllers\ArchiveCategoryController;
+use App\Http\Controllers\ArchiveFinancialAccountController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FinancialAccountController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\UserPreferenceController;
+use App\Http\Controllers\SystemReminderController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\VoidTransactionController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::inertia('/', 'welcome')->name('home');
 
@@ -37,6 +44,25 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware('auth')->group(function (): void {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/system-reminders', SystemReminderController::class)
+        ->name('system-reminders.index');
+
+    Route::resource('financial-accounts', FinancialAccountController::class)
+        ->except(['show', 'destroy']);
+    Route::patch('/financial-accounts/{financial_account}/archive', ArchiveFinancialAccountController::class)
+        ->name('financial-accounts.archive');
+
+    Route::resource('categories', CategoryController::class)
+        ->except(['show', 'destroy']);
+    Route::patch('/categories/{category}/archive', ArchiveCategoryController::class)
+        ->name('categories.archive');
+
+    Route::resource('transactions', TransactionController::class)
+        ->only(['index', 'create', 'store', 'show']);
+    Route::patch('/transactions/{transaction}/void', VoidTransactionController::class)
+        ->name('transactions.void');
+
     Route::prefix('settings')->group(function (): void {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -48,8 +74,3 @@ Route::middleware('auth')->group(function (): void {
         Route::patch('/preferences', [UserPreferenceController::class, 'update'])->name('preferences.update');
     });
 });
-
-// untuk tampilan
-Route::get('/dashboard', function () {
-    return Inertia::render('dashboard');
-})->name('dashboard');

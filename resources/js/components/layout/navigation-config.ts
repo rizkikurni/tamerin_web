@@ -17,7 +17,10 @@ import {
 import type { LucideIcon } from 'lucide-react';
 
 import { dashboard } from '@/routes';
+import { index as categoriesIndex } from '@/routes/categories';
+import { index as financialAccountsIndex } from '@/routes/financial-accounts';
 import { edit as editProfile } from '@/routes/profile';
+import { index as transactionsIndex } from '@/routes/transactions';
 
 export interface NavigationItem {
     label: string;
@@ -34,17 +37,17 @@ const navigationItems = {
     transactions: {
         label: 'Transaksi',
         icon: CreditCard,
-        href: '/transactions',
+        href: transactionsIndex.url(),
     },
     accounts: {
         label: 'Akun Keuangan',
         icon: Landmark,
-        href: '/accounts',
+        href: financialAccountsIndex.url(),
     },
     categories: {
         label: 'Kategori',
         icon: Tag,
-        href: '/categories',
+        href: categoriesIndex.url(),
     },
     budgets: {
         label: 'Budget',
@@ -110,8 +113,6 @@ export const sidebarNavigationGroups: NavigationItem[][] = [
     ],
     [navigationItems.reminders, navigationItems.reports],
 ];
-
-export const sidebarFooterItems: NavigationItem[] = [navigationItems.settings];
 
 export const mobileBottomNavigationItems = [
     { kind: 'link', item: navigationItems.dashboard },

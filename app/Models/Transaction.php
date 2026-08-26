@@ -6,12 +6,32 @@ use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use Database\Factories\TransactionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property string $user_id
+ * @property TransactionType $type
+ * @property int $amount
+ * @property Carbon $transacted_on
+ * @property string $account_id
+ * @property string|null $destination_account_id
+ * @property string|null $category_id
+ * @property string|null $note
+ * @property TransactionStatus $status
+ * @property Carbon|null $voided_at
+ * @property string|null $void_reason
+ * @property string|null $idempotency_key
+ * @property string $created_by
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable(['type', 'amount', 'transacted_on', 'account_id', 'destination_account_id', 'category_id', 'note', 'status', 'voided_at', 'void_reason', 'idempotency_key'])]
 class Transaction extends Model
 {
@@ -52,6 +72,12 @@ class Transaction extends Model
     public function obligationSettlement(): HasOne
     {
         return $this->hasOne(ObligationSettlement::class);
+    }
+
+    /** @param Builder<Transaction> $query */
+    public function scopePosted(Builder $query): void
+    {
+        $query->where('status', TransactionStatus::Posted);
     }
 
     /**
