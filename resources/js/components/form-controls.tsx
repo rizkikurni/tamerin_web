@@ -149,6 +149,10 @@ export function StatusMessage({ message }: { message?: string | null }) {
         'asset-created': 'Aset berhasil dibuat.',
         'asset-updated': 'Aset berhasil diperbarui.',
         'asset-archived': 'Aset berhasil diarsipkan.',
+        'obligation-created': 'Utang atau piutang berhasil dibuat.',
+        'obligation-updated': 'Utang atau piutang berhasil diperbarui.',
+        'obligation-archived': 'Utang atau piutang berhasil diarsipkan.',
+        'obligation-settlement-recorded': 'Pembayaran berhasil dicatat.',
     };
 
     return (

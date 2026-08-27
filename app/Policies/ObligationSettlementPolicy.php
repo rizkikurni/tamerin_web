@@ -2,11 +2,10 @@
 
 namespace App\Policies;
 
-use App\Enums\TransactionStatus;
-use App\Models\Transaction;
+use App\Models\ObligationSettlement;
 use App\Models\User;
 
-class TransactionPolicy
+class ObligationSettlementPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,9 +18,9 @@ class TransactionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Transaction $transaction): bool
+    public function view(User $user, ObligationSettlement $obligationSettlement): bool
     {
-        return $transaction->user_id === $user->id;
+        return $obligationSettlement->user_id === $user->id;
     }
 
     /**
@@ -29,28 +28,21 @@ class TransactionPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Transaction $transaction): bool
+    public function update(User $user, ObligationSettlement $obligationSettlement): bool
     {
         return false;
-    }
-
-    public function void(User $user, Transaction $transaction): bool
-    {
-        return $this->view($user, $transaction)
-            && $transaction->status === TransactionStatus::Posted
-            && $transaction->obligationSettlement()->doesntExist();
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Transaction $transaction): bool
+    public function delete(User $user, ObligationSettlement $obligationSettlement): bool
     {
         return false;
     }
@@ -58,7 +50,7 @@ class TransactionPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Transaction $transaction): bool
+    public function restore(User $user, ObligationSettlement $obligationSettlement): bool
     {
         return false;
     }
@@ -66,7 +58,7 @@ class TransactionPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Transaction $transaction): bool
+    public function forceDelete(User $user, ObligationSettlement $obligationSettlement): bool
     {
         return false;
     }

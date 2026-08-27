@@ -4,6 +4,7 @@ use App\Http\Controllers\ArchiveAssetController;
 use App\Http\Controllers\ArchiveCategoryController;
 use App\Http\Controllers\ArchiveFinancialAccountController;
 use App\Http\Controllers\ArchiveInvestmentHoldingController;
+use App\Http\Controllers\ArchiveObligationController;
 use App\Http\Controllers\ArchiveSavingsGoalController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialAccountController;
 use App\Http\Controllers\InvestmentHoldingController;
 use App\Http\Controllers\InvestmentValuationController;
+use App\Http\Controllers\ObligationController;
+use App\Http\Controllers\ObligationSettlementController;
 use App\Http\Controllers\SavingsContributionController;
 use App\Http\Controllers\SavingsGoalController;
 use App\Http\Controllers\Settings\PasswordController;
@@ -99,6 +102,13 @@ Route::middleware('auth')->group(function (): void {
         ->except(['destroy']);
     Route::patch('/assets/{asset}/archive', ArchiveAssetController::class)
         ->name('assets.archive');
+
+    Route::resource('obligations', ObligationController::class)
+        ->except(['destroy']);
+    Route::patch('/obligations/{obligation}/archive', ArchiveObligationController::class)
+        ->name('obligations.archive');
+    Route::post('/obligations/{obligation}/settlements', [ObligationSettlementController::class, 'store'])
+        ->name('obligations.settlements.store');
 
     Route::prefix('settings')->group(function (): void {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

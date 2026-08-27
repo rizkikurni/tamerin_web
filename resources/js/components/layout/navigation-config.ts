@@ -22,6 +22,7 @@ import { index as budgetsIndex } from '@/routes/budgets';
 import { index as categoriesIndex } from '@/routes/categories';
 import { index as financialAccountsIndex } from '@/routes/financial-accounts';
 import { index as investmentsIndex } from '@/routes/investments';
+import { index as obligationsIndex } from '@/routes/obligations';
 import { edit as editProfile } from '@/routes/profile';
 import { index as savingsGoalsIndex } from '@/routes/savings-goals';
 import { index as transactionsIndex } from '@/routes/transactions';
@@ -76,7 +77,7 @@ const navigationItems = {
     debts: {
         label: 'Utang & Piutang',
         icon: HandCoins,
-        href: '/debts',
+        href: obligationsIndex.url(),
     },
     reminders: {
         label: 'Pengingat',

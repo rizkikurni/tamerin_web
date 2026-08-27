@@ -8,7 +8,19 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property string $user_id
+ * @property string $obligation_id
+ * @property string $account_id
+ * @property string $transaction_id
+ * @property int $amount
+ * @property Carbon $settled_on
+ * @property string|null $note
+ * @property string|null $idempotency_key
+ */
 #[Fillable(['obligation_id', 'account_id', 'transaction_id', 'amount', 'settled_on', 'note', 'idempotency_key'])]
 class ObligationSettlement extends Model
 {

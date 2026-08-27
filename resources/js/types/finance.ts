@@ -296,3 +296,67 @@ export type AssetPermissions = {
     canEdit: boolean;
     canArchive: boolean;
 };
+
+export type ObligationKind = 'debt' | 'receivable';
+export type ObligationStatus = 'open' | 'settled' | 'archived';
+
+export type ObligationListItem = {
+    id: string;
+    kind: ObligationKind;
+    counterparty_name: string;
+    original_amount: number;
+    outstanding_amount: number;
+    paid_amount: number;
+    progress_percentage: number;
+    started_on: string;
+    due_on: string | null;
+    status: ObligationStatus;
+    settled_at: string | null;
+    archived_at: string | null;
+    note: string | null;
+    is_overdue: boolean;
+};
+
+export type ObligationFormData = Pick<
+    ObligationListItem,
+    | 'id'
+    | 'kind'
+    | 'counterparty_name'
+    | 'original_amount'
+    | 'started_on'
+    | 'due_on'
+    | 'note'
+>;
+
+export type ObligationSummary = {
+    totalDebt: number;
+    totalReceivable: number;
+    dueSoonCount: number;
+    overdueCount: number;
+};
+
+export type ObligationFilters = {
+    kind: string | null;
+    status: string | null;
+    due_filter: string | null;
+    search: string | null;
+};
+
+export type ObligationSettlement = {
+    id: string;
+    amount: number;
+    settled_on: string;
+    note: string | null;
+    account: TransactionRelation;
+    transaction: {
+        id: string;
+        type: TransactionType;
+        status: TransactionStatus;
+    };
+};
+
+export type ObligationPermissions = {
+    canEdit: boolean;
+    canArchive: boolean;
+    canSettle: boolean;
+};
