@@ -13,10 +13,13 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CompleteManualReminderController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DismissManualReminderController;
 use App\Http\Controllers\FinancialAccountController;
 use App\Http\Controllers\InvestmentHoldingController;
 use App\Http\Controllers\InvestmentValuationController;
+use App\Http\Controllers\ManualReminderController;
 use App\Http\Controllers\ObligationController;
 use App\Http\Controllers\ObligationSettlementController;
 use App\Http\Controllers\SavingsContributionController;
@@ -109,6 +112,14 @@ Route::middleware('auth')->group(function (): void {
         ->name('obligations.archive');
     Route::post('/obligations/{obligation}/settlements', [ObligationSettlementController::class, 'store'])
         ->name('obligations.settlements.store');
+
+    Route::resource('reminders', ManualReminderController::class)
+        ->parameters(['reminders' => 'manual_reminder'])
+        ->only(['index', 'store', 'update']);
+    Route::patch('/reminders/{manual_reminder}/complete', CompleteManualReminderController::class)
+        ->name('reminders.complete');
+    Route::patch('/reminders/{manual_reminder}/dismiss', DismissManualReminderController::class)
+        ->name('reminders.dismiss');
 
     Route::prefix('settings')->group(function (): void {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

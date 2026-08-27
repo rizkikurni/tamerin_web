@@ -360,3 +360,30 @@ export type ObligationPermissions = {
     canArchive: boolean;
     canSettle: boolean;
 };
+
+export type ManualReminderStatus = 'active' | 'done' | 'dismissed';
+export type ManualReminderGroup =
+    'overdue' | 'today' | 'upcoming' | 'no_due' | 'completed';
+
+export type ManualReminderListItem = {
+    id: string;
+    title: string;
+    due_on: string | null;
+    note: string | null;
+    status: ManualReminderStatus;
+    group: ManualReminderGroup;
+    updated_at: string;
+};
+
+export type ManualReminderFilters = {
+    status: string | null;
+    due_filter: string | null;
+    search: string | null;
+};
+
+export type ManualReminderSummary = {
+    activeCount: number;
+    dueTodayCount: number;
+    overdueCount: number;
+    completedThisMonthCount: number;
+};

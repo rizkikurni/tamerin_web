@@ -23,7 +23,8 @@ use Illuminate\Support\Carbon;
  *     type: 'budget'|'obligation'|'savings'|'investment',
  *     title: string,
  *     message: string,
- *     priority: 'high'|'medium'|'low'
+ *     priority: 'high'|'medium'|'low',
+ *     href: string
  * }
  */
 class SystemReminderQuery
@@ -88,6 +89,7 @@ class SystemReminderQuery
                 ? 'Sudah melewati batas yang ditentukan.'
                 : "Sudah terpakai {$budget['percentage']}% dari batas.",
             'priority' => $isOver ? 'high' : 'medium',
+            'href' => route('budgets.index'),
         ];
     }
 
@@ -120,6 +122,7 @@ class SystemReminderQuery
                         default => "Jatuh tempo {$daysUntilDue} hari lagi.",
                     },
                     'priority' => 'high',
+                    'href' => route('obligations.show', $obligation),
                 ];
             })
             ->values()
@@ -156,6 +159,7 @@ class SystemReminderQuery
                     'title' => $goal->name,
                     'message' => "Target segera jatuh tempo dengan progres {$percentage}%.",
                     'priority' => 'medium',
+                    'href' => route('savings-goals.show', $goal),
                 ];
             })
             ->values()
@@ -186,6 +190,7 @@ class SystemReminderQuery
                     ? 'Belum memiliki data penilaian.'
                     : 'Nilai investasi belum diperbarui lebih dari 30 hari.',
                 'priority' => 'low',
+                'href' => route('investments.show', $holding),
             ])
             ->values()
             ->all();

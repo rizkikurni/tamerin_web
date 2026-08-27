@@ -9,7 +9,18 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property string $user_id
+ * @property string $title
+ * @property Carbon|null $due_on
+ * @property string|null $note
+ * @property ManualReminderStatus $status
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 #[Fillable(['title', 'due_on', 'note', 'status'])]
 class ManualReminder extends Model
 {

@@ -153,6 +153,10 @@ export function StatusMessage({ message }: { message?: string | null }) {
         'obligation-updated': 'Utang atau piutang berhasil diperbarui.',
         'obligation-archived': 'Utang atau piutang berhasil diarsipkan.',
         'obligation-settlement-recorded': 'Pembayaran berhasil dicatat.',
+        'manual-reminder-created': 'Pengingat berhasil dibuat.',
+        'manual-reminder-updated': 'Pengingat berhasil diperbarui.',
+        'manual-reminder-completed': 'Pengingat ditandai selesai.',
+        'manual-reminder-dismissed': 'Pengingat berhasil diabaikan.',
     };
 
     return (

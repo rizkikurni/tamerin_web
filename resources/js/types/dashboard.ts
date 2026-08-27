@@ -89,6 +89,7 @@ export interface SystemReminder {
     title: string;
     message: string;
     priority: 'high' | 'medium' | 'low';
+    href: string;
 }
 
 export interface SystemReminderResponse {

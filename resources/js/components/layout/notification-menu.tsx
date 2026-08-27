@@ -1,4 +1,4 @@
-import { useHttp } from '@inertiajs/react';
+import { Link, useHttp } from '@inertiajs/react';
 import {
     AlertTriangle,
     Bell,
@@ -163,8 +163,10 @@ export default function NotificationMenu() {
                                 const Icon = reminderIcons[reminder.type];
 
                                 return (
-                                    <div
+                                    <Link
                                         key={reminder.id}
+                                        href={reminder.href}
+                                        onClick={() => setOpen(false)}
                                         className="flex gap-3 rounded-2xl p-3"
                                     >
                                         <div
@@ -185,7 +187,7 @@ export default function NotificationMenu() {
                                                 {reminder.message}
                                             </p>
                                         </div>
-                                    </div>
+                                    </Link>
                                 );
                             })}
                         </div>

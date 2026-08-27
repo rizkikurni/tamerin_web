@@ -24,6 +24,7 @@ import { index as financialAccountsIndex } from '@/routes/financial-accounts';
 import { index as investmentsIndex } from '@/routes/investments';
 import { index as obligationsIndex } from '@/routes/obligations';
 import { edit as editProfile } from '@/routes/profile';
+import { index as remindersIndex } from '@/routes/reminders';
 import { index as savingsGoalsIndex } from '@/routes/savings-goals';
 import { index as transactionsIndex } from '@/routes/transactions';
 
@@ -82,7 +83,7 @@ const navigationItems = {
     reminders: {
         label: 'Pengingat',
         icon: Bell,
-        href: '/reminders',
+        href: remindersIndex.url(),
     },
     reports: {
         label: 'Laporan',
