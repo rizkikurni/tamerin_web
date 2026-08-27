@@ -184,3 +184,115 @@ export type SavingsGoalPermissions = {
     canArchive: boolean;
     canContribute: boolean;
 };
+
+export type InvestmentInstrumentType =
+    'stock' | 'mutual_fund' | 'crypto' | 'bond' | 'gold' | 'other';
+
+export type InvestmentHoldingStatus = 'active' | 'archived';
+
+export type InvestmentValuationStatus = 'active' | 'voided';
+
+export type InvestmentListItem = {
+    id: string;
+    name: string;
+    instrument_type: InvestmentInstrumentType;
+    acquisition_cost: number;
+    acquired_on: string;
+    units: string | null;
+    status: InvestmentHoldingStatus;
+    last_valuation_at: string | null;
+    archived_at: string | null;
+    current_value: number | null;
+    profit_loss: number | null;
+    profit_loss_percentage: number | null;
+};
+
+export type InvestmentFormData = Pick<
+    InvestmentListItem,
+    | 'id'
+    | 'name'
+    | 'instrument_type'
+    | 'acquisition_cost'
+    | 'acquired_on'
+    | 'units'
+>;
+
+export type InvestmentSummary = {
+    totalCurrentValue: number;
+    totalAcquisitionCost: number;
+    profitLoss: number;
+    staleCount: number;
+};
+
+export type InvestmentFilters = {
+    instrument_type: string | null;
+    status: string | null;
+    valuation_condition: string | null;
+};
+
+export type InvestmentValuation = {
+    id: string;
+    valued_on: string;
+    value: number;
+    note: string | null;
+    status: InvestmentValuationStatus;
+};
+
+export type InvestmentChartPoint = Pick<
+    InvestmentValuation,
+    'valued_on' | 'value'
+>;
+
+export type InvestmentPermissions = {
+    canEdit: boolean;
+    canArchive: boolean;
+    canValue: boolean;
+};
+
+export type AssetType =
+    'vehicle' | 'electronics' | 'property' | 'jewelry' | 'other';
+
+export type AssetStatus = 'active' | 'archived';
+
+export type AssetListItem = {
+    id: string;
+    name: string;
+    asset_type: AssetType;
+    acquired_on: string | null;
+    acquisition_cost: number | null;
+    current_value: number;
+    valued_on: string;
+    note: string | null;
+    status: AssetStatus;
+    archived_at: string | null;
+    estimated_difference: number | null;
+};
+
+export type AssetFormData = Pick<
+    AssetListItem,
+    | 'id'
+    | 'name'
+    | 'asset_type'
+    | 'acquired_on'
+    | 'acquisition_cost'
+    | 'current_value'
+    | 'valued_on'
+    | 'note'
+>;
+
+export type AssetSummary = {
+    totalCurrentValue: number;
+    totalAcquisitionCost: number;
+    activeCount: number;
+    oldestValuedOn: string | null;
+};
+
+export type AssetFilters = {
+    asset_type: string | null;
+    status: string | null;
+};
+
+export type AssetPermissions = {
+    canEdit: boolean;
+    canArchive: boolean;
+};

@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property InvestmentInstrumentType $instrument_type
  * @property int $acquisition_cost
  * @property Carbon $acquired_on
- * @property string $units
+ * @property string|null $units
  * @property InvestmentHoldingStatus $status
  * @property Carbon|null $last_valuation_at
  * @property Carbon|null $archived_at

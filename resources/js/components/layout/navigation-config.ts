@@ -17,9 +17,11 @@ import {
 import type { LucideIcon } from 'lucide-react';
 
 import { dashboard } from '@/routes';
+import { index as assetsIndex } from '@/routes/assets';
 import { index as budgetsIndex } from '@/routes/budgets';
 import { index as categoriesIndex } from '@/routes/categories';
 import { index as financialAccountsIndex } from '@/routes/financial-accounts';
+import { index as investmentsIndex } from '@/routes/investments';
 import { edit as editProfile } from '@/routes/profile';
 import { index as savingsGoalsIndex } from '@/routes/savings-goals';
 import { index as transactionsIndex } from '@/routes/transactions';
@@ -64,12 +66,12 @@ const navigationItems = {
     investments: {
         label: 'Investasi',
         icon: TrendingUp,
-        href: '/investments',
+        href: investmentsIndex.url(),
     },
     assets: {
         label: 'Aset',
         icon: Package,
-        href: '/assets',
+        href: assetsIndex.url(),
     },
     debts: {
         label: 'Utang & Piutang',

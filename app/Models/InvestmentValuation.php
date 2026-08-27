@@ -9,7 +9,17 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property string $user_id
+ * @property string $investment_holding_id
+ * @property Carbon $valued_on
+ * @property int $value
+ * @property string|null $note
+ * @property InvestmentValuationStatus $status
+ */
 #[Fillable(['investment_holding_id', 'valued_on', 'value', 'note', 'status'])]
 class InvestmentValuation extends Model
 {
