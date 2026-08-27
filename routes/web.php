@@ -2,18 +2,23 @@
 
 use App\Http\Controllers\ArchiveCategoryController;
 use App\Http\Controllers\ArchiveFinancialAccountController;
+use App\Http\Controllers\ArchiveSavingsGoalController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialAccountController;
+use App\Http\Controllers\SavingsContributionController;
+use App\Http\Controllers\SavingsGoalController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\UserPreferenceController;
 use App\Http\Controllers\SystemReminderController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\VoidSavingsContributionController;
 use App\Http\Controllers\VoidTransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +67,18 @@ Route::middleware('auth')->group(function (): void {
         ->only(['index', 'create', 'store', 'show']);
     Route::patch('/transactions/{transaction}/void', VoidTransactionController::class)
         ->name('transactions.void');
+
+    Route::resource('budgets', BudgetController::class)
+        ->only(['index', 'store', 'update']);
+
+    Route::resource('savings-goals', SavingsGoalController::class)
+        ->except(['destroy']);
+    Route::patch('/savings-goals/{savings_goal}/archive', ArchiveSavingsGoalController::class)
+        ->name('savings-goals.archive');
+    Route::post('/savings-goals/{savings_goal}/contributions', [SavingsContributionController::class, 'store'])
+        ->name('savings-goals.contributions.store');
+    Route::patch('/savings-contributions/{savings_contribution}/void', VoidSavingsContributionController::class)
+        ->name('savings-contributions.void');
 
     Route::prefix('settings')->group(function (): void {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

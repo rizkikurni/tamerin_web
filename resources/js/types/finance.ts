@@ -108,3 +108,79 @@ export type TransactionFilterOptions = {
     accounts: TransactionAccountOption[];
     categories: TransactionCategoryOption[];
 };
+
+export type BudgetStatus = 'safe' | 'warning' | 'reached' | 'over';
+
+export type BudgetListItem = {
+    id: string;
+    category: {
+        id: string;
+        name: string;
+        color_token: string | null;
+        icon: string | null;
+    };
+    period_start: string;
+    amount: number;
+    spent: number;
+    remaining: number;
+    percentage: number;
+    status: BudgetStatus;
+};
+
+export type BudgetSummary = {
+    allocated: number;
+    spent: number;
+    remaining: number;
+    percentage: number;
+    overBudgetCount: number;
+};
+
+export type SavingsGoalStatus = 'active' | 'completed' | 'archived';
+
+export type SavingsContributionStatus = 'active' | 'voided';
+
+export type SavingsGoalListItem = {
+    id: string;
+    name: string;
+    target_amount: number;
+    saved_amount: number;
+    remaining_amount: number;
+    percentage: number;
+    target_date: string | null;
+    status: SavingsGoalStatus;
+    completed_at: string | null;
+    archived_at: string | null;
+};
+
+export type SavingsGoalFormData = Pick<
+    SavingsGoalListItem,
+    'id' | 'name' | 'target_amount' | 'target_date'
+>;
+
+export type SavingsGoalSummary = {
+    activeCount: number;
+    totalTarget: number;
+    totalSaved: number;
+    completedCount: number;
+};
+
+export type SavingsGoalFilters = {
+    status: string | null;
+};
+
+export type SavingsContributionListItem = {
+    id: string;
+    amount: number;
+    contributed_on: string;
+    note: string | null;
+    status: SavingsContributionStatus;
+    voided_at: string | null;
+    void_reason: string | null;
+    account: TransactionRelation | null;
+};
+
+export type SavingsGoalPermissions = {
+    canEdit: boolean;
+    canArchive: boolean;
+    canContribute: boolean;
+};

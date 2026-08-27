@@ -134,6 +134,13 @@ export function StatusMessage({ message }: { message?: string | null }) {
         'category-archived': 'Kategori berhasil diarsipkan.',
         'transaction-created': 'Transaksi berhasil dicatat.',
         'transaction-voided': 'Transaksi berhasil dibatalkan.',
+        'budget-created': 'Budget berhasil dibuat.',
+        'budget-updated': 'Budget berhasil diperbarui.',
+        'savings-goal-created': 'Target tabungan berhasil dibuat.',
+        'savings-goal-updated': 'Target tabungan berhasil diperbarui.',
+        'savings-goal-archived': 'Target tabungan berhasil diarsipkan.',
+        'savings-contribution-recorded': 'Setoran target berhasil dicatat.',
+        'savings-contribution-voided': 'Setoran target berhasil dibatalkan.',
     };
 
     return (

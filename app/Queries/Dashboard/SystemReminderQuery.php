@@ -2,6 +2,7 @@
 
 namespace App\Queries\Dashboard;
 
+use App\Enums\BudgetUsageStatus;
 use App\Enums\InvestmentHoldingStatus;
 use App\Enums\ObligationKind;
 use App\Enums\ObligationStatus;
@@ -11,6 +12,7 @@ use App\Models\InvestmentHolding;
 use App\Models\Obligation;
 use App\Models\SavingsGoal;
 use App\Models\User;
+use App\Queries\Budgets\BudgetUsageQuery;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -71,12 +73,12 @@ class SystemReminderQuery
     }
 
     /**
-     * @param  array{id: string, category: string, spent: int, limit: int, remaining: int, percentage: float, status: 'safe'|'warning'|'reached'|'over'}  $budget
+     * @param  array{id: string, category: string, spent: int, limit: int, remaining: int, percentage: float, status: BudgetUsageStatus}  $budget
      * @return SystemReminder
      */
     private function budgetReminder(array $budget): array
     {
-        $isOver = $budget['status'] === 'over';
+        $isOver = $budget['status'] === BudgetUsageStatus::Over;
 
         return [
             'id' => "budget:{$budget['id']}",

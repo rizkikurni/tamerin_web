@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DashboardPeriodRequest;
 use App\Models\User;
-use App\Queries\Dashboard\BudgetUsageQuery;
+use App\Queries\Budgets\BudgetUsageQuery;
 use App\Queries\Dashboard\DashboardSecondarySummaryQuery;
 use App\Queries\Dashboard\DashboardSummaryQuery;
 use App\Queries\Dashboard\NetWorthQuery;
