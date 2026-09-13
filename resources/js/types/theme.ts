@@ -1,10 +1,6 @@
 export type ThemeMode = 'system' | 'light' | 'dark';
 
-export type ThemePreset =
-    | 'ocean'
-    | 'forest'
-    | 'violet'
-    | 'custom';
+export type ThemePreset = 'ocean' | 'forest' | 'violet' | 'custom';
 
 export interface ThemeColors {
     primary: string;

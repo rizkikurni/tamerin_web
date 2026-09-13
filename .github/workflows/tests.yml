@@ -1,17 +1,52 @@
-name: tests
+name: CI/CD
 
 on:
   push:
     branches:
       - main
   pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: Deploy the main branch after CI passes
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
 
 jobs:
   ci:
+    name: Quality gate
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: tamerin_testing
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: tamerin_testing
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
 
     steps:
       - name: Checkout code
@@ -23,6 +58,7 @@ jobs:
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
           php-version: '8.5'
+          extensions: dom, fileinfo, intl, mbstring, pgsql, zip
           tools: composer:v2
           coverage: none
 
@@ -30,9 +66,128 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '22'
+          cache: npm
 
-      - name: Setup Application
-        run: composer setup
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
 
-      - name: Run CI Checks
+      - name: Prepare application
+        run: |
+          cp .env.example .env
+          php artisan key:generate --force
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run quality gate
         run: composer ci:check
+
+      - name: Build production assets
+        run: npm run build
+
+  deploy:
+    name: Deploy production
+    needs: ci
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || inputs.deploy == true)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    concurrency:
+      group: production-deployment
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.5'
+          extensions: dom, fileinfo, intl, mbstring, pgsql, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Build release
+        run: |
+          composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-progress
+          npm ci
+          npm run build
+          tar \
+            --exclude='./.git' \
+            --exclude='./.github' \
+            --exclude='./.env' \
+            --exclude='./node_modules' \
+            --exclude='./storage' \
+            --exclude='./tests' \
+            --exclude='./public/hot' \
+            --exclude='./.phpunit.cache' \
+            --exclude='./.phpunit.result.cache' \
+            -czf /tmp/tamerin-release.tar.gz .
+
+      - name: Configure SSH
+        env:
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          test -n "$VPS_SSH_PRIVATE_KEY"
+          test -n "$VPS_KNOWN_HOSTS"
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" > ~/.ssh/tamerin_deploy
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/tamerin_deploy ~/.ssh/known_hosts
+
+      - name: Upload and activate release
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
+          RELEASE_ID: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          test -n "$VPS_HOST"
+          test -n "$VPS_PORT"
+          test -n "$VPS_USER"
+          [[ "$VPS_PORT" =~ ^[0-9]+$ ]]
+          [[ "$VPS_DEPLOY_PATH" == /* ]]
+          [[ "$VPS_DEPLOY_PATH" != '/' ]]
+
+          remote="$VPS_USER@$VPS_HOST"
+          remote_archive="/tmp/tamerin-$RELEASE_ID.tar.gz"
+
+          scp \
+            -i ~/.ssh/tamerin_deploy \
+            -P "$VPS_PORT" \
+            -o BatchMode=yes \
+            /tmp/tamerin-release.tar.gz \
+            "$remote:$remote_archive"
+
+          remote_command=$(printf 'bash -s -- %q %q' "$VPS_DEPLOY_PATH" "$RELEASE_ID")
+
+          ssh \
+            -i ~/.ssh/tamerin_deploy \
+            -p "$VPS_PORT" \
+            -o BatchMode=yes \
+            "$remote" \
+            "$remote_command" < .github/scripts/deploy-release.sh
+
+      - name: Verify production health
+        env:
+          VPS_HEALTHCHECK_URL: ${{ secrets.VPS_HEALTHCHECK_URL }}
+        run: |
+          if [[ -z "$VPS_HEALTHCHECK_URL" ]]; then
+            echo 'VPS_HEALTHCHECK_URL is not configured; skipping HTTP health check.'
+            exit 0
+          fi
+
+          curl --fail --silent --show-error --retry 5 --retry-delay 3 "${VPS_HEALTHCHECK_URL%/}/up"
