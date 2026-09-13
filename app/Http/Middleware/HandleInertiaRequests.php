@@ -39,6 +39,13 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'seo' => [
+                'siteName' => config('seo.site_name'),
+                'description' => config('seo.description'),
+                'homeUrl' => route('home'),
+                'locale' => config('seo.locale'),
+                'language' => config('seo.language'),
+            ],
             'auth' => [
                 'user' => function () use ($request): ?array {
                     $user = $request->user();

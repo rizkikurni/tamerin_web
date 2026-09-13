@@ -1,10 +1,11 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Check, CircleDollarSign, ShieldCheck } from 'lucide-react';
 
 import DashboardPreview from '@/components/landing/dashboard-preview';
 import FeatureSection from '@/components/landing/feature-section';
 import LandingBrand from '@/components/landing/landing-brand';
 import LandingPrimaryLink from '@/components/landing/landing-primary-link';
+import SeoHead from '@/components/seo-head';
 import { dashboard, login, register } from '@/routes';
 
 const benefits = [
@@ -20,12 +21,7 @@ export default function Welcome() {
 
     return (
         <>
-            <Head title="Kelola Keuangan dengan Lebih Tenang">
-                <meta
-                    name="description"
-                    content="Tamerin membantu mencatat transaksi, menyusun anggaran, memantau tabungan, investasi, aset, dan laporan keuangan dalam satu tempat."
-                />
-            </Head>
+            <SeoHead title="Kelola Keuangan dengan Lebih Tenang" index />
 
             <div className="min-h-screen overflow-hidden bg-background text-foreground">
                 <header className="sticky top-0 z-50 border-b border-[var(--glass-border)] bg-background/80 backdrop-blur-xl">

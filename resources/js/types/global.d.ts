@@ -12,6 +12,13 @@ declare module '@inertiajs/core' {
     export interface InertiaConfig {
         sharedPageProps: {
             name: string;
+            seo: {
+                siteName: string;
+                description: string;
+                homeUrl: string;
+                locale: string;
+                language: string;
+            };
             auth: Auth;
             flash: {
                 status: string | null;

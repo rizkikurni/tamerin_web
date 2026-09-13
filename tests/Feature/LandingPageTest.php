@@ -8,7 +8,12 @@ test('landing page can be rendered for guests', function () {
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('welcome')
-            ->where('auth.user', null));
+            ->where('auth.user', null)
+            ->where('seo.siteName', 'Tamerin')
+            ->where('seo.description', config('seo.description'))
+            ->where('seo.homeUrl', route('home'))
+            ->where('seo.locale', 'id_ID')
+            ->where('seo.language', 'id-ID'));
 });
 
 test('landing page can be rendered for authenticated users', function () {

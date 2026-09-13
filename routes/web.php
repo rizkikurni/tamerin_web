@@ -27,6 +27,7 @@ use App\Http\Controllers\ObligationSettlementController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavingsContributionController;
 use App\Http\Controllers\SavingsGoalController;
+use App\Http\Controllers\SeoController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\UserPreferenceController;
@@ -36,6 +37,9 @@ use App\Http\Controllers\VoidInvestmentValuationController;
 use App\Http\Controllers\VoidSavingsContributionController;
 use App\Http\Controllers\VoidTransactionController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('seo.robots');
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('seo.sitemap');
 
 Route::inertia('/', 'welcome')->name('home');
 
