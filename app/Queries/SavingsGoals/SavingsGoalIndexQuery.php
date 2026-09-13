@@ -30,7 +30,7 @@ class SavingsGoalIndexQuery
      * @param  array{status: string|null}  $filters
      * @return LengthAwarePaginator<int, covariant SavingsGoalListItem>
      */
-    public function paginate(User $user, array $filters): LengthAwarePaginator
+    public function paginate(User $user, array $filters, int $perPage = 12): LengthAwarePaginator
     {
         return SavingsGoal::query()
             ->whereBelongsTo($user)
@@ -54,7 +54,7 @@ class SavingsGoalIndexQuery
             )
             ->orderByRaw('target_date ASC NULLS LAST')
             ->latest('created_at')
-            ->paginate(12)
+            ->paginate($perPage)
             ->withQueryString()
             ->through($this->toIndexItem(...));
     }

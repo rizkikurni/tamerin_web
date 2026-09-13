@@ -16,12 +16,15 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompleteManualReminderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DismissManualReminderController;
+use App\Http\Controllers\ExportAuditController;
+use App\Http\Controllers\ExportReportController;
 use App\Http\Controllers\FinancialAccountController;
 use App\Http\Controllers\InvestmentHoldingController;
 use App\Http\Controllers\InvestmentValuationController;
 use App\Http\Controllers\ManualReminderController;
 use App\Http\Controllers\ObligationController;
 use App\Http\Controllers\ObligationSettlementController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavingsContributionController;
 use App\Http\Controllers\SavingsGoalController;
 use App\Http\Controllers\Settings\PasswordController;
@@ -120,6 +123,13 @@ Route::middleware('auth')->group(function (): void {
         ->name('reminders.complete');
     Route::patch('/reminders/{manual_reminder}/dismiss', DismissManualReminderController::class)
         ->name('reminders.dismiss');
+
+    Route::get('/reports', [ReportController::class, 'index'])
+        ->name('reports.index');
+    Route::get('/reports/exports', [ExportAuditController::class, 'index'])
+        ->name('reports.exports.index');
+    Route::post('/reports/exports', [ExportReportController::class, 'store'])
+        ->name('reports.exports.store');
 
     Route::prefix('settings')->group(function (): void {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

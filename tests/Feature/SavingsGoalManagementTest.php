@@ -17,14 +17,14 @@ test('savings goal routes require authentication', function () {
         'savings_goal_id' => $goal->id,
     ]);
 
-    $this->get(route('savings-goals.index'))->assertRedirect(route('login'));
-    $this->get(route('savings-goals.create'))->assertRedirect(route('login'));
-    $this->get(route('savings-goals.show', $goal))->assertRedirect(route('login'));
-    $this->post(route('savings-goals.store'))->assertRedirect(route('login'));
-    $this->patch(route('savings-goals.update', $goal))->assertRedirect(route('login'));
-    $this->patch(route('savings-goals.archive', $goal))->assertRedirect(route('login'));
-    $this->post(route('savings-goals.contributions.store', $goal))->assertRedirect(route('login'));
-    $this->patch(route('savings-contributions.void', $contribution))->assertRedirect(route('login'));
+    $this->get(route('savings-goals.index'))->assertRedirect(route('home'));
+    $this->get(route('savings-goals.create'))->assertRedirect(route('home'));
+    $this->get(route('savings-goals.show', $goal))->assertRedirect(route('home'));
+    $this->post(route('savings-goals.store'))->assertRedirect(route('home'));
+    $this->patch(route('savings-goals.update', $goal))->assertRedirect(route('home'));
+    $this->patch(route('savings-goals.archive', $goal))->assertRedirect(route('home'));
+    $this->post(route('savings-goals.contributions.store', $goal))->assertRedirect(route('home'));
+    $this->patch(route('savings-contributions.void', $contribution))->assertRedirect(route('home'));
 });
 
 test('users only see their own goals and progress only sums active contributions', function () {

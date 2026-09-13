@@ -15,7 +15,7 @@ class InvestmentHoldingIndexQuery
      * @param  array{instrument_type: string|null, status: string|null, valuation_condition: string|null}  $filters
      * @return LengthAwarePaginator<int, covariant array<string, mixed>>
      */
-    public function paginate(User $user, array $filters): LengthAwarePaginator
+    public function paginate(User $user, array $filters, int $perPage = 12): LengthAwarePaginator
     {
         $query = InvestmentHolding::query()
             ->whereBelongsTo($user)
@@ -57,7 +57,7 @@ class InvestmentHoldingIndexQuery
                 fn (Builder $builder): Builder => $builder->whereNull('last_valuation_at'),
             )
             ->latest('created_at')
-            ->paginate(12)
+            ->paginate($perPage)
             ->withQueryString()
             ->through($this->toItem(...));
     }

@@ -387,3 +387,62 @@ export type ManualReminderSummary = {
     overdueCount: number;
     completedThisMonthCount: number;
 };
+
+export type ReportType =
+    | 'transactions'
+    | 'cash_flow'
+    | 'budgets'
+    | 'savings'
+    | 'investments'
+    | 'net_worth'
+    | 'obligations';
+
+export type ReportFilters = {
+    report_type: ReportType;
+    date_from: string;
+    date_to: string;
+    account_id: string | null;
+    category_id: string | null;
+    status: string | null;
+};
+
+export type ReportColumn = {
+    key: string;
+    label: string;
+    format: 'text' | 'currency' | 'date' | 'number' | 'percentage' | 'status';
+};
+
+export type ReportChartPoint = {
+    date: string;
+    income: number;
+    expense: number;
+};
+
+export type FinancialReport = {
+    type: ReportType;
+    title: string;
+    summary: Record<string, number>;
+    columns: ReportColumn[];
+    details: PaginatedData<Record<string, unknown>>;
+    chart: ReportChartPoint[];
+};
+
+export type ReportFilterOptions = {
+    accounts: SelectOption[];
+    categories: SelectOption[];
+};
+
+export type ExportAuditFilters = {
+    report_type: string | null;
+    format: string | null;
+};
+
+export type ExportAuditListItem = {
+    id: string;
+    report_type: ReportType;
+    format: 'pdf' | 'xlsx';
+    filters: Record<string, unknown>;
+    row_count: number;
+    file_name: string;
+    generated_at: string;
+};

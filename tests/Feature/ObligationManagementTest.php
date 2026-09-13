@@ -11,12 +11,12 @@ use Inertia\Testing\AssertableInertia as Assert;
 test('obligation routes require authentication', function () {
     $obligation = Obligation::factory()->create();
 
-    $this->get(route('obligations.index'))->assertRedirect(route('login'));
-    $this->get(route('obligations.create'))->assertRedirect(route('login'));
-    $this->get(route('obligations.show', $obligation))->assertRedirect(route('login'));
-    $this->post(route('obligations.store'))->assertRedirect(route('login'));
-    $this->patch(route('obligations.update', $obligation))->assertRedirect(route('login'));
-    $this->patch(route('obligations.archive', $obligation))->assertRedirect(route('login'));
+    $this->get(route('obligations.index'))->assertRedirect(route('home'));
+    $this->get(route('obligations.create'))->assertRedirect(route('home'));
+    $this->get(route('obligations.show', $obligation))->assertRedirect(route('home'));
+    $this->post(route('obligations.store'))->assertRedirect(route('home'));
+    $this->patch(route('obligations.update', $obligation))->assertRedirect(route('home'));
+    $this->patch(route('obligations.archive', $obligation))->assertRedirect(route('home'));
 });
 
 test('obligation index is owner scoped and supports kind status due and search filters', function () {

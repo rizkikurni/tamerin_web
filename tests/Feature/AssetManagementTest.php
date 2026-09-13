@@ -10,12 +10,12 @@ use Inertia\Testing\AssertableInertia as Assert;
 test('asset routes require authentication', function () {
     $asset = Asset::factory()->create();
 
-    $this->get(route('assets.index'))->assertRedirect(route('login'));
-    $this->get(route('assets.create'))->assertRedirect(route('login'));
-    $this->get(route('assets.show', $asset))->assertRedirect(route('login'));
-    $this->post(route('assets.store'))->assertRedirect(route('login'));
-    $this->patch(route('assets.update', $asset))->assertRedirect(route('login'));
-    $this->patch(route('assets.archive', $asset))->assertRedirect(route('login'));
+    $this->get(route('assets.index'))->assertRedirect(route('home'));
+    $this->get(route('assets.create'))->assertRedirect(route('home'));
+    $this->get(route('assets.show', $asset))->assertRedirect(route('home'));
+    $this->post(route('assets.store'))->assertRedirect(route('home'));
+    $this->patch(route('assets.update', $asset))->assertRedirect(route('home'));
+    $this->patch(route('assets.archive', $asset))->assertRedirect(route('home'));
 });
 
 test('asset index is owner scoped and returns active summary', function () {

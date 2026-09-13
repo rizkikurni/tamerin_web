@@ -11,9 +11,9 @@ use Inertia\Testing\AssertableInertia as Assert;
 test('budget routes require authentication', function () {
     $budget = Budget::factory()->create();
 
-    $this->get(route('budgets.index'))->assertRedirect(route('login'));
-    $this->post(route('budgets.store'))->assertRedirect(route('login'));
-    $this->patch(route('budgets.update', $budget))->assertRedirect(route('login'));
+    $this->get(route('budgets.index'))->assertRedirect(route('home'));
+    $this->post(route('budgets.store'))->assertRedirect(route('home'));
+    $this->patch(route('budgets.update', $budget))->assertRedirect(route('home'));
 });
 
 test('users only see their own budgets for the selected month with calculated usage', function () {

@@ -24,8 +24,23 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('dashboard and system reminders require authentication', function () {
-    $this->get(route('dashboard'))->assertRedirect(route('login'));
-    $this->get(route('system-reminders.index'))->assertRedirect(route('login'));
+    $this->get(route('dashboard'))->assertRedirect(route('home'));
+    $this->get(route('system-reminders.index'))->assertRedirect(route('home'));
+});
+
+test('dashboard shares the logged in user identity for the account menu', function () {
+    $user = User::factory()->create([
+        'name' => 'Nadia Pratama',
+        'email' => 'nadia@example.test',
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('auth.user.id', $user->id)
+            ->where('auth.user.name', 'Nadia Pratama')
+            ->where('auth.user.email', 'nadia@example.test'));
 });
 
 test('dashboard validates the selected monthly period', function () {

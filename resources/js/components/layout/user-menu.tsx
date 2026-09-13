@@ -1,3 +1,4 @@
+import { usePage } from '@inertiajs/react';
 import { LogOut, Settings, User } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -25,14 +26,29 @@ function UserMenuLink({ href, icon: Icon, label }: UserMenuLinkProps) {
     );
 }
 
+function getUserInitials(name: string): string {
+    const nameParts = name.trim().split(/\s+/).filter(Boolean);
+
+    if (nameParts.length === 0) {
+        return 'U';
+    }
+
+    if (nameParts.length === 1) {
+        return nameParts[0].charAt(0).toUpperCase();
+    }
+
+    return `${nameParts[0].charAt(0)}${nameParts.at(-1)?.charAt(0) ?? ''}`.toUpperCase();
+}
+
 export default function UserMenu() {
     const [open, setOpen] = useState(false);
+    const user = usePage().props.auth.user;
 
-    const user = {
-        name: 'Rizki',
-        email: 'rizki@tamerin.id',
-        initials: 'RK',
-    };
+    if (!user) {
+        return null;
+    }
+
+    const initials = getUserInitials(user.name);
 
     return (
         <div className="relative z-50">
@@ -57,7 +73,7 @@ export default function UserMenu() {
                 aria-haspopup="menu"
                 aria-expanded={open}
             >
-                {user.initials}
+                {initials}
             </button>
 
             {open && (

@@ -10,7 +10,18 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property string $user_id
+ * @property ExportReportType $report_type
+ * @property ExportFormat $format
+ * @property array<string, mixed> $filters_json
+ * @property int $row_count
+ * @property string $file_name
+ * @property Carbon $generated_at
+ */
 #[Fillable(['report_type', 'format', 'filters_json', 'row_count', 'file_name', 'generated_at'])]
 class ExportAudit extends Model
 {

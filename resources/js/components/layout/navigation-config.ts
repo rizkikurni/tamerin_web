@@ -25,6 +25,7 @@ import { index as investmentsIndex } from '@/routes/investments';
 import { index as obligationsIndex } from '@/routes/obligations';
 import { edit as editProfile } from '@/routes/profile';
 import { index as remindersIndex } from '@/routes/reminders';
+import { index as reportsIndex } from '@/routes/reports';
 import { index as savingsGoalsIndex } from '@/routes/savings-goals';
 import { index as transactionsIndex } from '@/routes/transactions';
 
@@ -88,7 +89,7 @@ const navigationItems = {
     reports: {
         label: 'Laporan',
         icon: BarChart3,
-        href: '/reports',
+        href: reportsIndex.url(),
     },
     settings: {
         label: 'Pengaturan',

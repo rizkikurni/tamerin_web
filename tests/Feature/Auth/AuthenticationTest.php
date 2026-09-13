@@ -57,7 +57,7 @@ test('authenticated users can logout', function () {
 });
 
 test('guests are redirected from protected settings pages', function (string $routeName) {
-    $this->get(route($routeName))->assertRedirect(route('login'));
+    $this->get(route($routeName))->assertRedirect(route('home'));
 })->with([
     'profile' => 'profile.edit',
     'password' => 'password.edit',

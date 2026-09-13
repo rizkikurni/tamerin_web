@@ -12,12 +12,12 @@ use Inertia\Testing\AssertableInertia as Assert;
 test('investment holding routes require authentication', function () {
     $holding = InvestmentHolding::factory()->create();
 
-    $this->get(route('investments.index'))->assertRedirect(route('login'));
-    $this->get(route('investments.create'))->assertRedirect(route('login'));
-    $this->get(route('investments.show', $holding))->assertRedirect(route('login'));
-    $this->post(route('investments.store'))->assertRedirect(route('login'));
-    $this->patch(route('investments.update', $holding))->assertRedirect(route('login'));
-    $this->patch(route('investments.archive', $holding))->assertRedirect(route('login'));
+    $this->get(route('investments.index'))->assertRedirect(route('home'));
+    $this->get(route('investments.create'))->assertRedirect(route('home'));
+    $this->get(route('investments.show', $holding))->assertRedirect(route('home'));
+    $this->post(route('investments.store'))->assertRedirect(route('home'));
+    $this->patch(route('investments.update', $holding))->assertRedirect(route('home'));
+    $this->patch(route('investments.archive', $holding))->assertRedirect(route('home'));
 });
 
 test('investment index is owner scoped and reports the latest active values', function () {

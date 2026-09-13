@@ -62,6 +62,31 @@ class BudgetUsageQuery
             );
     }
 
+    /** @return list<BudgetListItem> */
+    public function reportItems(User $user, CarbonInterface $period, ?string $categoryId = null): array
+    {
+        $usageByCategory = $this->usageByCategory($user, $period);
+        $items = Budget::query()
+            ->whereBelongsTo($user)
+            ->whereDate('period_start', $period->copy()->startOfMonth()->toDateString())
+            ->when(
+                $categoryId,
+                fn ($query, string $value) => $query->where('category_id', $value),
+            )
+            ->select(['id', 'category_id', 'period_start', 'amount', 'created_at'])
+            ->with('category:id,name,color_token,icon')
+            ->latest()
+            ->get()
+            ->map(
+                /** @return BudgetListItem */
+                fn (Budget $budget): array => $this->listItem($budget, $usageByCategory),
+            )
+            ->values()
+            ->all();
+
+        return array_values($items);
+    }
+
     /** @return array{allocated: int, spent: int, remaining: int, percentage: float, overBudgetCount: int} */
     public function summary(User $user, CarbonInterface $period): array
     {

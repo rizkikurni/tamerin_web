@@ -11,11 +11,11 @@ use Inertia\Testing\AssertableInertia as Assert;
 test('manual reminder routes require authentication and permanent deletion is unavailable', function () {
     $reminder = ManualReminder::factory()->create();
 
-    $this->get(route('reminders.index'))->assertRedirect(route('login'));
-    $this->post(route('reminders.store'))->assertRedirect(route('login'));
-    $this->patch(route('reminders.update', $reminder))->assertRedirect(route('login'));
-    $this->patch(route('reminders.complete', $reminder))->assertRedirect(route('login'));
-    $this->patch(route('reminders.dismiss', $reminder))->assertRedirect(route('login'));
+    $this->get(route('reminders.index'))->assertRedirect(route('home'));
+    $this->post(route('reminders.store'))->assertRedirect(route('home'));
+    $this->patch(route('reminders.update', $reminder))->assertRedirect(route('home'));
+    $this->patch(route('reminders.complete', $reminder))->assertRedirect(route('home'));
+    $this->patch(route('reminders.dismiss', $reminder))->assertRedirect(route('home'));
 
     expect(Route::has('reminders.destroy'))->toBeFalse();
 });
