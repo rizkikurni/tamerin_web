@@ -84,9 +84,9 @@ class HandleInertiaRequests extends Middleware
                     'mode' => $preference->theme_mode->value,
                     'preset' => $preference->theme_preset->value,
                     'customColors' => $hasCustom ? [
-                        'primary' => $preference->primary_hex ?? '#5B7CFA',
-                        'secondary' => $preference->secondary_hex ?? '#79B8F3',
-                        'accent' => $preference->accent_hex ?? '#62C6C1',
+                        'primary' => $preference->primary_hex ?? '#806CEB',
+                        'secondary' => $preference->secondary_hex ?? '#A58AF4',
+                        'accent' => $preference->accent_hex ?? '#D38CF0',
                     ] : null,
                 ];
             },

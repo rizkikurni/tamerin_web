@@ -29,7 +29,7 @@ test('new users can register with default preferences', function () {
         ->and(Hash::check('password', $user->password))->toBeTrue()
         ->and($user->preference)->not->toBeNull()
         ->and($user->preference?->theme_mode)->toBe(ThemeMode::System)
-        ->and($user->preference?->theme_preset)->toBe(ThemePreset::Ocean)
+        ->and($user->preference?->theme_preset)->toBe(ThemePreset::Violet)
         ->and($user->preference?->timezone)->toBe('Asia/Jakarta');
 });
 

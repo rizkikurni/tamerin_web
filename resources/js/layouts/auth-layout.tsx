@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 
+import BrandIcon from '@/components/brand-icon';
 import SeoHead from '@/components/seo-head';
 import { home } from '@/routes';
 
@@ -21,9 +22,12 @@ export default function AuthLayout({
                     <div className="grid gap-4">
                         <Link
                             href={home()}
-                            className="text-lg font-medium text-primary"
+                            className="inline-flex w-fit items-center gap-2.5 text-lg font-medium text-foreground"
                         >
-                            Tamerin
+                            <span className="grid size-9 place-items-center rounded-xl border border-primary/25 bg-primary-soft text-primary shadow-[var(--brand-shadow)]">
+                                <BrandIcon className="size-[22px]" />
+                            </span>
+                            <span>Tamerin</span>
                         </Link>
                         <div className="grid gap-1">
                             <h1 className="text-2xl font-medium text-foreground">

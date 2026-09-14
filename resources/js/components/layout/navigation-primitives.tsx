@@ -1,10 +1,10 @@
-import { PiggyBank } from 'lucide-react';
 import type {
     AnchorHTMLAttributes,
     ButtonHTMLAttributes,
     ReactNode,
 } from 'react';
 
+import BrandIcon from '@/components/brand-icon';
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 
@@ -25,16 +25,16 @@ export function BrandLink({
             aria-label="Tamerin"
             className={cn(
                 'flex h-11 w-11 items-center justify-center rounded-full',
-                'border-2 border-primary/40 bg-primary text-primary-foreground',
+                'border-2 border-primary/30 bg-primary-soft text-primary',
                 'shadow-[var(--brand-shadow)]',
                 'transition-all duration-200 ease-out',
-                'hover:-translate-y-[1px] hover:brightness-105',
+                'hover:-translate-y-[1px] hover:border-primary/50 hover:brightness-105',
                 'hover:shadow-[var(--brand-shadow-hover)]',
                 className,
             )}
             {...props}
         >
-            <PiggyBank className={cn('h-5 w-5', iconClassName)} />
+            <BrandIcon className={cn('h-6 w-6', iconClassName)} />
         </a>
     );
 }

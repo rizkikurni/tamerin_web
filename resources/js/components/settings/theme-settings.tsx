@@ -9,7 +9,11 @@ import Button from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Progress from '@/components/ui/progress';
 import { useTheme } from '@/hooks/use-theme';
-import { themePresets } from '@/lib/themes';
+import {
+    defaultThemeColors,
+    defaultThemePreset,
+    themePresets,
+} from '@/lib/themes';
 import { cn } from '@/lib/utils';
 import type { ThemeMode, ThemePreset } from '@/types/theme';
 
@@ -194,13 +198,13 @@ export default function ThemeSettings() {
         useTheme();
 
     const [customPrimary, setCustomPrimary] = useState(
-        customColors?.primary ?? '#5B7CFA',
+        customColors?.primary ?? defaultThemeColors.primary,
     );
     const [customSecondary, setCustomSecondary] = useState(
-        customColors?.secondary ?? '#79B8F3',
+        customColors?.secondary ?? defaultThemeColors.secondary,
     );
     const [customAccent, setCustomAccent] = useState(
-        customColors?.accent ?? '#62C6C1',
+        customColors?.accent ?? defaultThemeColors.accent,
     );
 
     const [saving, setSaving] = useState(false);
@@ -249,10 +253,10 @@ export default function ThemeSettings() {
 
     function handleReset() {
         setMode('system');
-        setPreset('ocean');
-        setCustomPrimary('#5B7CFA');
-        setCustomSecondary('#79B8F3');
-        setCustomAccent('#62C6C1');
+        setPreset(defaultThemePreset);
+        setCustomPrimary(defaultThemeColors.primary);
+        setCustomSecondary(defaultThemeColors.secondary);
+        setCustomAccent(defaultThemeColors.accent);
     }
 
     function handleSaveToDatabase() {

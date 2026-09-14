@@ -1,0 +1,23 @@
+import type { SVGAttributes } from 'react';
+
+import { cn } from '@/lib/utils';
+
+export default function BrandIcon({
+    className,
+    ...props
+}: SVGAttributes<SVGSVGElement>) {
+    return (
+        <svg
+            viewBox="0 0 72 72"
+            fill="currentColor"
+            aria-hidden="true"
+            focusable="false"
+            className={cn('shrink-0', className)}
+            {...props}
+        >
+            <path d="M8 29c0-9.8 5.9-16.7 14.4-18.9l27.3-7C55.4 1.6 61 5.9 61 11.8V24H25.1C17.7 24 11.8 25.8 8 29Z" />
+            <path d="M8 31.8c4.3-4.2 10-6 17.1-6H64a8 8 0 0 1 0 16H39a8 8 0 0 0-8 8V68H18c-5.5 0-10-4.5-10-10V31.8Z" />
+            <circle cx="57" cy="58" r="10" />
+        </svg>
+    );
+}

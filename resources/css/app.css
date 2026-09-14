@@ -26,14 +26,14 @@
     --border: #eef0f3;
     --border-strong: #dde0e6;
 
-    --primary: #5b7cfa;
+    --primary: #806ceb;
     --primary-foreground: #ffffff;
     --primary-soft: color-mix(in srgb, var(--primary) 11%, white);
 
-    --secondary: #79b8f3;
+    --secondary: #a58af4;
     --secondary-soft: color-mix(in srgb, var(--secondary) 11%, white);
 
-    --accent: #62c6c1;
+    --accent: #d38cf0;
     --accent-soft: color-mix(in srgb, var(--accent) 12%, white);
 
     --success: #22c55e;

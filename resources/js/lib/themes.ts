@@ -23,12 +23,15 @@ export const themePresets: Record<
     },
 };
 
+export const defaultThemePreset: Exclude<ThemePreset, 'custom'> = 'violet';
+export const defaultThemeColors = themePresets[defaultThemePreset];
+
 export function getThemeColors(
     preset: ThemePreset,
     customColors?: ThemeColors,
 ): ThemeColors {
     if (preset === 'custom') {
-        return customColors ?? themePresets.ocean;
+        return customColors ?? defaultThemeColors;
     }
 
     return themePresets[preset];

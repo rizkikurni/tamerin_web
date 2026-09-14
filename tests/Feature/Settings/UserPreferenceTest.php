@@ -22,6 +22,18 @@ test('preference settings screen can be rendered', function () {
             ->where('preferences.theme_preset', $preference->theme_preset->value));
 });
 
+test('preference settings use violet when the user has no saved preference', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('preferences.edit'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('settings/preferences')
+            ->where('preferences.theme_mode', ThemeMode::System->value)
+            ->where('preferences.theme_preset', ThemePreset::Violet->value));
+});
+
 test('users can update only their own preferences', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();

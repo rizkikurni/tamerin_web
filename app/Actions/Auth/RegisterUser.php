@@ -19,7 +19,7 @@ class RegisterUser
 
             $user->preference()->create([
                 'theme_mode' => ThemeMode::System,
-                'theme_preset' => ThemePreset::Ocean,
+                'theme_preset' => ThemePreset::Violet,
                 'primary_hex' => null,
                 'secondary_hex' => null,
                 'accent_hex' => null,

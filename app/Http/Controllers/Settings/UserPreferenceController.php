@@ -24,7 +24,7 @@ class UserPreferenceController extends Controller
         return Inertia::render('settings/preferences', [
             'preferences' => [
                 'theme_mode' => $preference?->theme_mode->value ?? ThemeMode::System->value,
-                'theme_preset' => $preference?->theme_preset->value ?? ThemePreset::Ocean->value,
+                'theme_preset' => $preference?->theme_preset->value ?? ThemePreset::Violet->value,
                 'primary_hex' => $preference?->primary_hex,
                 'secondary_hex' => $preference?->secondary_hex,
                 'accent_hex' => $preference?->accent_hex,

@@ -1,7 +1,11 @@
 import { createContext, useLayoutEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import { getReadableForeground, getThemeColors } from '@/lib/themes';
+import {
+    defaultThemePreset,
+    getReadableForeground,
+    getThemeColors,
+} from '@/lib/themes';
 import type {
     ThemeColors,
     ThemeMode,
@@ -34,7 +38,7 @@ export default function ThemeProvider({
 }: ThemeProviderProps) {
     const [mode, setMode] = useState<ThemeMode>(preferences?.mode ?? 'system');
     const [preset, setPreset] = useState<ThemePreset>(
-        preferences?.preset ?? 'ocean',
+        preferences?.preset ?? defaultThemePreset,
     );
     const [customColors, setCustomColors] = useState<ThemeColors | undefined>(
         preferences?.customColors,

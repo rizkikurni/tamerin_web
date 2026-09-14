@@ -24,6 +24,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return to_route('profile.edit');
+        return to_route('dashboard');
     }
 }
