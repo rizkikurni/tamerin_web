@@ -49,8 +49,9 @@ chmod -R ug+rwX "$shared_storage" "$release_path/bootstrap/cache"
 
 cd "$release_path"
 
-php artisan optimize:clear
+php artisan optimize:clear --except=cache
 php artisan migrate --force
+php artisan cache:clear
 php artisan storage:link
 php artisan optimize
 php artisan about --only=environment
