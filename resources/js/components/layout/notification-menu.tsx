@@ -29,7 +29,13 @@ const priorityClasses: Record<SystemReminder['priority'], string> = {
     low: 'bg-primary-soft text-primary',
 };
 
-export default function NotificationMenu() {
+interface NotificationMenuProps {
+    triggerClassName?: string;
+}
+
+export default function NotificationMenu({
+    triggerClassName,
+}: NotificationMenuProps = {}) {
     const [open, setOpen] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [response, setResponse] = useState<SystemReminderResponse | null>(
@@ -67,6 +73,7 @@ export default function NotificationMenu() {
         <div className="relative">
             <HeaderActionButton
                 label="Pengingat"
+                className={triggerClassName}
                 aria-expanded={open}
                 aria-controls="system-reminder-menu"
                 onClick={toggleMenu}

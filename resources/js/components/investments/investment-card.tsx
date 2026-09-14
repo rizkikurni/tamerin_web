@@ -56,7 +56,7 @@ export default function InvestmentCard({
                         </Badge>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 rounded-2xl border border-border bg-background/55 p-3.5">
+                    <div className="grid grid-cols-2 gap-3 rounded-2xl border border-primary/10 bg-primary-soft/55 p-3.5 dark:border-border dark:bg-background/55">
                         <div>
                             <p className="text-xs font-light text-muted-foreground">
                                 Modal

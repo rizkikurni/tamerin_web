@@ -118,7 +118,7 @@ export default function InvestmentForm({
                                 />
                             </div>
 
-                            <p className="rounded-2xl border border-border bg-background/60 p-3.5 text-xs leading-5 font-light text-muted-foreground">
+                            <p className="rounded-2xl border border-primary/10 bg-primary-soft/60 p-3.5 text-xs leading-5 font-light text-muted-foreground dark:border-border dark:bg-background/60">
                                 Unit harus lebih dari nol dan dapat memakai
                                 maksimal delapan angka desimal.
                             </p>

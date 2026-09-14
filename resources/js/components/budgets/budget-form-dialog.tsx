@@ -77,7 +77,7 @@ export default function BudgetFormDialog({
                 >
                     {({ errors, processing }) => (
                         <>
-                            <div className="flex items-center gap-3 rounded-2xl border border-border bg-background/60 p-3">
+                            <div className="flex items-center gap-3 rounded-2xl border border-primary/10 bg-primary-soft/60 p-3 dark:border-border dark:bg-background/60">
                                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
                                     <CalendarDays className="h-4 w-4" />
                                 </div>
@@ -127,7 +127,7 @@ export default function BudgetFormDialog({
                             )}
 
                             {isEditing && (
-                                <div className="rounded-2xl border border-border bg-background/60 p-3">
+                                <div className="rounded-2xl border border-primary/10 bg-primary-soft/60 p-3 dark:border-border dark:bg-background/60">
                                     <p className="text-xs font-light text-muted-foreground">
                                         Kategori
                                     </p>

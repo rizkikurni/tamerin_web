@@ -12,6 +12,7 @@ interface AppLayoutProps {
     breadcrumbs?: { label: string; href?: string }[];
     headerActions?: ReactNode;
     currentPath?: string;
+    headerTitle?: string;
 }
 
 export default function AppLayout({
@@ -21,12 +22,13 @@ export default function AppLayout({
     breadcrumbs,
     headerActions,
     currentPath = '/dashboard',
+    headerTitle,
 }: AppLayoutProps) {
     return (
         <>
             <SeoHead title={title} description={description} />
-            <div className="min-h-screen bg-background">
-                <div className="flex min-h-screen">
+            <div className="app-light-glass min-h-screen bg-background">
+                <div className="app-shell flex min-h-screen">
                     {/* Sidebar — desktop only */}
                     <Sidebar currentPath={currentPath} />
 
@@ -38,13 +40,16 @@ export default function AppLayout({
                             description={description}
                             breadcrumbs={breadcrumbs}
                             currentPath={currentPath}
+                            heading={headerTitle}
                         >
                             {headerActions}
                         </AppHeader>
 
                         {/* Page Content */}
-                        <main className="flex-1 bg-background p-4 pb-20 lg:p-6 lg:pb-6">
-                            {children}
+                        <main className="app-page-content flex-1 bg-background p-4 pb-20 lg:p-6 lg:pb-6">
+                            <div className="mx-auto w-full max-w-[1600px]">
+                                {children}
+                            </div>
                         </main>
                     </div>
 

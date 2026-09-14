@@ -47,7 +47,7 @@ export default function TransactionsIndex({
         >
             <Head title="Transaksi" />
 
-            <div className="mx-auto grid max-w-7xl gap-4">
+            <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
 
                 <Card variant="navbar">

@@ -40,7 +40,11 @@ function getUserInitials(name: string): string {
     return `${nameParts[0].charAt(0)}${nameParts.at(-1)?.charAt(0) ?? ''}`.toUpperCase();
 }
 
-export default function UserMenu() {
+interface UserMenuProps {
+    triggerClassName?: string;
+}
+
+export default function UserMenu({ triggerClassName }: UserMenuProps = {}) {
     const [open, setOpen] = useState(false);
     const user = usePage().props.auth.user;
 
@@ -68,6 +72,7 @@ export default function UserMenu() {
                         '-translate-y-0.5 border-primary/60 brightness-105',
                         'shadow-[var(--brand-shadow-hover)]',
                     ],
+                    triggerClassName,
                 )}
                 aria-label="User menu"
                 aria-haspopup="menu"

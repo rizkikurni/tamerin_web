@@ -1,3 +1,4 @@
+import { ChevronDown } from 'lucide-react';
 import type {
     ButtonHTMLAttributes,
     InputHTMLAttributes,
@@ -15,14 +16,18 @@ type FieldProps = {
 };
 
 const formControlClassName = cn(
-    'h-11 rounded-xl border-2 border-border-strong bg-background/70 px-3 py-2',
-    'text-foreground shadow-[var(--control-shadow)] outline-none',
-    'placeholder:text-muted-foreground',
+    'h-11 w-full rounded-[14px] border border-[var(--control-border)]',
+    'bg-[var(--control-background)] px-3.5 py-2 text-sm font-normal text-foreground',
+    'shadow-[var(--control-shadow)] backdrop-blur-sm outline-none',
+    'placeholder:font-light placeholder:text-muted-foreground',
     'transition-[border-color,background-color,box-shadow] duration-200',
-    'hover:border-primary/40',
-    'focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/20',
+    'hover:border-primary/35 hover:bg-surface-muted/80 hover:shadow-[var(--control-shadow-hover)]',
+    'focus:border-primary/60 focus:bg-surface-muted focus:ring-2 focus:ring-primary/15',
     'disabled:cursor-not-allowed disabled:opacity-60',
 );
+
+const fieldClassName =
+    'grid min-w-0 gap-2 text-xs font-medium text-foreground-secondary';
 
 export function TextField({
     label,
@@ -32,7 +37,7 @@ export function TextField({
     ...props
 }: FieldProps & InputHTMLAttributes<HTMLInputElement>) {
     return (
-        <label className="grid gap-1.5 text-sm font-medium text-foreground-secondary">
+        <label className={fieldClassName}>
             <span>{label}</span>
             <input
                 name={name}
@@ -55,15 +60,25 @@ export function SelectField({
     ...props
 }: FieldProps & SelectHTMLAttributes<HTMLSelectElement>) {
     return (
-        <label className="grid gap-1.5 text-sm font-medium text-foreground-secondary">
+        <label className={fieldClassName}>
             <span>{label}</span>
-            <select
-                name={name}
-                className={cn(formControlClassName, className)}
-                {...props}
-            >
-                {children}
-            </select>
+            <span className="relative block">
+                <select
+                    name={name}
+                    className={cn(
+                        formControlClassName,
+                        'peer appearance-none pr-10',
+                        className,
+                    )}
+                    {...props}
+                >
+                    {children}
+                </select>
+                <ChevronDown
+                    aria-hidden="true"
+                    className="pointer-events-none absolute top-1/2 right-3.5 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors peer-focus:text-primary"
+                />
+            </span>
             {error && (
                 <span className="text-xs font-normal text-danger">{error}</span>
             )}
@@ -79,7 +94,7 @@ export function TextAreaField({
     ...props
 }: FieldProps & TextareaHTMLAttributes<HTMLTextAreaElement>) {
     return (
-        <label className="grid gap-1.5 text-sm font-medium text-foreground-secondary">
+        <label className={fieldClassName}>
             <span>{label}</span>
             <textarea
                 name={name}

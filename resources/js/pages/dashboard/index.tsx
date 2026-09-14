@@ -11,7 +11,7 @@ import {
 import AccountSummary from '@/components/dashboard/account-summary';
 import BudgetProgress from '@/components/dashboard/budget-progress';
 import CashFlowChart from '@/components/dashboard/cash-flow-chart';
-import DashboardHeader from '@/components/dashboard/dashboard-header';
+import { DashboardPeriodPicker } from '@/components/dashboard/dashboard-header';
 import InvestmentSummary from '@/components/dashboard/investment-summary';
 import NetWorthCard from '@/components/dashboard/net-worth-card';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
@@ -57,16 +57,21 @@ export default function DashboardIndex({
             description="Ringkasan kondisi keuanganmu."
             breadcrumbs={[{ label: 'Ringkasan' }, { label: 'Dashboard' }]}
             currentPath={dashboard.url()}
+            headerTitle={`Selamat datang, ${auth.user?.name ?? 'Pengguna'}`}
+            headerActions={
+                <DashboardPeriodPicker
+                    key={period.value}
+                    period={period}
+                    className="dashboard-navbar-period"
+                    popupAlign="right"
+                    showChevron={false}
+                />
+            }
         >
             <Head title="Dashboard" />
 
             <div className="relative overflow-hidden">
-                <div className="relative z-10 mx-auto max-w-7xl space-y-6">
-                    <DashboardHeader
-                        userName={auth.user?.name ?? 'Pengguna'}
-                        period={period}
-                    />
-
+                <div className="relative z-10 w-full space-y-3 dark:space-y-6">
                     {isNewUser && (
                         <EmptyState
                             icon={
@@ -91,7 +96,7 @@ export default function DashboardIndex({
                         />
                     )}
 
-                    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4 dark:gap-4">
                         <SummaryCard
                             title="Total Saldo"
                             value={formatRupiah(summary.totalBalance)}
@@ -136,23 +141,23 @@ export default function DashboardIndex({
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-                        <div className="lg:col-span-8">
+                    <div className="grid gap-3 xl:grid-cols-[minmax(0,1.65fr)_minmax(300px,0.75fr)] dark:gap-6 dark:lg:grid-cols-12 dark:xl:grid-cols-12">
+                        <div className="dark:lg:col-span-8">
                             <CashFlowChart data={cashFlow} />
                         </div>
-                        <div className="lg:col-span-4">
+                        <div className="dark:lg:col-span-4">
                             <NetWorthCard netWorth={netWorth} />
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-3 xl:grid-cols-2 dark:gap-6 dark:lg:grid-cols-2">
                         <AccountSummary accounts={accounts} />
                         <BudgetProgress budgets={budgets} />
                     </div>
 
                     <RecentTransactions transactions={recentTransactions} />
 
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-3 xl:grid-cols-2 dark:gap-6 dark:lg:grid-cols-2">
                         <SavingsSummary goal={secondary.savingsGoal} />
                         <InvestmentSummary investment={secondary.investment} />
                     </div>

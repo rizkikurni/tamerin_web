@@ -87,7 +87,7 @@ export default function AssetShow({
         >
             <Head title={asset.name} />
 
-            <div className="mx-auto grid max-w-5xl gap-5">
+            <div className="grid w-full gap-5">
                 <StatusMessage message={flash.status} />
 
                 <Card variant="navbar">
@@ -196,7 +196,7 @@ export default function AssetShow({
                                 Kondisi atau sumber estimasi nilai terakhir.
                             </p>
                         </div>
-                        <p className="rounded-2xl border border-border bg-background/55 p-4 text-sm leading-6 font-light text-foreground-secondary">
+                        <p className="rounded-2xl border border-primary/10 bg-primary-soft/55 p-4 text-sm leading-6 font-light text-foreground-secondary dark:border-border dark:bg-background/55">
                             {asset.note ?? 'Tidak ada catatan untuk aset ini.'}
                         </p>
                         <p className="rounded-2xl bg-warning/10 px-4 py-3 text-xs leading-5 font-light text-warning">

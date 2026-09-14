@@ -18,7 +18,7 @@ export default function SavingsGoalCreate() {
         >
             <Head title="Buat Target Tabungan" />
 
-            <div className="mx-auto max-w-3xl">
+            <div className="w-full">
                 <SavingsGoalForm />
             </div>
         </AppLayout>

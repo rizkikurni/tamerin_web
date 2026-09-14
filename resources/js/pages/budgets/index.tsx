@@ -86,7 +86,7 @@ export default function BudgetsIndex({
         >
             <Head title="Budget" />
 
-            <div className="mx-auto grid max-w-6xl gap-5">
+            <div className="grid w-full gap-5">
                 <StatusMessage message={flash.status} />
 
                 <div className="flex flex-wrap items-center justify-between gap-3">

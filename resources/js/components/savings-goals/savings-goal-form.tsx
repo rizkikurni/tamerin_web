@@ -70,7 +70,7 @@ export default function SavingsGoalForm({
                                 error={errors.target_date}
                             />
 
-                            <div className="flex items-start gap-3 rounded-2xl border border-border bg-background/60 p-3.5">
+                            <div className="flex items-start gap-3 rounded-2xl border border-primary/10 bg-primary-soft/60 p-3.5 dark:border-border dark:bg-background/60">
                                 <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                                 <p className="text-xs leading-5 font-light text-muted-foreground">
                                     Tanggal target hanya menjadi panduan. Target

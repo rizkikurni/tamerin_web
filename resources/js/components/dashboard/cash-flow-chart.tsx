@@ -108,14 +108,14 @@ export default function CashFlowChart({ data }: { data: CashFlowPoint[] }) {
                             Pemasukan dibanding pengeluaran
                         </p>
                     </div>
-                    <div className="flex rounded-xl bg-surface-muted p-1">
+                    <div className="dashboard-chart-toggle flex rounded-xl bg-surface-muted p-1">
                         {(['daily', 'weekly'] as const).map((option) => (
                             <button
                                 key={option}
                                 type="button"
                                 onClick={() => setView(option)}
                                 className={cn(
-                                    'rounded-lg px-3 py-1.5 text-xs font-medium transition-all',
+                                    'dashboard-chart-toggle-option rounded-lg px-3 py-1.5 text-xs font-medium transition-all',
                                     view === option
                                         ? 'bg-surface text-foreground shadow-[var(--control-shadow)]'
                                         : 'text-muted-foreground hover:text-foreground',
@@ -153,9 +153,11 @@ export default function CashFlowChart({ data }: { data: CashFlowPoint[] }) {
                                 }}
                             >
                                 <CartesianGrid
-                                    strokeDasharray="3 3"
-                                    stroke="var(--border)"
-                                    vertical={false}
+                                    horizontal
+                                    vertical
+                                    stroke="var(--muted-foreground)"
+                                    strokeDasharray="4 6"
+                                    strokeOpacity={0.22}
                                 />
                                 <XAxis
                                     dataKey="label"

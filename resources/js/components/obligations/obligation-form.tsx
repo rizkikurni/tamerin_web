@@ -122,7 +122,7 @@ export default function ObligationForm({
                                 error={errors.note}
                             />
 
-                            <div className="flex items-start gap-3 rounded-2xl border border-border bg-background/60 p-3.5">
+                            <div className="flex items-start gap-3 rounded-2xl border border-primary/10 bg-primary-soft/60 p-3.5 dark:border-border dark:bg-background/60">
                                 <CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                                 <p className="text-xs leading-5 font-light text-muted-foreground">
                                     Pembayaran dicatat dari halaman detail dan

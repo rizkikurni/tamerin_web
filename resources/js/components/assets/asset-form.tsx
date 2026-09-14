@@ -134,7 +134,7 @@ export default function AssetForm({
                                 error={errors.note}
                             />
 
-                            <p className="rounded-2xl border border-border bg-background/60 p-3.5 text-xs leading-5 font-light text-muted-foreground">
+                            <p className="rounded-2xl border border-primary/10 bg-primary-soft/60 p-3.5 text-xs leading-5 font-light text-muted-foreground dark:border-border dark:bg-background/60">
                                 Versi pertama belum menyimpan histori nilai
                                 aset. Mengubah nilai akan mengganti estimasi
                                 terakhir.

@@ -24,7 +24,7 @@ export default function SavingsGoalEdit({
         >
             <Head title={`Ubah ${goal.name}`} />
 
-            <div className="mx-auto max-w-3xl">
+            <div className="w-full">
                 <SavingsGoalForm goal={goal} />
             </div>
         </AppLayout>

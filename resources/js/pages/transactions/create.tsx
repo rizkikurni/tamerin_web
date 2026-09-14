@@ -40,7 +40,7 @@ export default function CreateTransaction({
         >
             <Head title="Catat Transaksi" />
 
-            <Card variant="navbar" className="mx-auto max-w-3xl">
+            <Card variant="navbar">
                 <CardHeader>
                     <div className="flex items-start gap-3">
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary">

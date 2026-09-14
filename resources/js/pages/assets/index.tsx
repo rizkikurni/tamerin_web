@@ -63,7 +63,7 @@ export default function AssetIndex({
         >
             <Head title="Aset" />
 
-            <div className="mx-auto grid max-w-6xl gap-5">
+            <div className="grid w-full gap-5">
                 <StatusMessage message={flash.status} />
 
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

@@ -116,7 +116,7 @@ export default function ObligationShow({
         >
             <Head title={obligation.counterparty_name} />
 
-            <div className="mx-auto grid max-w-6xl gap-5">
+            <div className="grid w-full gap-5">
                 <StatusMessage message={flash.status} />
 
                 <Card variant="navbar">
@@ -225,7 +225,7 @@ export default function ObligationShow({
                         <h2 className="text-base font-medium text-foreground">
                             Catatan
                         </h2>
-                        <p className="rounded-2xl border border-border bg-background/55 p-4 text-sm leading-6 font-light text-foreground-secondary">
+                        <p className="rounded-2xl border border-primary/10 bg-primary-soft/55 p-4 text-sm leading-6 font-light text-foreground-secondary dark:border-border dark:bg-background/55">
                             {obligation.note ??
                                 'Tidak ada catatan untuk kewajiban ini.'}
                         </p>

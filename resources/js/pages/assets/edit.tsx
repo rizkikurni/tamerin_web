@@ -25,7 +25,7 @@ export default function AssetEdit({
             currentPath={index.url()}
         >
             <Head title={`Ubah ${asset.name}`} />
-            <div className="mx-auto max-w-3xl">
+            <div className="w-full">
                 <AssetForm asset={asset} assetTypeOptions={assetTypeOptions} />
             </div>
         </AppLayout>

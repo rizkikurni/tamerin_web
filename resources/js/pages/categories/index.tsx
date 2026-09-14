@@ -99,7 +99,7 @@ export default function CategoriesIndex({
         >
             <Head title="Kategori" />
 
-            <div className="mx-auto grid max-w-6xl gap-4">
+            <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
 
                 {categories.data.length === 0 ? (

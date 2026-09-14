@@ -226,7 +226,10 @@ export function MobileNavigationLink({ item, active }: NavigationLinkProps) {
             href={item.href}
             aria-label={item.label}
             aria-current={active ? 'page' : undefined}
-            className={getNavigationIconClass(active, 'justify-self-center')}
+            className={getNavigationIconClass(
+                active,
+                'mobile-navigation-control justify-self-center',
+            )}
         >
             <Icon className="h-[18px] w-[18px]" />
             <NavigationTooltip label={item.label} placement="top" />
@@ -256,7 +259,7 @@ export function MobileMenuToggle({
             aria-expanded={open}
             className={getNavigationIconClass(
                 open,
-                cn('justify-self-center', className),
+                cn('mobile-navigation-control justify-self-center', className),
             )}
             {...props}
         >

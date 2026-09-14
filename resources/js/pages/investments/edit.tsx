@@ -28,7 +28,7 @@ export default function InvestmentEdit({
             currentPath={index.url()}
         >
             <Head title={`Ubah ${investment.name}`} />
-            <div className="mx-auto max-w-3xl">
+            <div className="w-full">
                 <InvestmentForm
                     investment={investment}
                     instrumentOptions={instrumentOptions}

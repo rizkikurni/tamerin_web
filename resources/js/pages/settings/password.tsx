@@ -20,7 +20,7 @@ export default function Password() {
         >
             <Head title="Kata Sandi" />
 
-            <div className="mx-auto grid max-w-3xl gap-4">
+            <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
 
                 <SettingsPanel

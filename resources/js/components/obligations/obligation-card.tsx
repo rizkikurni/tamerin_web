@@ -58,7 +58,7 @@ export default function ObligationCard({
                         </Badge>
                     </div>
 
-                    <div className="rounded-2xl border border-border bg-background/55 p-3.5">
+                    <div className="rounded-2xl border border-primary/10 bg-primary-soft/55 p-3.5 dark:border-border dark:bg-background/55">
                         <p className="text-xs font-light text-muted-foreground">
                             Sisa outstanding
                         </p>

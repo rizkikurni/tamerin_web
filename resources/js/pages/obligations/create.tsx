@@ -24,7 +24,7 @@ export default function ObligationCreate({
             currentPath={index.url()}
         >
             <Head title="Tambah Utang atau Piutang" />
-            <div className="mx-auto max-w-3xl">
+            <div className="w-full">
                 <ObligationForm
                     kindOptions={kindOptions}
                     defaultStartedOn={defaultStartedOn}

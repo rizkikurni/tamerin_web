@@ -62,7 +62,7 @@ export default function ExportHistory({
         >
             <Head title="Riwayat Export" />
 
-            <div className="mx-auto grid max-w-7xl gap-5">
+            <div className="grid w-full gap-5">
                 <Card variant="navbar">
                     <CardHeader>
                         <div className="flex items-center gap-3">

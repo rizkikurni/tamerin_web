@@ -21,7 +21,7 @@ function MobileMoreMenuLink({ item, active }: MobileMoreMenuLinkProps) {
             href={item.href}
             aria-current={active ? 'page' : undefined}
             className={cn(
-                'group flex min-h-[86px] flex-col items-center justify-center',
+                'mobile-more-menu-link group flex min-h-[86px] flex-col items-center justify-center',
                 'gap-2 rounded-[18px] border-[1.5px] px-2 py-3',
                 'text-[11px] font-normal transition-all duration-200 ease-out',
                 active
@@ -107,7 +107,7 @@ export default function MobileMoreMenu({
                             type="button"
                             onClick={onClose}
                             className={cn(
-                                'flex h-10 w-10 items-center justify-center rounded-full',
+                                'mobile-menu-close flex h-10 w-10 items-center justify-center rounded-full',
                                 'border-[1.5px] border-border-strong/70 bg-background/80',
                                 'text-muted-foreground',
                                 'shadow-[var(--control-shadow)]',

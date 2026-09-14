@@ -33,7 +33,7 @@ export default function ObligationSettlementCard({
                         Transaksi
                     </ButtonLink>
                 </div>
-                <div className="flex items-center gap-2 rounded-xl border border-border bg-background/55 px-3 py-2 text-xs font-light text-muted-foreground">
+                <div className="flex items-center gap-2 rounded-xl border border-primary/10 bg-primary-soft/55 px-3 py-2 text-xs font-light text-muted-foreground dark:border-border dark:bg-background/55">
                     <Landmark className="h-3.5 w-3.5 text-primary" />
                     {settlement.account.name}
                 </div>

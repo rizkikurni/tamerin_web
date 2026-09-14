@@ -8,7 +8,7 @@ export default function InvestmentValueChart({
 }) {
     if (points.length === 0) {
         return (
-            <div className="flex min-h-48 items-center justify-center rounded-2xl border border-dashed border-border bg-background/45 px-5 text-center text-sm font-light text-muted-foreground">
+            <div className="flex min-h-48 items-center justify-center rounded-2xl border border-dashed border-primary/15 bg-primary-soft/45 px-5 text-center text-sm font-light text-muted-foreground dark:border-border dark:bg-background/45">
                 Grafik akan muncul setelah valuasi pertama dicatat.
             </div>
         );
@@ -30,7 +30,7 @@ export default function InvestmentValueChart({
 
     return (
         <div className="grid gap-4">
-            <div className="overflow-hidden rounded-2xl border border-border bg-background/55 p-4">
+            <div className="overflow-hidden rounded-2xl border border-primary/10 bg-primary-soft/55 p-4 dark:border-border dark:bg-background/55">
                 <svg
                     viewBox="0 0 100 40"
                     role="img"

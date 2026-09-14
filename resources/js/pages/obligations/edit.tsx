@@ -28,7 +28,7 @@ export default function ObligationEdit({
             currentPath={index.url()}
         >
             <Head title={`Ubah ${obligation.counterparty_name}`} />
-            <div className="mx-auto max-w-3xl">
+            <div className="w-full">
                 <ObligationForm
                     obligation={obligation}
                     kindOptions={kindOptions}

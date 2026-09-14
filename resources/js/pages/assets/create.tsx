@@ -24,7 +24,7 @@ export default function AssetCreate({
             currentPath={index.url()}
         >
             <Head title="Tambah Aset" />
-            <div className="mx-auto max-w-3xl">
+            <div className="w-full">
                 <AssetForm
                     assetTypeOptions={assetTypeOptions}
                     defaultValuedOn={defaultValuedOn}

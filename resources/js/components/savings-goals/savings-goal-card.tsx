@@ -51,7 +51,7 @@ export default function SavingsGoalCard({
                     <Badge variant={status.variant}>{status.label}</Badge>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 rounded-2xl border border-border/70 bg-background/40 p-3">
+                <div className="grid grid-cols-2 gap-3 rounded-2xl border border-primary/10 bg-primary-soft/40 p-3 dark:border-border/70 dark:bg-background/40">
                     <div>
                         <p className="text-xs font-light text-muted-foreground">
                             Terkumpul

@@ -79,7 +79,7 @@ export default function ManualReminderCard({
                 </div>
 
                 {reminder.note && (
-                    <p className="rounded-2xl border border-border bg-background/55 p-3 text-xs leading-5 font-light text-muted-foreground">
+                    <p className="rounded-2xl border border-primary/10 bg-primary-soft/55 p-3 text-xs leading-5 font-light text-muted-foreground dark:border-border dark:bg-background/55">
                         {reminder.note}
                     </p>
                 )}

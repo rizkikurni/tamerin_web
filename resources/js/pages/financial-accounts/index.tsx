@@ -100,7 +100,7 @@ export default function FinancialAccountsIndex({
         >
             <Head title="Akun Keuangan" />
 
-            <div className="mx-auto grid max-w-6xl gap-4">
+            <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
 
                 {accounts.data.length === 0 ? (

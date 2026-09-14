@@ -86,7 +86,7 @@ export default function TransactionShow({
         >
             <Head title="Detail Transaksi" />
 
-            <div className="mx-auto grid max-w-4xl gap-4">
+            <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
 
                 <Card variant="navbar">

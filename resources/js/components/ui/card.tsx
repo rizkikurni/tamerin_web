@@ -20,7 +20,7 @@ export function Card({
     return (
         <div
             className={cn(
-                'rounded-2xl border border-border bg-surface',
+                'app-panel rounded-2xl border border-border bg-surface',
                 'shadow-[var(--control-shadow)]',
                 'transition-colors duration-200',
                 variant === 'navbar' && [

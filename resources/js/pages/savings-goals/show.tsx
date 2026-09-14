@@ -122,7 +122,7 @@ export default function SavingsGoalShow({
         >
             <Head title={goal.name} />
 
-            <div className="mx-auto grid max-w-6xl gap-5">
+            <div className="grid w-full gap-5">
                 <StatusMessage message={flash.status} />
 
                 <Card variant="navbar">

@@ -24,7 +24,7 @@ export default function InvestmentCreate({
             currentPath={index.url()}
         >
             <Head title="Tambah Investasi" />
-            <div className="mx-auto max-w-3xl">
+            <div className="w-full">
                 <InvestmentForm
                     instrumentOptions={instrumentOptions}
                     defaultAcquiredOn={defaultAcquiredOn}

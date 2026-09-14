@@ -29,7 +29,7 @@ export default function MobileNavigation({
                 onClose={() => setMoreOpen(false)}
             />
 
-            <nav className="fixed right-3 bottom-[calc(env(safe-area-inset-bottom)+12px)] left-3 z-50 h-16 rounded-[22px] border border-[var(--glass-border)] bg-surface/90 px-2 shadow-[var(--glass-shadow)] backdrop-blur-xl lg:hidden">
+            <nav className="app-mobile-navigation fixed right-3 bottom-[calc(env(safe-area-inset-bottom)+12px)] left-3 z-50 h-16 rounded-[22px] border border-[var(--glass-border)] bg-surface/90 px-2 shadow-[var(--glass-shadow)] backdrop-blur-xl lg:hidden">
                 <div className="grid h-full grid-cols-5 items-center">
                     {mobileBottomNavigationItems.map((navigationItem) => {
                         if (navigationItem.kind === 'action') {

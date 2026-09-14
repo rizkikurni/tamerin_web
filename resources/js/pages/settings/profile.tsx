@@ -27,7 +27,7 @@ export default function Profile({ user }: { user: ProfileUser }) {
         >
             <Head title="Profil" />
 
-            <div className="mx-auto grid max-w-3xl gap-4">
+            <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
 
                 <SettingsPanel
