@@ -80,11 +80,11 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Run quality gate
-        run: composer ci:check
-
       - name: Build production assets
         run: npm run build
+
+      - name: Run quality gate
+        run: composer ci:check
 
   deploy:
     name: Deploy production
