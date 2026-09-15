@@ -4,6 +4,7 @@ use App\Enums\ThemeMode;
 use App\Enums\ThemePreset;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('registration screen can be rendered', function () {
@@ -11,6 +12,44 @@ test('registration screen can be rendered', function () {
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page->component('auth/register'));
 });
+
+test('registration validation messages are shown in Indonesian', function () {
+    $this->post(route('register.store'), [
+        'password' => 'pendek',
+        'password_confirmation' => 'pendek',
+    ])->assertSessionHasErrors([
+        'name' => 'Nama wajib diisi.',
+        'email' => 'Email wajib diisi.',
+        'password' => 'Kata sandi minimal 8 karakter.',
+    ]);
+
+    $this->post(route('register.store'), [
+        'name' => 'Rizki Tamerin',
+        'password' => 'password',
+        'password_confirmation' => 'berbeda',
+    ])->assertSessionHasErrors([
+        'email' => 'Email wajib diisi.',
+        'password' => 'Konfirmasi kata sandi tidak cocok.',
+    ]);
+});
+
+test('strong password validation messages are shown in Indonesian', function (string $password, string $message) {
+    Password::defaults(fn (): Password => Password::min(12)
+        ->mixedCase()
+        ->letters()
+        ->numbers()
+        ->symbols());
+
+    $this->post(route('register.store'), [
+        'name' => 'Rizki Tamerin',
+        'password' => $password,
+        'password_confirmation' => $password,
+    ])->assertSessionHasErrors(['password' => $message]);
+})->with([
+    'huruf besar dan kecil' => ['abcdefghijkl', 'Kata sandi harus mengandung huruf besar dan huruf kecil.'],
+    'angka' => ['Abcdefghijk!', 'Kata sandi harus mengandung minimal satu angka.'],
+    'simbol' => ['Abcdefghijk1', 'Kata sandi harus mengandung minimal satu simbol.'],
+]);
 
 test('new users can register with default preferences', function () {
     $response = $this->post(route('register.store'), [
