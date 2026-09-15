@@ -37,9 +37,14 @@ class AppServiceProvider extends ServiceProvider
     {
         Date::use(CarbonImmutable::class);
 
-        RateLimiter::for('login', fn (Request $request): Limit => Limit::perMinute(5)->by(
-            Str::lower($request->string('email')->toString()).'|'.$request->ip(),
+        RateLimiter::for('login', fn (Request $request): Limit => Limit::perMinute(30)->by(
+            'login-requests:'.($request->ip() ?? 'unknown'),
         ));
+
+        RateLimiter::for('registration', fn (Request $request): array => [
+            Limit::perMinute(3)->by('registration-minute:'.($request->ip() ?? 'unknown')),
+            Limit::perHour(10)->by('registration-hour:'.($request->ip() ?? 'unknown')),
+        ]);
 
         RateLimiter::for('password-reset-link', fn (Request $request): Limit => Limit::perMinute(3)->by(
             Str::lower($request->string('email')->toString()).'|'.$request->ip(),

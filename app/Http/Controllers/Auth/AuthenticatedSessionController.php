@@ -20,7 +20,11 @@ class AuthenticatedSessionController extends Controller
 
     public function store(LoginRequest $request, AuthenticateUser $action): RedirectResponse
     {
-        $action->handle($request->credentials(), $request->boolean('remember'));
+        $action->handle(
+            $request->credentials(),
+            $request->boolean('remember'),
+            $request->throttleKey(),
+        );
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard'));

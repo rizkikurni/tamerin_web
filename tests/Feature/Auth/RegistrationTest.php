@@ -45,3 +45,37 @@ test('registration validates unique email and password confirmation', function (
 
     $this->assertGuest();
 });
+
+test('registration attempts are rate limited', function () {
+    foreach (range(1, 3) as $attempt) {
+        $this->post(route('register.store'), [
+            'name' => 'Rizki Tamerin',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ])->assertInvalid(['email']);
+    }
+
+    $this->post(route('register.store'), [
+        'name' => 'Rizki Tamerin',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ])->assertTooManyRequests();
+});
+
+test('registration attempts are also rate limited per hour', function () {
+    foreach (range(1, 10) as $attempt) {
+        $this->post(route('register.store'), [
+            'name' => 'Rizki Tamerin',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ])->assertInvalid(['email']);
+
+        $this->travel(61)->seconds();
+    }
+
+    $this->post(route('register.store'), [
+        'name' => 'Rizki Tamerin',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ])->assertTooManyRequests();
+});

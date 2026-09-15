@@ -41,6 +41,11 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function throttleKey(): string
+    {
+        return 'login-failures:'.hash('sha256', $this->string('email')->toString().'|'.($this->ip() ?? 'unknown'));
+    }
+
     protected function prepareForValidation(): void
     {
         $this->merge([
