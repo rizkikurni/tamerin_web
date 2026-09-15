@@ -557,13 +557,15 @@
     animation-delay: calc(300ms + var(--bar-index) * 60ms);
 }
 
-.landing-pie {
-    opacity: 0;
-    transform: scale(0.94);
+.landing-pie-arc {
+    stroke-dasharray: 251.33;
+    stroke-dashoffset: 251.33;
+    transition: stroke-dashoffset 1500ms cubic-bezier(0.2, 1, 0.3, 1) 300ms;
+    will-change: stroke-dashoffset;
 }
 
-.landing-preview.is-visible .landing-pie {
-    animation: landing-pie-in 800ms cubic-bezier(0.2, 1, 0.3, 1) 400ms forwards;
+.landing-preview.is-visible .landing-pie-arc {
+    stroke-dashoffset: 80.43;
 }
 
 @keyframes landing-metric-in {
@@ -579,19 +581,12 @@
     }
 }
 
-@keyframes landing-pie-in {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
     .landing-reveal,
     .landing-preview,
     .landing-preview-metric,
     .landing-chart-bar,
-    .landing-pie {
+    .landing-pie-arc {
         opacity: 1;
         transform: none;
         transition: none;

@@ -13,6 +13,7 @@ interface AnimatedNumberProps {
     prefix?: string;
     suffix: string;
     fractionDigits?: number;
+    delay?: number;
 }
 
 function AnimatedNumber({
@@ -21,6 +22,7 @@ function AnimatedNumber({
     prefix = '',
     suffix,
     fractionDigits = 0,
+    delay = 0,
 }: AnimatedNumberProps) {
     const [value, setValue] = useState(0);
 
@@ -37,10 +39,16 @@ function AnimatedNumber({
             return () => cancelAnimationFrame(animationFrame);
         }
 
-        const startedAt = performance.now();
+        const startedAt = performance.now() + delay;
         const duration = 1500;
 
         const updateValue = (timestamp: number) => {
+            if (timestamp < startedAt) {
+                animationFrame = requestAnimationFrame(updateValue);
+
+                return;
+            }
+
             const progress = Math.min((timestamp - startedAt) / duration, 1);
             const easedProgress = 1 - Math.pow(1 - progress, 3);
 
@@ -54,7 +62,7 @@ function AnimatedNumber({
         animationFrame = requestAnimationFrame(updateValue);
 
         return () => cancelAnimationFrame(animationFrame);
-    }, [active, target]);
+    }, [active, delay, target]);
 
     return (
         <>
@@ -145,15 +153,43 @@ export default function DashboardPreview() {
                         <p className="text-xs text-muted-foreground">
                             Anggaran terpakai
                         </p>
-                        <div className="landing-pie mx-auto my-4 grid size-24 place-items-center rounded-full bg-[conic-gradient(var(--primary)_0_68%,var(--surface-tinted)_68%_100%)]">
+                        <div className="relative mx-auto my-4 grid size-24 place-items-center">
+                            <svg
+                                className="size-24 -rotate-90 transform"
+                                viewBox="0 0 96 96"
+                                aria-hidden="true"
+                            >
+                                <circle
+                                    cx="48"
+                                    cy="48"
+                                    r="40"
+                                    fill="none"
+                                    stroke="var(--surface-tinted)"
+                                    strokeWidth="16"
+                                />
+                                <circle
+                                    cx="48"
+                                    cy="48"
+                                    r="40"
+                                    fill="none"
+                                    stroke="var(--primary)"
+                                    strokeWidth="16"
+                                    strokeDasharray="251.33"
+                                    strokeDashoffset={
+                                        visible ? '80.43' : '251.33'
+                                    }
+                                    className="landing-pie-arc"
+                                />
+                            </svg>
                             <div
-                                className="grid size-16 place-items-center rounded-full bg-surface text-sm font-medium text-foreground"
+                                className="absolute grid size-16 place-items-center rounded-full bg-surface text-sm font-medium text-foreground"
                                 aria-label="68 persen"
                             >
                                 <AnimatedNumber
                                     active={visible}
                                     target={68}
                                     suffix="%"
+                                    delay={300}
                                 />
                             </div>
                         </div>
