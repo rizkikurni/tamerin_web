@@ -1,8 +1,10 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { useCallback, useState } from 'react';
 
 import { store } from '@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController';
 import { create as forgotPassword } from '@/actions/App/Http/Controllers/Auth/PasswordResetLinkController';
 import { create as register } from '@/actions/App/Http/Controllers/Auth/RegisteredUserController';
+import TurnstileWidget from '@/components/auth/turnstile-widget';
 import {
     StatusMessage,
     SubmitButton,
@@ -10,8 +12,27 @@ import {
 } from '@/components/form-controls';
 import AuthLayout from '@/layouts/auth-layout';
 
-export default function Login() {
+export default function Login({
+    turnstileSiteKey,
+}: {
+    turnstileSiteKey?: string | null;
+}) {
     const { flash } = usePage().props;
+    const [turnstileInstance, setTurnstileInstance] = useState(0);
+    const [isTurnstileVerified, setIsTurnstileVerified] =
+        useState(!turnstileSiteKey);
+    const handleVerificationChange = useCallback((verified: boolean) => {
+        setIsTurnstileVerified(verified);
+    }, []);
+
+    const resetTurnstile = useCallback(() => {
+        if (!turnstileSiteKey) {
+            return;
+        }
+
+        setIsTurnstileVerified(false);
+        setTurnstileInstance((instance) => instance + 1);
+    }, [turnstileSiteKey]);
 
     return (
         <AuthLayout
@@ -24,6 +45,7 @@ export default function Login() {
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
+                onError={resetTurnstile}
                 className="grid gap-4"
             >
                 {({ errors, processing }) => (
@@ -56,7 +78,20 @@ export default function Login() {
                             Ingat saya
                         </label>
 
-                        <SubmitButton processing={processing}>
+                        {turnstileSiteKey && (
+                            <TurnstileWidget
+                                key={turnstileInstance}
+                                siteKey={turnstileSiteKey}
+                                action="login"
+                                error={errors['cf-turnstile-response']}
+                                onVerificationChange={handleVerificationChange}
+                            />
+                        )}
+
+                        <SubmitButton
+                            processing={processing}
+                            disabled={processing || !isTurnstileVerified}
+                        >
                             Masuk
                         </SubmitButton>
                     </>

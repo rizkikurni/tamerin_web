@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
+use App\Rules\ValidTurnstileToken;
+use App\Services\TurnstileVerifier;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
@@ -24,12 +26,20 @@ class RegisterUserRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules(TurnstileVerifier $turnstileVerifier): array
     {
         return [
             'name' => ['required', 'string', 'max:120'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)],
             'password' => ['required', 'confirmed', Password::defaults()],
+            'cf-turnstile-response' => config('services.turnstile.enabled')
+                ? [
+                    'required',
+                    'string',
+                    'max:2048',
+                    new ValidTurnstileToken($turnstileVerifier, 'register', $this->ip()),
+                ]
+                : ['nullable'],
         ];
     }
 

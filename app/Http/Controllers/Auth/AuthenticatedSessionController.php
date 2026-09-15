@@ -15,7 +15,13 @@ class AuthenticatedSessionController extends Controller
 {
     public function create(): Response
     {
-        return Inertia::render('auth/login');
+        $siteKey = config('services.turnstile.site_key');
+
+        return Inertia::render('auth/login', [
+            'turnstileSiteKey' => config('services.turnstile.enabled') && is_string($siteKey)
+                ? $siteKey
+                : null,
+        ]);
     }
 
     public function store(LoginRequest $request, AuthenticateUser $action): RedirectResponse

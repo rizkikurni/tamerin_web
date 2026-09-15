@@ -14,7 +14,13 @@ class RegisteredUserController extends Controller
 {
     public function create(): Response
     {
-        return Inertia::render('auth/register');
+        $siteKey = config('services.turnstile.site_key');
+
+        return Inertia::render('auth/register', [
+            'turnstileSiteKey' => config('services.turnstile.enabled') && is_string($siteKey)
+                ? $siteKey
+                : null,
+        ]);
     }
 
     public function store(RegisterUserRequest $request, RegisterUser $action): RedirectResponse

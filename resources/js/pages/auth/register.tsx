@@ -1,11 +1,33 @@
 import { Form, Head, Link } from '@inertiajs/react';
+import { useCallback, useState } from 'react';
 
 import { create as login } from '@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController';
 import { store } from '@/actions/App/Http/Controllers/Auth/RegisteredUserController';
+import TurnstileWidget from '@/components/auth/turnstile-widget';
 import { SubmitButton, TextField } from '@/components/form-controls';
 import AuthLayout from '@/layouts/auth-layout';
 
-export default function Register() {
+export default function Register({
+    turnstileSiteKey,
+}: {
+    turnstileSiteKey?: string | null;
+}) {
+    const [turnstileInstance, setTurnstileInstance] = useState(0);
+    const [isTurnstileVerified, setIsTurnstileVerified] =
+        useState(!turnstileSiteKey);
+    const handleVerificationChange = useCallback((verified: boolean) => {
+        setIsTurnstileVerified(verified);
+    }, []);
+
+    const resetTurnstile = useCallback(() => {
+        if (!turnstileSiteKey) {
+            return;
+        }
+
+        setIsTurnstileVerified(false);
+        setTurnstileInstance((instance) => instance + 1);
+    }, [turnstileSiteKey]);
+
     return (
         <AuthLayout
             title="Buat akun"
@@ -16,6 +38,7 @@ export default function Register() {
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
+                onError={resetTurnstile}
                 className="grid gap-4"
             >
                 {({ errors, processing }) => (
@@ -53,7 +76,20 @@ export default function Register() {
                             error={errors.password_confirmation}
                         />
 
-                        <SubmitButton processing={processing}>
+                        {turnstileSiteKey && (
+                            <TurnstileWidget
+                                key={turnstileInstance}
+                                siteKey={turnstileSiteKey}
+                                action="register"
+                                error={errors['cf-turnstile-response']}
+                                onVerificationChange={handleVerificationChange}
+                            />
+                        )}
+
+                        <SubmitButton
+                            processing={processing}
+                            disabled={processing || !isTurnstileVerified}
+                        >
                             Daftar
                         </SubmitButton>
                     </>
