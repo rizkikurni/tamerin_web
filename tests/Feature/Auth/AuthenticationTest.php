@@ -17,7 +17,7 @@ test('users can authenticate', function () {
         'password' => 'password',
     ]);
 
-    $response->assertRedirect(route('profile.edit'));
+    $response->assertRedirect(route('dashboard'));
     $this->assertAuthenticatedAs($user);
 });
 
@@ -30,7 +30,7 @@ test('session id is regenerated after authentication', function () {
     $this->post(route('login.store'), [
         'email' => $user->email,
         'password' => 'password',
-    ])->assertRedirect(route('profile.edit'));
+    ])->assertRedirect(route('dashboard'));
 
     expect(session()->getId())->not->toBe($sessionIdBeforeLogin);
 });

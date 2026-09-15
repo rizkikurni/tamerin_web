@@ -20,7 +20,7 @@ test('new users can register with default preferences', function () {
         'password_confirmation' => 'password',
     ]);
 
-    $response->assertRedirect(route('profile.edit'));
+    $response->assertRedirect(route('dashboard'));
     $this->assertAuthenticated();
 
     $user = User::query()->where('email', 'rizki@example.com')->firstOrFail();
