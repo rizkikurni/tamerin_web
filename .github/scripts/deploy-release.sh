@@ -45,7 +45,7 @@ trap 'rm -f "$archive_path"' EXIT
 tar -xzf "$archive_path" -C "$release_path"
 ln -s "$shared_path/.env" "$release_path/.env"
 ln -s "$shared_storage" "$release_path/storage"
-chmod -R ug+rwX "$shared_storage" "$release_path/bootstrap/cache"
+chmod -R ug+rwX "$release_path/bootstrap/cache"
 
 cd "$release_path"
 
