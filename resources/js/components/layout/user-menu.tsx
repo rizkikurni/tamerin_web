@@ -15,12 +15,7 @@ interface UserMenuLinkProps {
     onClick?: () => void;
 }
 
-function UserMenuLink({
-    href,
-    icon: Icon,
-    label,
-    onClick,
-}: UserMenuLinkProps) {
+function UserMenuLink({ href, icon: Icon, label, onClick }: UserMenuLinkProps) {
     return (
         <Link
             href={href}
