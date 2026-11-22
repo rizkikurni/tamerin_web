@@ -21,6 +21,8 @@ test('investment holding routes require authentication', function () {
 });
 
 test('investment index is owner scoped and reports the latest active values', function () {
+    $this->travelTo('2026-08-27');
+
     $user = User::factory()->create();
     $holding = InvestmentHolding::factory()->for($user)->create([
         'name' => 'Saham Tamerin',
