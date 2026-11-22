@@ -74,7 +74,7 @@ class StoreTransactionRequest extends FormRequest
      *     account_id: string,
      *     destination_account_id: string|null,
      *     category_id: string|null,
-     *     note: string|null,
+     *     note: string|null,9
      *     idempotency_key: string
      * }
      */

@@ -1,9 +1,10 @@
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { LogOut, Settings, User } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
+import { logout } from '@/routes';
 import { edit as editPreferences } from '@/routes/preferences';
 import { edit as editProfile } from '@/routes/profile';
 
@@ -11,18 +12,25 @@ interface UserMenuLinkProps {
     href: string;
     icon: LucideIcon;
     label: string;
+    onClick?: () => void;
 }
 
-function UserMenuLink({ href, icon: Icon, label }: UserMenuLinkProps) {
+function UserMenuLink({
+    href,
+    icon: Icon,
+    label,
+    onClick,
+}: UserMenuLinkProps) {
     return (
-        <a
+        <Link
             href={href}
             role="menuitem"
+            onClick={onClick}
             className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-foreground-secondary transition-colors hover:bg-surface-muted hover:text-foreground"
         >
             <Icon className="h-4 w-4" />
             {label}
-        </a>
+        </Link>
     );
 }
 
@@ -111,23 +119,27 @@ export default function UserMenu({ triggerClassName }: UserMenuProps = {}) {
                             href={editProfile.url()}
                             icon={User}
                             label="Profil"
+                            onClick={() => setOpen(false)}
                         />
                         <UserMenuLink
                             href={editPreferences.url()}
                             icon={Settings}
                             label="Pengaturan"
+                            onClick={() => setOpen(false)}
                         />
 
                         <div className="my-1.5 border-t border-border" />
 
-                        <button
-                            type="button"
+                        <Link
+                            href={logout()}
+                            as="button"
                             role="menuitem"
+                            onClick={() => setOpen(false)}
                             className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-danger transition-colors hover:bg-danger/10"
                         >
                             <LogOut className="h-4 w-4" />
                             Keluar
-                        </button>
+                        </Link>
                     </div>
                 </>
             )}
