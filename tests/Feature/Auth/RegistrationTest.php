@@ -1,7 +1,9 @@
 <?php
 
+use App\Enums\CategoryType;
 use App\Enums\ThemeMode;
 use App\Enums\ThemePreset;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -70,6 +72,15 @@ test('new users can register with default preferences', function () {
         ->and($user->preference?->theme_mode)->toBe(ThemeMode::System)
         ->and($user->preference?->theme_preset)->toBe(ThemePreset::Violet)
         ->and($user->preference?->timezone)->toBe('Asia/Jakarta');
+
+    $categories = $user->categories()->orderBy('name')->get();
+
+    expect($categories)->toHaveCount(6)
+        ->and($categories->every(fn (Category $category): bool => $category->is_system && $category->archived_at === null))->toBeTrue()
+        ->and($categories->where('type', CategoryType::Income)->pluck('name')->values()->all())
+        ->toBe(['Gaji', 'Pemasukan Lainnya'])
+        ->and($categories->where('type', CategoryType::Expense)->pluck('name')->values()->all())
+        ->toBe(['Belanja', 'Makanan & Minuman', 'Tagihan & Rumah', 'Transportasi']);
 });
 
 test('registration validates unique email and password confirmation', function () {

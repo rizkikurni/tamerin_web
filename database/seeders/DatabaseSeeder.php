@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Actions\Categories\CreateDefaultCategories;
 use App\Enums\FinancialAccountType;
 use App\Enums\InvestmentInstrumentType;
 use App\Models\Asset;
 use App\Models\AuditEvent;
 use App\Models\Budget;
-use App\Models\Category;
 use App\Models\ExportAudit;
 use App\Models\FinancialAccount;
 use App\Models\InvestmentHolding;
@@ -56,17 +56,11 @@ class DatabaseSeeder extends Seeder
                 'type' => FinancialAccountType::Cash,
             ]);
 
-            $incomeCategory = Category::factory()->income()->for($user)->create([
-                'name' => 'Salary',
-            ]);
+            app(CreateDefaultCategories::class)->handle($user);
 
-            $foodCategory = Category::factory()->expense()->for($user)->create([
-                'name' => 'Food and Drinks',
-            ]);
-
-            $transportCategory = Category::factory()->expense()->for($user)->create([
-                'name' => 'Transportation',
-            ]);
+            $incomeCategory = $user->categories()->where('name', 'Gaji')->firstOrFail();
+            $foodCategory = $user->categories()->where('name', 'Makanan & Minuman')->firstOrFail();
+            $transportCategory = $user->categories()->where('name', 'Transportasi')->firstOrFail();
 
             $incomeTransaction = Transaction::factory()->income()->for($user)->create([
                 'account_id' => $primaryAccount->id,

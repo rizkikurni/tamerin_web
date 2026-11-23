@@ -2,6 +2,7 @@
 
 namespace App\Actions\Auth;
 
+use App\Actions\Categories\CreateDefaultCategories;
 use App\Enums\ThemeMode;
 use App\Enums\ThemePreset;
 use App\Models\User;
@@ -9,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class RegisterUser
 {
+    public function __construct(
+        private CreateDefaultCategories $createDefaultCategories,
+    ) {}
+
     /**
      * @param  array{name: string, email: string, password: string}  $data
      */
@@ -25,6 +30,8 @@ class RegisterUser
                 'accent_hex' => null,
                 'timezone' => 'Asia/Jakarta',
             ]);
+
+            $this->createDefaultCategories->handle($user);
 
             return $user;
         });

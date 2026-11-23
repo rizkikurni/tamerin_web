@@ -134,3 +134,32 @@ test('users can archive a category once and archived categories are excluded fro
         ->patch(route('categories.archive', $category))
         ->assertForbidden();
 });
+
+test('users can update and archive their default system categories', function () {
+    $user = User::factory()->create();
+    $systemCategory = Category::factory()->for($user)->expense()->create([
+        'name' => 'Makanan & Minuman',
+        'is_system' => true,
+    ]);
+
+    $this->actingAs($user)
+        ->patch(route('categories.update', $systemCategory), [
+            'name' => 'Kuliner Harian',
+            'type' => CategoryType::Expense->value,
+            'color_token' => 'amber',
+            'icon' => 'utensils',
+        ])
+        ->assertRedirect(route('categories.index'))
+        ->assertSessionHas('status', 'category-updated');
+
+    expect($systemCategory->refresh())
+        ->name->toBe('Kuliner Harian')
+        ->is_system->toBeTrue();
+
+    $this->actingAs($user)
+        ->patch(route('categories.archive', $systemCategory))
+        ->assertRedirect(route('categories.index'))
+        ->assertSessionHas('status', 'category-archived');
+
+    expect($systemCategory->refresh()->archived_at)->not->toBeNull();
+});

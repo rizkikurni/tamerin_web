@@ -8,10 +8,7 @@ import { SubmitButton, TextField } from '@/components/form-controls';
 import AuthLayout from '@/layouts/auth-layout';
 
 const passwordRequirements = [
-    'Minimal 12 karakter',
-    'Mengandung huruf besar dan huruf kecil',
-    'Mengandung minimal satu angka dan satu simbol',
-    'Belum pernah terdeteksi dalam kebocoran data',
+    'Minimal 8 karakter',
     'Konfirmasi harus sama dengan kata sandi',
 ];
 
