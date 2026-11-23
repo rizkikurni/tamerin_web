@@ -39,6 +39,15 @@ class ObligationFactory extends Factory
         ];
     }
 
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Obligation $obligation): void {
+            if ($obligation->outstanding_amount > $obligation->original_amount) {
+                $obligation->original_amount = $obligation->outstanding_amount;
+            }
+        });
+    }
+
     public function receivable(): static
     {
         return $this->state(fn (array $attributes): array => [

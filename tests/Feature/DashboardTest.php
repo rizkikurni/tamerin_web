@@ -130,11 +130,13 @@ test('net worth applies the correct signs and excludes other users data', functi
         'status' => AssetStatus::Active,
     ]);
     Obligation::factory()->receivable()->for($user)->create([
+        'original_amount' => 4_000_000,
         'outstanding_amount' => 4_000_000,
         'status' => ObligationStatus::Open,
     ]);
     Obligation::factory()->for($user)->create([
         'kind' => ObligationKind::Debt,
+        'original_amount' => 1_500_000,
         'outstanding_amount' => 1_500_000,
         'status' => ObligationStatus::Open,
     ]);
