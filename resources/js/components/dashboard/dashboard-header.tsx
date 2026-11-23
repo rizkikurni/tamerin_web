@@ -97,6 +97,11 @@ export function DashboardPeriodPicker({
                 aria-expanded={pickerOpen}
                 aria-controls={pickerId}
                 aria-haspopup="dialog"
+                title={
+                    period.rangeLabel
+                        ? `Rentang siklus: ${period.rangeLabel}`
+                        : period.label
+                }
                 className={cn(
                     'inline-flex items-center gap-2',
                     'rounded-xl border border-border bg-surface',
@@ -105,7 +110,12 @@ export function DashboardPeriodPicker({
                 )}
             >
                 <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                {period.label}
+                <span>{period.label}</span>
+                {period.rangeLabel && (
+                    <span className="hidden rounded-lg bg-primary-soft px-2 py-0.5 text-[11px] font-normal text-primary xl:inline-block">
+                        {period.rangeLabel}
+                    </span>
+                )}
                 {showChevron && (
                     <ChevronDown
                         className={cn(

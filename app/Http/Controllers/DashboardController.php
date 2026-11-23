@@ -25,14 +25,18 @@ class DashboardController extends Controller
         /** @var User $user */
         $user = $request->user();
         $period = $request->period();
+        $cycleRange = $user->financialCycleRange($period);
         $overview = $summaryQuery->handle($user, $period);
 
         return Inertia::render('dashboard/index', [
             'period' => [
                 'value' => $period->format('Y-m'),
                 'label' => $period->translatedFormat('F Y'),
-                'previous' => $period->subMonth()->format('Y-m'),
-                'next' => $period->addMonth()->format('Y-m'),
+                'previous' => $period->copy()->subMonth()->format('Y-m'),
+                'next' => $period->copy()->addMonth()->format('Y-m'),
+                'rangeLabel' => $cycleRange['label'],
+                'startDate' => $cycleRange['start']->toDateString(),
+                'endDate' => $cycleRange['end']->toDateString(),
             ],
             ...$overview,
             'recentTransactions' => $recentTransactionQuery->get($user),

@@ -11,9 +11,11 @@ use Inertia\Testing\AssertableInertia as Assert;
 test('users only see their own financial accounts including archived history', function () {
     $user = User::factory()->create();
     $activeAccount = FinancialAccount::factory()->for($user)->create([
+        'type' => FinancialAccountType::Bank,
         'opening_balance' => 1_000_000,
     ]);
     $archivedAccount = FinancialAccount::factory()->for($user)->archived()->create([
+        'type' => FinancialAccountType::Cash,
         'opening_balance' => 250_000,
     ]);
     $otherAccount = FinancialAccount::factory()->create();

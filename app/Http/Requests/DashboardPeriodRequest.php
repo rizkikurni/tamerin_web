@@ -31,7 +31,7 @@ class DashboardPeriodRequest extends FormRequest
         $value = $this->string('period')->toString();
 
         return $value === ''
-            ? Carbon::today()->startOfMonth()
+            ? ($this->user()?->currentFinancialPeriod() ?? Carbon::today()->startOfMonth())
             : Carbon::createFromFormat('Y-m', $value)->startOfMonth();
     }
 }

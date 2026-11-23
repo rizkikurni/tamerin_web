@@ -24,6 +24,7 @@ class BudgetController extends Controller
         /** @var User $user */
         $user = $request->user();
         $period = $request->period();
+        $cycleRange = $user->financialCycleRange($period);
 
         return Inertia::render('budgets/index', [
             'period' => [
@@ -31,6 +32,9 @@ class BudgetController extends Controller
                 'label' => $period->translatedFormat('F Y'),
                 'previous' => $period->copy()->subMonth()->format('Y-m'),
                 'next' => $period->copy()->addMonth()->format('Y-m'),
+                'rangeLabel' => $cycleRange['label'],
+                'startDate' => $cycleRange['start']->toDateString(),
+                'endDate' => $cycleRange['end']->toDateString(),
             ],
             'budgets' => $query->paginate($user, $period),
             'summary' => $query->summary($user, $period),

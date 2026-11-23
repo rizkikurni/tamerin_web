@@ -38,6 +38,7 @@ export default function MobileNavigation({
                             return (
                                 <MobilePrimaryAction
                                     key={navigationItem.label}
+                                    href={navigationItem.href}
                                     label={navigationItem.label}
                                     icon={<Icon className="h-7 w-7" />}
                                 />

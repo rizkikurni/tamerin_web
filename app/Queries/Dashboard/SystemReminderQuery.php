@@ -63,8 +63,9 @@ class SystemReminderQuery
     private function budgetReminders(User $user, CarbonInterface $date): array
     {
         $reminders = [];
+        $activePeriod = $user->currentFinancialPeriod($date);
 
-        foreach ($this->budgetUsageQuery->get($user, $date->copy()->startOfMonth()) as $budget) {
+        foreach ($this->budgetUsageQuery->get($user, $activePeriod) as $budget) {
             if ($budget['percentage'] >= 80) {
                 $reminders[] = $this->budgetReminder($budget);
             }

@@ -190,3 +190,62 @@ test('users cannot update another users budget', function () {
 
     expect($otherBudget->refresh()->amount)->toBe(1_000_000);
 });
+
+test('budget usage and default period follow user custom financial cycle start day', function () {
+    $this->travelTo('2026-08-26 10:00:00');
+
+    $user = User::factory()->create();
+    $user->preference()->create([
+        'theme_mode' => 'system',
+        'theme_preset' => 'violet',
+        'timezone' => 'Asia/Jakarta',
+        'financial_cycle_start_day' => 25,
+    ]);
+
+    $account = FinancialAccount::factory()->for($user)->create();
+    $category = Category::factory()->for($user)->expense()->create(['name' => 'Kebutuhan Bulanan']);
+
+    // Period 2026-09 (Gaya B: 25 Aug 2026 - 24 Sep 2026)
+    $septemberBudget = Budget::factory()->for($user)->create([
+        'category_id' => $category->id,
+        'period_start' => '2026-09-01',
+        'amount' => 2_000_000,
+    ]);
+
+    // Transaction on 2026-08-24 belongs to August cycle (25 Jul - 24 Aug), not September cycle
+    Transaction::factory()->expense()->for($user)->create([
+        'account_id' => $account->id,
+        'category_id' => $category->id,
+        'transacted_on' => '2026-08-24',
+        'amount' => 300_000,
+    ]);
+
+    // Transactions on 2026-08-25 and 2026-09-10 belong to September cycle (25 Aug - 24 Sep)
+    Transaction::factory()->expense()->for($user)->create([
+        'account_id' => $account->id,
+        'category_id' => $category->id,
+        'transacted_on' => '2026-08-25',
+        'amount' => 500_000,
+    ]);
+    Transaction::factory()->expense()->for($user)->create([
+        'account_id' => $account->id,
+        'category_id' => $category->id,
+        'transacted_on' => '2026-09-10',
+        'amount' => 400_000,
+    ]);
+
+    // Because today is 2026-08-26 (>= day 25), default period without query parameter is 2026-09
+    $this->actingAs($user)
+        ->get(route('budgets.index'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('budgets/index')
+            ->where('period.value', '2026-09')
+            ->where('period.startDate', '2026-08-25')
+            ->where('period.endDate', '2026-09-24')
+            ->has('budgets.data', 1)
+            ->where('budgets.data.0.id', $septemberBudget->id)
+            ->where('budgets.data.0.spent', 900_000)
+            ->where('budgets.data.0.remaining', 1_100_000)
+            ->where('summary.spent', 900_000));
+});

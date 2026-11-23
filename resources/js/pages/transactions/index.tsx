@@ -1,11 +1,13 @@
 import { Head, usePage } from '@inertiajs/react';
-import { Filter, Plus } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, Plus, TrendingUp } from 'lucide-react';
 
+import SummaryCard from '@/components/dashboard/summary-card';
 import { StatusMessage } from '@/components/form-controls';
+import { formatRupiah } from '@/components/transactions/transaction-display';
 import TransactionFiltersForm from '@/components/transactions/transaction-filters';
 import TransactionList from '@/components/transactions/transaction-list';
 import { ButtonLink } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { create, index } from '@/routes/transactions';
 import type {
@@ -13,16 +15,19 @@ import type {
     TransactionFilterOptions,
     TransactionFilters,
     TransactionListItem,
+    TransactionSummary,
 } from '@/types';
 
 type TransactionsIndexProps = {
     transactions: PaginatedData<TransactionListItem>;
+    summary: TransactionSummary;
     filters: TransactionFilters;
     filterOptions: TransactionFilterOptions;
 };
 
 export default function TransactionsIndex({
     transactions,
+    summary,
     filters,
     filterOptions,
 }: TransactionsIndexProps) {
@@ -50,23 +55,34 @@ export default function TransactionsIndex({
             <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
 
+                <div className="grid gap-3 sm:grid-cols-3">
+                    <SummaryCard
+                        title="Total Pemasukan"
+                        value={formatRupiah(summary.totalIncome)}
+                        comparison="Transaksi tercatat sesuai filter"
+                        icon={
+                            <ArrowDownLeft className="h-5 w-5 text-success" />
+                        }
+                        iconBg="bg-success/10"
+                    />
+                    <SummaryCard
+                        title="Total Pengeluaran"
+                        value={formatRupiah(summary.totalExpense)}
+                        comparison="Transaksi tercatat sesuai filter"
+                        icon={<ArrowUpRight className="h-5 w-5 text-danger" />}
+                        iconBg="bg-danger/10"
+                    />
+                    <SummaryCard
+                        title="Arus Kas Bersih"
+                        value={formatRupiah(summary.netCashFlow)}
+                        comparison={`Dari ${summary.transactionCount} transaksi ditemukan`}
+                        icon={<TrendingUp className="h-5 w-5 text-primary" />}
+                        iconBg="bg-primary-soft"
+                    />
+                </div>
+
                 <Card variant="navbar">
-                    <CardHeader>
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary">
-                                <Filter className="h-4 w-4" />
-                            </div>
-                            <div>
-                                <h2 className="text-sm font-medium text-foreground">
-                                    Filter transaksi
-                                </h2>
-                                <p className="mt-0.5 text-xs font-light text-muted-foreground">
-                                    Saring berdasarkan periode dan data terkait.
-                                </p>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-3.5 sm:p-4">
                         <TransactionFiltersForm
                             filters={filters}
                             options={filterOptions}

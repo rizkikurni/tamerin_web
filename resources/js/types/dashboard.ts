@@ -13,6 +13,9 @@ export interface DashboardPeriod {
     label: string;
     previous: string;
     next: string;
+    rangeLabel?: string;
+    startDate?: string;
+    endDate?: string;
 }
 
 export interface CashFlowPoint {

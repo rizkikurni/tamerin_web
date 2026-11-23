@@ -1,5 +1,13 @@
 import { router } from '@inertiajs/react';
-import { Check, Monitor, Moon, RotateCcw, Save, Sun } from 'lucide-react';
+import {
+    CalendarClock,
+    Check,
+    Monitor,
+    Moon,
+    RotateCcw,
+    Save,
+    Sun,
+} from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 
@@ -193,7 +201,48 @@ function LivePreview() {
 
 // --- Main Component ---
 
-export default function ThemeSettings() {
+const cyclePresets = [
+    {
+        day: 1,
+        label: 'Tanggal 1',
+        description: 'Awal bulan (1 Nov – 30 Nov)',
+    },
+    {
+        day: 15,
+        label: 'Tanggal 15',
+        description: 'Tengah bulan (15 Okt – 14 Nov)',
+    },
+    {
+        day: 25,
+        label: 'Tanggal 25',
+        description: 'Gajian akhir bulan (25 Okt – 24 Nov)',
+    },
+    {
+        day: 28,
+        label: 'Tanggal 28',
+        description: 'Menjelang akhir bulan (28 Okt – 27 Nov)',
+    },
+];
+
+const cycleDays = Array.from({ length: 28 }, (_, index) => index + 1);
+
+function describeCycleExample(startDay: number): string {
+    if (startDay <= 1) {
+        return 'Contoh periode November dihitung dari 1 November s/d 30 November.';
+    }
+
+    return `Contoh periode November dihitung dari ${startDay} Oktober s/d ${startDay - 1} November (gaji akhir bulan sebelumnya dipakai untuk bulan berjalan).`;
+}
+
+interface ThemeSettingsProps {
+    initialCycleStartDay?: number;
+    initialTimezone?: string;
+}
+
+export default function ThemeSettings({
+    initialCycleStartDay = 1,
+    initialTimezone = 'Asia/Jakarta',
+}: ThemeSettingsProps = {}) {
     const { mode, preset, setMode, setPreset, customColors, setCustomColors } =
         useTheme();
 
@@ -206,6 +255,8 @@ export default function ThemeSettings() {
     const [customAccent, setCustomAccent] = useState(
         customColors?.accent ?? defaultThemeColors.accent,
     );
+    const [cycleStartDay, setCycleStartDay] =
+        useState<number>(initialCycleStartDay);
 
     const [saving, setSaving] = useState(false);
     const [savedMessage, setSavedMessage] = useState<string | null>(null);
@@ -257,6 +308,7 @@ export default function ThemeSettings() {
         setCustomPrimary(defaultThemeColors.primary);
         setCustomSecondary(defaultThemeColors.secondary);
         setCustomAccent(defaultThemeColors.accent);
+        setCycleStartDay(1);
     }
 
     function handleSaveToDatabase() {
@@ -271,14 +323,15 @@ export default function ThemeSettings() {
                 primary_hex: preset === 'custom' ? customPrimary : null,
                 secondary_hex: preset === 'custom' ? customSecondary : null,
                 accent_hex: preset === 'custom' ? customAccent : null,
-                timezone: 'Asia/Jakarta',
+                timezone: initialTimezone,
+                financial_cycle_start_day: cycleStartDay,
             },
             {
                 preserveScroll: true,
                 onSuccess: () => {
                     setSaving(false);
                     setSavedMessage(
-                        'Preferensi tema berhasil disimpan ke database!',
+                        'Preferensi tampilan dan siklus keuangan berhasil disimpan!',
                     );
                     setTimeout(() => setSavedMessage(null), 4000);
                 },
@@ -456,6 +509,94 @@ export default function ThemeSettings() {
 
             {/* Live Preview */}
             <LivePreview />
+
+            {/* Siklus Keuangan Bulanan */}
+            <div className="space-y-3 border-t border-border pt-6">
+                <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                        <CalendarClock className="h-5 w-5" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-medium text-foreground">
+                            Tanggal Mulai Siklus Keuangan
+                        </h3>
+                        <p className="mt-0.5 text-xs font-light text-muted-foreground">
+                            Sesuaikan perhitungan arus kas Dashboard dan Budget
+                            dengan tanggal gajian Anda (1–28).
+                        </p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+                    {cyclePresets.map((item) => {
+                        const active = cycleStartDay === item.day;
+
+                        return (
+                            <button
+                                key={item.day}
+                                type="button"
+                                onClick={() => setCycleStartDay(item.day)}
+                                className={cn(
+                                    'relative flex flex-col items-start gap-1 rounded-2xl border p-3.5 text-left transition-all duration-150',
+                                    active
+                                        ? 'border-primary bg-primary-soft'
+                                        : 'border-border bg-surface hover:border-border-strong hover:bg-surface-muted',
+                                )}
+                            >
+                                <span
+                                    className={cn(
+                                        'text-sm font-medium',
+                                        active
+                                            ? 'text-primary'
+                                            : 'text-foreground',
+                                    )}
+                                >
+                                    {item.label}
+                                </span>
+                                <span className="text-xs font-light text-muted-foreground">
+                                    {item.description}
+                                </span>
+                                {active && (
+                                    <span className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
+                                        <Check className="h-3 w-3 text-primary-foreground" />
+                                    </span>
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                <div className="grid gap-2">
+                    <span className="text-xs font-medium text-foreground-secondary">
+                        Atau pilih tanggal kustom (1–28)
+                    </span>
+                    <div className="grid grid-cols-7 gap-1.5 sm:grid-cols-14">
+                        {cycleDays.map((day) => {
+                            const active = cycleStartDay === day;
+
+                            return (
+                                <button
+                                    key={day}
+                                    type="button"
+                                    onClick={() => setCycleStartDay(day)}
+                                    className={cn(
+                                        'flex h-9 items-center justify-center rounded-xl border text-xs font-medium transition-all duration-150',
+                                        active
+                                            ? 'border-primary bg-primary text-primary-foreground shadow-[var(--control-shadow-active)]'
+                                            : 'border-border bg-surface text-foreground-secondary hover:border-primary/40 hover:bg-primary-soft hover:text-primary',
+                                    )}
+                                >
+                                    {day}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <p className="rounded-2xl bg-primary-soft/75 px-4 py-3 text-xs leading-5 font-light text-primary">
+                    {describeCycleExample(cycleStartDay)}
+                </p>
+            </div>
 
             {/* Actions: Save & Reset */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">

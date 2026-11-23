@@ -32,7 +32,7 @@ export default function CreateCategory({
         >
             <Head title="Tambah Kategori" />
 
-            <Card>
+            <Card variant="navbar">
                 <CardHeader>
                     <div className="flex items-start gap-3">
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary">
@@ -43,7 +43,8 @@ export default function CreateCategory({
                                 Informasi kategori
                             </h1>
                             <p className="mt-1 text-sm font-light text-muted-foreground">
-                                Nama harus unik untuk setiap tipe kategori.
+                                Pilih tipe, gunakan preset cepat, atau sesuaikan
+                                warna dan ikon secara visual.
                             </p>
                         </div>
                     </div>

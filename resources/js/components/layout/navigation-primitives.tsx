@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import type {
     AnchorHTMLAttributes,
     ButtonHTMLAttributes,
@@ -269,20 +270,22 @@ export function MobileMenuToggle({
     );
 }
 
-interface MobilePrimaryActionProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface MobilePrimaryActionProps {
+    href: string;
     icon: ReactNode;
     label: string;
+    className?: string;
 }
 
 export function MobilePrimaryAction({
+    href,
     icon,
     label,
     className,
-    ...props
 }: MobilePrimaryActionProps) {
     return (
-        <button
-            type="button"
+        <Link
+            href={href}
             aria-label={label}
             className={cn(
                 'group relative flex h-14 w-14 -translate-y-3 items-center justify-center',
@@ -297,10 +300,9 @@ export function MobilePrimaryAction({
                 'active:shadow-[var(--floating-action-shadow-active)]',
                 className,
             )}
-            {...props}
         >
             {icon}
             <NavigationTooltip label={label} placement="top" />
-        </button>
+        </Link>
     );
 }

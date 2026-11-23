@@ -28,6 +28,7 @@ class UserPreferenceFactory extends Factory
             'secondary_hex' => fake()->optional()->hexColor(),
             'accent_hex' => fake()->optional()->hexColor(),
             'timezone' => 'Asia/Jakarta',
+            'financial_cycle_start_day' => 1,
         ];
     }
 }

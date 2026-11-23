@@ -63,6 +63,7 @@ class FinancialAccountController extends Controller
 
         return Inertia::render('financial-accounts/create', [
             'accountTypes' => $this->accountTypes(),
+            'defaultOpenedOn' => today()->toDateString(),
         ]);
     }
 

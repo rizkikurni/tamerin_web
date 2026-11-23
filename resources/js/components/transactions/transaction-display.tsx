@@ -1,8 +1,61 @@
-import { ArrowDownLeft, ArrowLeftRight, ArrowUpRight } from 'lucide-react';
+import {
+    ArrowDownLeft,
+    ArrowLeftRight,
+    ArrowUpRight,
+    BriefcaseBusiness,
+    Car,
+    CircleDollarSign,
+    Gift,
+    GraduationCap,
+    HeartPulse,
+    House,
+    ShoppingCart,
+    Utensils,
+    Wallet,
+} from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import type { TransactionType } from '@/types';
+import type { TransactionCategoryRelation, TransactionType } from '@/types';
+
+const categoryIconMap: Record<string, LucideIcon> = {
+    wallet: Wallet,
+    'shopping-cart': ShoppingCart,
+    utensils: Utensils,
+    car: Car,
+    'briefcase-business': BriefcaseBusiness,
+    house: House,
+    'heart-pulse': HeartPulse,
+    'graduation-cap': GraduationCap,
+    gift: Gift,
+    'circle-dollar-sign': CircleDollarSign,
+};
+
+const categoryColorMap: Record<
+    string,
+    { backgroundClass: string; iconClass: string }
+> = {
+    blue: {
+        backgroundClass: 'bg-primary-soft',
+        iconClass: 'text-primary',
+    },
+    green: {
+        backgroundClass: 'bg-success/10',
+        iconClass: 'text-success',
+    },
+    violet: {
+        backgroundClass: 'bg-secondary-soft',
+        iconClass: 'text-secondary',
+    },
+    amber: {
+        backgroundClass: 'bg-warning/10',
+        iconClass: 'text-warning',
+    },
+    rose: {
+        backgroundClass: 'bg-danger/10',
+        iconClass: 'text-danger',
+    },
+};
 
 export const transactionTypeConfig: Record<
     TransactionType,
@@ -45,18 +98,34 @@ export const transactionTypeConfig: Record<
     },
 };
 
-export function TransactionTypeIcon({ type }: { type: TransactionType }) {
+export function TransactionTypeIcon({
+    type,
+    category,
+}: {
+    type: TransactionType;
+    category?: TransactionCategoryRelation | null;
+}) {
     const config = transactionTypeConfig[type];
-    const Icon = config.icon;
+    const CategoryIcon = category?.icon
+        ? categoryIconMap[category.icon]
+        : undefined;
+    const categoryColor = category?.color_token
+        ? categoryColorMap[category.color_token]
+        : undefined;
+
+    const Icon = CategoryIcon ?? config.icon;
+    const backgroundClass =
+        categoryColor?.backgroundClass ?? config.backgroundClass;
+    const iconClass = categoryColor?.iconClass ?? config.iconClass;
 
     return (
         <div
             className={cn(
                 'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
-                config.backgroundClass,
+                backgroundClass,
             )}
         >
-            <Icon className={cn('h-5 w-5', config.iconClass)} />
+            <Icon className={cn('h-5 w-5', iconClass)} />
         </div>
     );
 }

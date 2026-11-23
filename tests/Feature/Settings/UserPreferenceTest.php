@@ -48,6 +48,7 @@ test('users can update only their own preferences', function () {
             'secondary_hex' => '#445566',
             'accent_hex' => '#778899',
             'timezone' => 'Asia/Jakarta',
+            'financial_cycle_start_day' => 25,
         ])
         ->assertRedirect(route('preferences.edit'))
         ->assertSessionHas('status', 'preferences-updated');
@@ -57,6 +58,7 @@ test('users can update only their own preferences', function () {
     expect($preference->theme_mode)->toBe(ThemeMode::Dark)
         ->and($preference->theme_preset)->toBe(ThemePreset::Custom)
         ->and($preference->primary_hex)->toBe('#112233')
+        ->and($preference->financial_cycle_start_day)->toBe(25)
         ->and($otherPreference->fresh()?->theme_mode)->toBe($otherPreference->theme_mode);
 });
 
@@ -71,12 +73,14 @@ test('preference values must be valid', function () {
             'secondary_hex' => null,
             'accent_hex' => null,
             'timezone' => 'Invalid/Timezone',
+            'financial_cycle_start_day' => 29,
         ])
         ->assertInvalid([
             'theme_mode',
             'theme_preset',
             'primary_hex',
             'timezone',
+            'financial_cycle_start_day',
         ]);
 
     expect($user->preference)->toBeNull();

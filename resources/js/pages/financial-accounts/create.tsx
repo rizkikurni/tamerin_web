@@ -10,8 +10,10 @@ import type { SelectOption } from '@/types';
 
 export default function CreateFinancialAccount({
     accountTypes,
+    defaultOpenedOn,
 }: {
     accountTypes: SelectOption[];
+    defaultOpenedOn?: string;
 }) {
     return (
         <AppLayout
@@ -26,7 +28,7 @@ export default function CreateFinancialAccount({
         >
             <Head title="Tambah Akun Keuangan" />
 
-            <Card>
+            <Card variant="navbar">
                 <CardHeader>
                     <div className="flex items-start gap-3">
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary">
@@ -37,7 +39,8 @@ export default function CreateFinancialAccount({
                                 Informasi akun
                             </h1>
                             <p className="mt-1 text-sm font-light text-muted-foreground">
-                                Isi identitas akun dan saldo awalnya.
+                                Pilih tipe akun, gunakan saran nama cepat, dan
+                                isi saldo awalnya.
                             </p>
                         </div>
                     </div>
@@ -46,6 +49,7 @@ export default function CreateFinancialAccount({
                     <FinancialAccountForm
                         form={store.form()}
                         accountTypes={accountTypes}
+                        defaultOpenedOn={defaultOpenedOn}
                         cancelUrl={index.url()}
                         submitLabel="Simpan Akun"
                     />

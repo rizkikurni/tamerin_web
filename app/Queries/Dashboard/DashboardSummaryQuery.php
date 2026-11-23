@@ -114,13 +114,15 @@ class DashboardSummaryQuery
     /** @return list<array{date: string, income: int, expense: int}> */
     private function cashFlow(User $user, Carbon $period): array
     {
+        $range = $user->financialCycleRange($period);
+
         $dailyTotals = Transaction::query()
             ->whereBelongsTo($user)
             ->where('status', TransactionStatus::Posted)
             ->whereIn('type', [TransactionType::Income, TransactionType::Expense])
             ->whereBetween('transacted_on', [
-                $period->copy()->startOfMonth()->toDateString(),
-                $period->copy()->endOfMonth()->toDateString(),
+                $range['start']->toDateString(),
+                $range['end']->toDateString(),
             ])
             ->select('transacted_on')
             ->selectRaw(
@@ -141,9 +143,10 @@ class DashboardSummaryQuery
             ]);
 
         $cashFlow = [];
+        $totalDays = (int) $range['start']->diffInDays($range['end']) + 1;
 
-        for ($day = 0; $day < $period->daysInMonth; $day++) {
-            $date = $period->copy()->startOfMonth()->addDays($day)->toDateString();
+        for ($day = 0; $day < $totalDays; $day++) {
+            $date = $range['start']->copy()->addDays($day)->toDateString();
             $totals = $dailyTotals->get($date, ['income' => 0, 'expense' => 0]);
 
             $cashFlow[] = [
@@ -159,12 +162,14 @@ class DashboardSummaryQuery
     /** @return array{income: int, expense: int} */
     private function periodTotals(User $user, Carbon $period): array
     {
+        $range = $user->financialCycleRange($period);
+
         $totals = Transaction::query()
             ->whereBelongsTo($user)
             ->where('status', TransactionStatus::Posted)
             ->whereBetween('transacted_on', [
-                $period->copy()->startOfMonth()->toDateString(),
-                $period->copy()->endOfMonth()->toDateString(),
+                $range['start']->toDateString(),
+                $range['end']->toDateString(),
             ])
             ->selectRaw(
                 'COALESCE(SUM(CASE WHEN type = ? THEN amount ELSE 0 END), 0) AS income',

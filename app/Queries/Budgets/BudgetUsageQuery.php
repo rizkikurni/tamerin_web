@@ -107,7 +107,7 @@ class BudgetUsageQuery
         ];
     }
 
-    /** @return list<array{value: string, label: string}> */
+    /** @return list<array{value: string, label: string, color_token: string|null, icon: string|null}> */
     public function availableCategoryOptions(User $user, CarbonInterface $period): array
     {
         $budgetedCategoryIds = Budget::query()
@@ -121,10 +121,12 @@ class BudgetUsageQuery
             ->where('type', CategoryType::Expense)
             ->whereNotIn('id', $budgetedCategoryIds)
             ->orderBy('name')
-            ->get(['id', 'name'])
+            ->get(['id', 'name', 'color_token', 'icon'])
             ->map(fn (Category $category): array => [
                 'value' => $category->id,
                 'label' => $category->name,
+                'color_token' => $category->color_token,
+                'icon' => $category->icon,
             ])
             ->values()
             ->all();
@@ -156,13 +158,15 @@ class BudgetUsageQuery
     /** @return Collection<string, int> */
     private function usageByCategory(User $user, CarbonInterface $period): Collection
     {
+        $range = $user->financialCycleRange($period);
+
         return Transaction::query()
             ->whereBelongsTo($user)
             ->where('status', TransactionStatus::Posted)
             ->where('type', TransactionType::Expense)
             ->whereBetween('transacted_on', [
-                $period->copy()->startOfMonth()->toDateString(),
-                $period->copy()->endOfMonth()->toDateString(),
+                $range['start']->toDateString(),
+                $range['end']->toDateString(),
             ])
             ->whereNotNull('category_id')
             ->select('category_id')

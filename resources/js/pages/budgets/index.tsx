@@ -1,14 +1,18 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import {
+    AlertTriangle,
     ArrowLeft,
     ArrowRight,
+    CheckCircle2,
+    Flame,
     Gauge,
+    Layers,
     PiggyBank,
     Plus,
     ReceiptText,
     Wallet,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import BudgetCard from '@/components/budgets/budget-card';
 import BudgetFormDialog from '@/components/budgets/budget-form-dialog';
@@ -19,20 +23,21 @@ import EmptyState from '@/components/ui/empty-state';
 import Pagination from '@/components/ui/pagination';
 import AppLayout from '@/layouts/app-layout';
 import { formatRupiah } from '@/lib/formatters';
+import { cn } from '@/lib/utils';
 import { index } from '@/routes/budgets';
 import type {
+    BudgetCategoryOption,
     BudgetListItem,
     BudgetSummary,
     DashboardPeriod,
     PaginatedData,
-    SelectOption,
 } from '@/types';
 
 type BudgetsIndexProps = {
     period: DashboardPeriod;
     budgets: PaginatedData<BudgetListItem>;
     summary: BudgetSummary;
-    categoryOptions: SelectOption[];
+    categoryOptions: BudgetCategoryOption[];
 };
 
 export default function BudgetsIndex({
@@ -43,10 +48,32 @@ export default function BudgetsIndex({
 }: BudgetsIndexProps) {
     const { flash } = usePage().props;
     const [creating, setCreating] = useState(false);
+    const [preselectedCategoryId, setPreselectedCategoryId] = useState<
+        string | null
+    >(null);
     const [selectedBudget, setSelectedBudget] = useState<BudgetListItem | null>(
         null,
     );
+    const [statusFilter, setStatusFilter] = useState<
+        'all' | 'safe' | 'warning' | 'over'
+    >('all');
+
     const canCreate = categoryOptions.length > 0;
+
+    const visibleBudgets = useMemo(() => {
+        if (statusFilter === 'all') {
+            return budgets.data;
+        }
+
+        if (statusFilter === 'warning') {
+            return budgets.data.filter(
+                (item) =>
+                    item.status === 'warning' || item.status === 'reached',
+            );
+        }
+
+        return budgets.data.filter((item) => item.status === statusFilter);
+    }, [budgets.data, statusFilter]);
 
     const selectPeriod = (value: string) => {
         router.get(
@@ -56,10 +83,49 @@ export default function BudgetsIndex({
         );
     };
 
+    const openCreateForCategory = (categoryId?: string) => {
+        setPreselectedCategoryId(
+            categoryId ?? categoryOptions[0]?.value ?? null,
+        );
+        setCreating(true);
+    };
+
     const closeDialog = () => {
         setCreating(false);
+        setPreselectedCategoryId(null);
         setSelectedBudget(null);
     };
+
+    const statusTabs = [
+        {
+            value: 'all' as const,
+            label: 'Semua',
+            icon: Layers,
+            activeClass:
+                'border-primary/40 bg-primary-soft text-primary shadow-[var(--control-shadow-active)]',
+        },
+        {
+            value: 'safe' as const,
+            label: 'Aman',
+            icon: CheckCircle2,
+            activeClass:
+                'border-success/40 bg-success/10 text-success shadow-[var(--control-shadow-active)]',
+        },
+        {
+            value: 'warning' as const,
+            label: 'Mendekati Batas',
+            icon: AlertTriangle,
+            activeClass:
+                'border-warning/40 bg-warning/10 text-warning shadow-[var(--control-shadow-active)]',
+        },
+        {
+            value: 'over' as const,
+            label: 'Melebihi Budget',
+            icon: Flame,
+            activeClass:
+                'border-danger/40 bg-danger/10 text-danger shadow-[var(--control-shadow-active)]',
+        },
+    ];
 
     return (
         <AppLayout
@@ -77,7 +143,7 @@ export default function BudgetsIndex({
                             ? 'Buat budget baru'
                             : 'Semua kategori pengeluaran aktif sudah memiliki budget'
                     }
-                    onClick={() => setCreating(true)}
+                    onClick={() => openCreateForCategory()}
                 >
                     <Plus className="h-4 w-4" />
                     <span className="hidden sm:inline">Buat Budget</span>
@@ -91,11 +157,19 @@ export default function BudgetsIndex({
 
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <h2 className="text-xl font-medium text-foreground">
-                            Budget {period.label}
-                        </h2>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <h2 className="text-xl font-medium text-foreground">
+                                Budget {period.label}
+                            </h2>
+                            {period.rangeLabel && (
+                                <span className="rounded-full border border-primary/20 bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
+                                    Siklus: {period.rangeLabel}
+                                </span>
+                            )}
+                        </div>
                         <p className="mt-1 text-sm font-light text-muted-foreground">
-                            Pemakaian dihitung dari transaksi pengeluaran aktif.
+                            Pemakaian dihitung dari transaksi pengeluaran aktif
+                            pada rentang siklus ini.
                         </p>
                     </div>
 
@@ -173,20 +247,43 @@ export default function BudgetsIndex({
                     />
                 </div>
 
+                {canCreate && (
+                    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-primary/15 bg-primary-soft/50 px-4 py-3">
+                        <span className="text-xs font-medium text-foreground-secondary">
+                            Belum diatur bulan ini:
+                        </span>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                            {categoryOptions.map((category) => (
+                                <button
+                                    key={category.value}
+                                    type="button"
+                                    onClick={() =>
+                                        openCreateForCategory(category.value)
+                                    }
+                                    className="inline-flex items-center gap-1 rounded-xl border border-primary/25 bg-surface px-2.5 py-1 text-xs font-medium text-primary transition-all hover:border-primary/50 hover:bg-primary-soft active:scale-95"
+                                >
+                                    <Plus className="h-3 w-3" />
+                                    {category.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {budgets.data.length === 0 ? (
                     <EmptyState
                         icon={<Wallet className="h-7 w-7 text-primary" />}
                         title="Belum ada budget bulan ini"
                         description={
                             canCreate
-                                ? 'Buat budget untuk mulai mengendalikan pengeluaran per kategori.'
+                                ? 'Pilih salah satu kategori di atas atau tekan tombol di bawah untuk mulai mengatur budget.'
                                 : 'Tambahkan kategori pengeluaran aktif terlebih dahulu sebelum membuat budget.'
                         }
                         action={
                             canCreate ? (
                                 <Button
                                     className="rounded-full"
-                                    onClick={() => setCreating(true)}
+                                    onClick={() => openCreateForCategory()}
                                 >
                                     <Plus className="h-4 w-4" />
                                     Buat budget pertama
@@ -196,11 +293,49 @@ export default function BudgetsIndex({
                     />
                 ) : (
                     <>
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div
+                                role="tablist"
+                                aria-label="Filter status budget"
+                                className="grid w-full grid-cols-2 gap-1.5 rounded-2xl border border-[var(--control-border)] bg-surface/80 p-1.5 sm:inline-grid sm:w-auto sm:grid-cols-4"
+                            >
+                                {statusTabs.map((tab) => {
+                                    const Icon = tab.icon;
+                                    const active = statusFilter === tab.value;
+
+                                    return (
+                                        <button
+                                            key={tab.value}
+                                            type="button"
+                                            role="tab"
+                                            aria-selected={active}
+                                            onClick={() =>
+                                                setStatusFilter(tab.value)
+                                            }
+                                            className={cn(
+                                                'flex min-h-9 items-center justify-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-medium transition-all duration-150',
+                                                active
+                                                    ? tab.activeClass
+                                                    : 'border-transparent text-foreground-secondary hover:bg-surface-muted hover:text-foreground',
+                                            )}
+                                        >
+                                            <Icon className="h-3.5 w-3.5 shrink-0" />
+                                            <span className="truncate">
+                                                {tab.label}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
                         <div className="grid gap-4 md:grid-cols-2">
-                            {budgets.data.map((budget) => (
+                            {visibleBudgets.map((budget) => (
                                 <BudgetCard
                                     key={budget.id}
                                     budget={budget}
+                                    periodStart={period.startDate}
+                                    periodEnd={period.endDate}
                                     onEdit={() => setSelectedBudget(budget)}
                                 />
                             ))}
@@ -218,10 +353,15 @@ export default function BudgetsIndex({
             </div>
 
             <BudgetFormDialog
+                key={
+                    selectedBudget?.id ??
+                    `create-${preselectedCategoryId ?? 'none'}-${creating ? 'open' : 'closed'}`
+                }
                 open={creating || selectedBudget !== null}
                 period={period}
                 categoryOptions={categoryOptions}
                 budget={selectedBudget}
+                initialCategoryId={preselectedCategoryId}
                 onClose={closeDialog}
             />
         </AppLayout>

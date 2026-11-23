@@ -34,7 +34,7 @@ export default function EditCategory({
         >
             <Head title={`Edit ${category.name}`} />
 
-            <Card>
+            <Card variant="navbar">
                 <CardHeader>
                     <div className="flex items-start gap-3">
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary">

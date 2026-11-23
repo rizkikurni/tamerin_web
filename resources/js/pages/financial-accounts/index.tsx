@@ -1,6 +1,7 @@
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     Archive,
+    ArrowUpRight,
     Banknote,
     Landmark,
     Pencil,
@@ -21,6 +22,7 @@ import Pagination from '@/components/ui/pagination';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { archive, create, edit, index } from '@/routes/financial-accounts';
+import { index as transactionsIndex } from '@/routes/transactions';
 import type { FinancialAccount, PaginatedData } from '@/types';
 
 const accountTypeLabels: Record<FinancialAccount['type'], string> = {
@@ -197,31 +199,47 @@ export default function FinancialAccountsIndex({
                                                         account.opened_on,
                                                     )}
                                                 </p>
-                                                {!isArchived && (
-                                                    <div className="flex gap-2">
-                                                        <IconLink
-                                                            href={edit.url(
-                                                                account.id,
-                                                            )}
-                                                            label={`Edit ${account.name}`}
-                                                            icon={
-                                                                <Pencil className="h-4 w-4" />
-                                                            }
-                                                        />
-                                                        <IconButton
-                                                            label={`Arsipkan ${account.name}`}
-                                                            variant="warning"
-                                                            onClick={() =>
-                                                                setSelectedAccount(
-                                                                    account,
-                                                                )
-                                                            }
-                                                            icon={
-                                                                <Archive className="h-4 w-4" />
-                                                            }
-                                                        />
-                                                    </div>
-                                                )}
+                                                <div className="flex items-center gap-2">
+                                                    <Link
+                                                        href={transactionsIndex.url(
+                                                            {
+                                                                query: {
+                                                                    account_id:
+                                                                        account.id,
+                                                                },
+                                                            },
+                                                        )}
+                                                        className="inline-flex h-9 items-center gap-1 rounded-xl border border-[var(--control-border)] bg-[var(--control-background)] px-2.5 text-xs font-medium text-foreground-secondary transition-colors hover:border-primary/35 hover:bg-primary-soft hover:text-primary"
+                                                    >
+                                                        <span>Mutasi</span>
+                                                        <ArrowUpRight className="h-3.5 w-3.5" />
+                                                    </Link>
+                                                    {!isArchived && (
+                                                        <>
+                                                            <IconLink
+                                                                href={edit.url(
+                                                                    account.id,
+                                                                )}
+                                                                label={`Edit ${account.name}`}
+                                                                icon={
+                                                                    <Pencil className="h-4 w-4" />
+                                                                }
+                                                            />
+                                                            <IconButton
+                                                                label={`Arsipkan ${account.name}`}
+                                                                variant="warning"
+                                                                onClick={() =>
+                                                                    setSelectedAccount(
+                                                                        account,
+                                                                    )
+                                                                }
+                                                                icon={
+                                                                    <Archive className="h-4 w-4" />
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
                                         </CardContent>
                                     </Card>

@@ -58,12 +58,15 @@ export type TransactionStatus = 'posted' | 'voided';
 export type TransactionAccountOption = {
     id: string;
     name: string;
+    type?: 'cash' | 'bank' | 'e_wallet';
 };
 
 export type TransactionCategoryOption = {
     id: string;
     name: string;
     type: 'income' | 'expense';
+    color_token?: string | null;
+    icon?: string | null;
 };
 
 export type TransactionRelation = {
@@ -73,6 +76,15 @@ export type TransactionRelation = {
 
 export type TransactionCategoryRelation = TransactionRelation & {
     type: 'income' | 'expense';
+    color_token?: string | null;
+    icon?: string | null;
+};
+
+export type TransactionSummary = {
+    totalIncome: number;
+    totalExpense: number;
+    netCashFlow: number;
+    transactionCount: number;
 };
 
 export type TransactionListItem = {
@@ -111,6 +123,11 @@ export type TransactionFilterOptions = {
 };
 
 export type BudgetStatus = 'safe' | 'warning' | 'reached' | 'over';
+
+export type BudgetCategoryOption = SelectOption & {
+    color_token?: string | null;
+    icon?: string | null;
+};
 
 export type BudgetListItem = {
     id: string;

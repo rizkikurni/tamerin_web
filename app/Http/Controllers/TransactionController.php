@@ -32,6 +32,7 @@ class TransactionController extends Controller
 
         return Inertia::render('transactions/index', [
             'transactions' => $query->paginate($user, $filters),
+            'summary' => $query->summary($user, $filters),
             'filters' => $filters,
             'filterOptions' => [
                 'types' => $this->transactionTypes(),
@@ -132,33 +133,36 @@ class TransactionController extends Controller
         ];
     }
 
-    /** @return list<array{id: string, name: string}> */
+    /** @return list<array{id: string, name: string, type: string}> */
     private function accountOptions(User $user, bool $onlyActive): array
     {
         $options = $user->financialAccounts()
             ->when($onlyActive, fn (Builder $query): Builder => $query->active())
             ->orderBy('name')
-            ->get(['id', 'name'])
+            ->get(['id', 'name', 'type'])
             ->map(fn (FinancialAccount $account): array => [
                 'id' => $account->id,
                 'name' => $account->name,
+                'type' => $account->type->value,
             ])
             ->all();
 
         return array_values($options);
     }
 
-    /** @return list<array{id: string, name: string, type: string}> */
+    /** @return list<array{id: string, name: string, type: string, color_token: string|null, icon: string|null}> */
     private function categoryOptions(User $user, bool $onlyActive): array
     {
         $options = $user->categories()
             ->when($onlyActive, fn (Builder $query): Builder => $query->active())
             ->orderBy('name')
-            ->get(['id', 'name', 'type'])
+            ->get(['id', 'name', 'type', 'color_token', 'icon'])
             ->map(fn (Category $category): array => [
                 'id' => $category->id,
                 'name' => $category->name,
                 'type' => $category->type->value,
+                'color_token' => $category->color_token,
+                'icon' => $category->icon,
             ])
             ->all();
 

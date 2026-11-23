@@ -181,6 +181,10 @@ test('transaction index is filtered and isolated by owner', function () {
             ->component('transactions/index')
             ->has('transactions.data', 1)
             ->where('transactions.data.0.id', $income->id)
+            ->where('summary.totalIncome', $income->amount)
+            ->where('summary.totalExpense', 0)
+            ->where('summary.netCashFlow', $income->amount)
+            ->where('summary.transactionCount', 1)
             ->where('filters.type', TransactionType::Income->value)
             ->where('filters.status', TransactionStatus::Posted->value));
 });

@@ -29,6 +29,7 @@ class UserPreferenceController extends Controller
                 'secondary_hex' => $preference?->secondary_hex,
                 'accent_hex' => $preference?->accent_hex,
                 'timezone' => $preference->timezone ?? 'Asia/Jakarta',
+                'financial_cycle_start_day' => $user->financialCycleStartDay(),
             ],
             'themeModes' => array_column(ThemeMode::cases(), 'value'),
             'themePresets' => array_column(ThemePreset::cases(), 'value'),

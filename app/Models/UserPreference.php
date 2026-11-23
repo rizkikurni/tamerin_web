@@ -21,10 +21,11 @@ use Illuminate\Support\Carbon;
  * @property string|null $secondary_hex
  * @property string|null $accent_hex
  * @property string $timezone
+ * @property int $financial_cycle_start_day
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['theme_mode', 'theme_preset', 'primary_hex', 'secondary_hex', 'accent_hex', 'timezone'])]
+#[Fillable(['theme_mode', 'theme_preset', 'primary_hex', 'secondary_hex', 'accent_hex', 'timezone', 'financial_cycle_start_day'])]
 class UserPreference extends Model
 {
     /** @use HasFactory<UserPreferenceFactory> */
@@ -32,6 +33,7 @@ class UserPreference extends Model
 
     protected $attributes = [
         'timezone' => 'Asia/Jakarta',
+        'financial_cycle_start_day' => 1,
     ];
 
     /** @return BelongsTo<User, $this> */
@@ -48,6 +50,7 @@ class UserPreference extends Model
         return [
             'theme_mode' => ThemeMode::class,
             'theme_preset' => ThemePreset::class,
+            'financial_cycle_start_day' => 'integer',
         ];
     }
 }

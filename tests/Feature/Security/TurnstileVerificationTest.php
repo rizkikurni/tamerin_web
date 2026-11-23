@@ -7,6 +7,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     config()->set([
+        'inertia.ssr.enabled' => false,
         'services.turnstile.enabled' => true,
         'services.turnstile.site_key' => 'test-site-key',
         'services.turnstile.secret_key' => 'test-secret-key',

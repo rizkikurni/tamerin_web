@@ -27,7 +27,10 @@ import { edit as editProfile } from '@/routes/profile';
 import { index as remindersIndex } from '@/routes/reminders';
 import { index as reportsIndex } from '@/routes/reports';
 import { index as savingsGoalsIndex } from '@/routes/savings-goals';
-import { index as transactionsIndex } from '@/routes/transactions';
+import {
+    create as createTransaction,
+    index as transactionsIndex,
+} from '@/routes/transactions';
 
 export interface NavigationItem {
     label: string;
@@ -124,7 +127,12 @@ export const sidebarNavigationGroups: NavigationItem[][] = [
 export const mobileBottomNavigationItems = [
     { kind: 'link', item: navigationItems.dashboard },
     { kind: 'link', item: navigationItems.transactions },
-    { kind: 'action', label: 'Tambah', icon: Plus },
+    {
+        kind: 'action',
+        label: 'Catat Transaksi',
+        href: createTransaction.url(),
+        icon: Plus,
+    },
     { kind: 'link', item: navigationItems.budgets },
     { kind: 'menu', label: 'Lainnya', icon: Menu },
 ] as const;

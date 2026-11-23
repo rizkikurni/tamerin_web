@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -36,6 +37,58 @@ class User extends Authenticatable
     public function preference(): HasOne
     {
         return $this->hasOne(UserPreference::class);
+    }
+
+    public function financialCycleStartDay(): int
+    {
+        $day = (int) ($this->preference->financial_cycle_start_day ?? 1);
+
+        return max(1, min(28, $day));
+    }
+
+    public function currentFinancialPeriod(?CarbonInterface $referenceDate = null): Carbon
+    {
+        $today = $referenceDate !== null
+            ? Carbon::parse($referenceDate)->startOfDay()
+            : Carbon::today();
+        $startDay = $this->financialCycleStartDay();
+
+        if ($startDay > 1 && $today->day >= $startDay) {
+            return $today->copy()->addMonthNoOverflow()->startOfMonth();
+        }
+
+        return $today->copy()->startOfMonth();
+    }
+
+    /**
+     * @return array{start: Carbon, end: Carbon, label: string}
+     */
+    public function financialCycleRange(CarbonInterface $period): array
+    {
+        $month = Carbon::parse($period)->startOfMonth();
+        $startDay = $this->financialCycleStartDay();
+
+        if ($startDay === 1) {
+            $start = $month->copy()->startOfMonth();
+            $end = $month->copy()->endOfMonth()->startOfDay();
+        } else {
+            $start = $month->copy()->subMonthNoOverflow()->day($startDay)->startOfDay();
+            $end = $month->copy()->day($startDay - 1)->startOfDay();
+        }
+
+        if ($start->year !== $end->year) {
+            $label = $start->translatedFormat('j M Y').' – '.$end->translatedFormat('j M Y');
+        } elseif ($start->month !== $end->month) {
+            $label = $start->translatedFormat('j M').' – '.$end->translatedFormat('j M Y');
+        } else {
+            $label = $start->format('j').' – '.$end->translatedFormat('j M Y');
+        }
+
+        return [
+            'start' => $start,
+            'end' => $end,
+            'label' => $label,
+        ];
     }
 
     /** @return HasMany<FinancialAccount, $this> */

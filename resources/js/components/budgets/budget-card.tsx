@@ -1,4 +1,6 @@
+import { Link } from '@inertiajs/react';
 import {
+    ArrowUpRight,
     BriefcaseBusiness,
     Car,
     CircleDollarSign,
@@ -20,6 +22,7 @@ import IconButton from '@/components/ui/icon-button';
 import Progress from '@/components/ui/progress';
 import { formatRupiah } from '@/lib/formatters';
 import { cn } from '@/lib/utils';
+import { index as transactionsIndex } from '@/routes/transactions';
 import type { BudgetListItem, BudgetStatus } from '@/types';
 
 const categoryIcons: Record<string, LucideIcon> = {
@@ -53,11 +56,27 @@ const statusConfig: Record<
     over: { label: 'Melebihi budget', variant: 'danger' },
 };
 
+function getEndOfMonthDateString(periodStart: string): string {
+    const [year, month] = periodStart.split('-').map(Number);
+
+    if (!year || !month) {
+        return periodStart;
+    }
+
+    const lastDay = new Date(Date.UTC(year, month, 0));
+
+    return lastDay.toISOString().slice(0, 10);
+}
+
 export default function BudgetCard({
     budget,
+    periodStart,
+    periodEnd,
     onEdit,
 }: {
     budget: BudgetListItem;
+    periodStart?: string;
+    periodEnd?: string;
     onEdit: () => void;
 }) {
     const Icon = categoryIcons[budget.category.icon ?? ''] ?? Tags;
@@ -65,6 +84,9 @@ export default function BudgetCard({
         colorClasses[budget.category.color_token ?? ''] ??
         'bg-surface-muted text-muted-foreground';
     const status = statusConfig[budget.status];
+    const effectiveStart = periodStart ?? budget.period_start;
+    const effectiveEnd =
+        periodEnd ?? getEndOfMonthDateString(budget.period_start);
 
     return (
         <Card
@@ -91,11 +113,27 @@ export default function BudgetCard({
                             </p>
                         </div>
                     </div>
-                    <IconButton
-                        label={`Ubah budget ${budget.category.name}`}
-                        onClick={onEdit}
-                        icon={<Pencil className="h-4 w-4" />}
-                    />
+                    <div className="flex shrink-0 items-center gap-1.5">
+                        <Link
+                            href={transactionsIndex.url({
+                                query: {
+                                    type: 'expense',
+                                    category_id: budget.category.id,
+                                    date_from: effectiveStart,
+                                    date_to: effectiveEnd,
+                                },
+                            })}
+                            className="inline-flex h-9 items-center gap-1 rounded-xl border border-[var(--control-border)] bg-[var(--control-background)] px-2.5 text-xs font-medium text-foreground-secondary transition-colors hover:border-primary/35 hover:bg-primary-soft hover:text-primary"
+                        >
+                            <span>Transaksi</span>
+                            <ArrowUpRight className="h-3.5 w-3.5" />
+                        </Link>
+                        <IconButton
+                            label={`Ubah budget ${budget.category.name}`}
+                            onClick={onEdit}
+                            icon={<Pencil className="h-4 w-4" />}
+                        />
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 rounded-2xl border border-primary/10 bg-primary-soft/40 p-3 dark:border-border/70 dark:bg-background/40">

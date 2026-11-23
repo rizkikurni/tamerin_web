@@ -23,6 +23,7 @@ import AppLayout from '@/layouts/app-layout';
 import { formatRupiah } from '@/lib/formatters';
 import { dashboard } from '@/routes';
 import { create as createAccount } from '@/routes/financial-accounts';
+import { create as createTransaction } from '@/routes/transactions';
 import type { DashboardProps } from '@/types';
 
 function comparisonLabel(
@@ -59,13 +60,25 @@ export default function DashboardIndex({
             currentPath={dashboard.url()}
             headerTitle={`Selamat datang, ${auth.user?.name ?? 'Pengguna'}`}
             headerActions={
-                <DashboardPeriodPicker
-                    key={period.value}
-                    period={period}
-                    className="dashboard-navbar-period"
-                    popupAlign="right"
-                    showChevron={false}
-                />
+                <div className="flex items-center gap-2">
+                    <DashboardPeriodPicker
+                        key={period.value}
+                        period={period}
+                        className="dashboard-navbar-period"
+                        popupAlign="right"
+                        showChevron={false}
+                    />
+                    <ButtonLink
+                        href={createTransaction.url()}
+                        size="sm"
+                        className="rounded-full px-4"
+                    >
+                        <Plus className="h-4 w-4" />
+                        <span className="hidden sm:inline">
+                            Catat Transaksi
+                        </span>
+                    </ButtonLink>
+                </div>
             }
         >
             <Head title="Dashboard" />

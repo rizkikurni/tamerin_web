@@ -29,6 +29,7 @@ class RegisterUser
                 'secondary_hex' => null,
                 'accent_hex' => null,
                 'timezone' => 'Asia/Jakarta',
+                'financial_cycle_start_day' => 1,
             ]);
 
             $this->createDefaultCategories->handle($user);

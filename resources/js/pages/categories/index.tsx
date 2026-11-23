@@ -1,6 +1,8 @@
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     Archive,
+    ArrowDownLeft,
+    ArrowUpRight,
     BriefcaseBusiness,
     Car,
     CircleDollarSign,
@@ -8,6 +10,7 @@ import {
     GraduationCap,
     HeartPulse,
     House,
+    Layers,
     Pencil,
     Plus,
     ShoppingCart,
@@ -16,7 +19,7 @@ import {
     Wallet,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { StatusMessage } from '@/components/form-controls';
 import Badge from '@/components/ui/badge';
@@ -29,6 +32,7 @@ import Pagination from '@/components/ui/pagination';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { archive, create, edit, index } from '@/routes/categories';
+import { index as transactionsIndex } from '@/routes/transactions';
 import type { Category, PaginatedData } from '@/types';
 
 const categoryIcons: Record<string, LucideIcon> = {
@@ -62,6 +66,43 @@ export default function CategoriesIndex({
         null,
     );
     const [archiving, setArchiving] = useState(false);
+    const [activeTypeFilter, setActiveTypeFilter] = useState<
+        'all' | 'expense' | 'income'
+    >('all');
+
+    const visibleCategories = useMemo(
+        () =>
+            activeTypeFilter === 'all'
+                ? categories.data
+                : categories.data.filter(
+                      (category) => category.type === activeTypeFilter,
+                  ),
+        [activeTypeFilter, categories.data],
+    );
+
+    const typeFilterTabs = [
+        {
+            value: 'all' as const,
+            label: 'Semua',
+            icon: Layers,
+            activeClass:
+                'border-primary/40 bg-primary-soft text-primary shadow-[var(--control-shadow-active)]',
+        },
+        {
+            value: 'expense' as const,
+            label: 'Pengeluaran',
+            icon: ArrowUpRight,
+            activeClass:
+                'border-danger/40 bg-danger/10 text-danger shadow-[var(--control-shadow-active)]',
+        },
+        {
+            value: 'income' as const,
+            label: 'Pemasukan',
+            icon: ArrowDownLeft,
+            activeClass:
+                'border-success/40 bg-success/10 text-success shadow-[var(--control-shadow-active)]',
+        },
+    ];
 
     const archiveSelectedCategory = () => {
         if (!selectedCategory) {
@@ -119,8 +160,43 @@ export default function CategoriesIndex({
                     />
                 ) : (
                     <>
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div
+                                role="tablist"
+                                aria-label="Filter tipe kategori"
+                                className="inline-grid grid-cols-3 gap-1.5 rounded-2xl border border-[var(--control-border)] bg-surface/80 p-1.5"
+                            >
+                                {typeFilterTabs.map((tab) => {
+                                    const Icon = tab.icon;
+                                    const active =
+                                        activeTypeFilter === tab.value;
+
+                                    return (
+                                        <button
+                                            key={tab.value}
+                                            type="button"
+                                            role="tab"
+                                            aria-selected={active}
+                                            onClick={() =>
+                                                setActiveTypeFilter(tab.value)
+                                            }
+                                            className={cn(
+                                                'flex min-h-9 items-center justify-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-medium transition-all duration-150',
+                                                active
+                                                    ? tab.activeClass
+                                                    : 'border-transparent text-foreground-secondary hover:bg-surface-muted hover:text-foreground',
+                                            )}
+                                        >
+                                            <Icon className="h-3.5 w-3.5 shrink-0" />
+                                            <span>{tab.label}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
                         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                            {categories.data.map((category) => {
+                            {visibleCategories.map((category) => {
                                 const Icon =
                                     categoryIcons[category.icon ?? ''] ?? Tags;
                                 const isArchived =
@@ -190,35 +266,52 @@ export default function CategoriesIndex({
                                                         : 'Pengeluaran'}
                                                 </Badge>
 
-                                                {!isArchived ? (
-                                                    <div className="flex shrink-0 gap-2">
-                                                        <IconLink
-                                                            href={edit.url(
-                                                                category.id,
-                                                            )}
-                                                            label={`Edit ${category.name}`}
-                                                            icon={
-                                                                <Pencil className="h-4 w-4" />
-                                                            }
-                                                        />
-                                                        <IconButton
-                                                            label={`Arsipkan ${category.name}`}
-                                                            variant="warning"
-                                                            onClick={() =>
-                                                                setSelectedCategory(
-                                                                    category,
-                                                                )
-                                                            }
-                                                            icon={
-                                                                <Archive className="h-4 w-4" />
-                                                            }
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <span className="text-xs font-light text-muted-foreground">
-                                                        Hanya histori
-                                                    </span>
-                                                )}
+                                                <div className="flex shrink-0 items-center gap-2">
+                                                    <Link
+                                                        href={transactionsIndex.url(
+                                                            {
+                                                                query: {
+                                                                    category_id:
+                                                                        category.id,
+                                                                },
+                                                            },
+                                                        )}
+                                                        className="inline-flex h-9 items-center gap-1 rounded-xl border border-[var(--control-border)] bg-[var(--control-background)] px-2.5 text-xs font-medium text-foreground-secondary transition-colors hover:border-primary/35 hover:bg-primary-soft hover:text-primary"
+                                                    >
+                                                        <span>Transaksi</span>
+                                                        <ArrowUpRight className="h-3.5 w-3.5" />
+                                                    </Link>
+
+                                                    {!isArchived ? (
+                                                        <>
+                                                            <IconLink
+                                                                href={edit.url(
+                                                                    category.id,
+                                                                )}
+                                                                label={`Edit ${category.name}`}
+                                                                icon={
+                                                                    <Pencil className="h-4 w-4" />
+                                                                }
+                                                            />
+                                                            <IconButton
+                                                                label={`Arsipkan ${category.name}`}
+                                                                variant="warning"
+                                                                onClick={() =>
+                                                                    setSelectedCategory(
+                                                                        category,
+                                                                    )
+                                                                }
+                                                                icon={
+                                                                    <Archive className="h-4 w-4" />
+                                                                }
+                                                            />
+                                                        </>
+                                                    ) : (
+                                                        <span className="text-xs font-light text-muted-foreground">
+                                                            Hanya histori
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </div>
                                         </CardContent>
                                     </Card>

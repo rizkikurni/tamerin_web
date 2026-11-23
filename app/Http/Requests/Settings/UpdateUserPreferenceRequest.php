@@ -32,6 +32,7 @@ class UpdateUserPreferenceRequest extends FormRequest
             'secondary_hex' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'accent_hex' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'timezone' => ['required', 'string', 'timezone'],
+            'financial_cycle_start_day' => ['sometimes', 'integer', 'min:1', 'max:28'],
         ];
     }
 
@@ -42,7 +43,8 @@ class UpdateUserPreferenceRequest extends FormRequest
      *     primary_hex: string|null,
      *     secondary_hex: string|null,
      *     accent_hex: string|null,
-     *     timezone: string
+     *     timezone: string,
+     *     financial_cycle_start_day: int
      * }
      */
     public function preferenceData(): array
@@ -54,6 +56,9 @@ class UpdateUserPreferenceRequest extends FormRequest
             'secondary_hex' => $this->nullableString('secondary_hex'),
             'accent_hex' => $this->nullableString('accent_hex'),
             'timezone' => $this->string('timezone')->toString(),
+            'financial_cycle_start_day' => $this->filled('financial_cycle_start_day')
+                ? $this->integer('financial_cycle_start_day')
+                : ($this->user()?->financialCycleStartDay() ?? 1),
         ];
     }
 

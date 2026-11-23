@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ChevronRight, Plus, ReceiptText } from 'lucide-react';
+import { useMemo } from 'react';
 
 import {
     formatRupiah,
@@ -18,7 +19,7 @@ import type { PaginatedData, TransactionListItem } from '@/types';
 
 function accountLabel(transaction: TransactionListItem): string {
     if (transaction.destination_account) {
-        return `${transaction.account.name} ke ${transaction.destination_account.name}`;
+        return `${transaction.account.name} → ${transaction.destination_account.name}`;
     }
 
     return transaction.account.name;
@@ -30,11 +31,90 @@ function amountLabel(transaction: TransactionListItem): string {
     return `${config.prefix}${formatRupiah(transaction.amount)}`;
 }
 
+function toLocalIsoDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
+function formatGroupDateHeading(dateString: string): string {
+    const now = new Date();
+    const todayStr = toLocalIsoDate(now);
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const yesterdayStr = toLocalIsoDate(yesterday);
+
+    const formatted = new Intl.DateTimeFormat('id-ID', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+    }).format(new Date(`${dateString}T00:00:00Z`));
+
+    if (dateString === todayStr) {
+        return `Hari ini · ${formatted}`;
+    }
+
+    if (dateString === yesterdayStr) {
+        return `Kemarin · ${formatted}`;
+    }
+
+    return formatted;
+}
+
+type TransactionDateGroup = {
+    date: string;
+    heading: string;
+    netAmount: number;
+    hasCashFlow: boolean;
+    items: TransactionListItem[];
+};
+
 export default function TransactionList({
     transactions,
 }: {
     transactions: PaginatedData<TransactionListItem>;
 }) {
+    const groupedTransactions = useMemo<TransactionDateGroup[]>(() => {
+        const groups = new Map<string, TransactionDateGroup>();
+
+        for (const item of transactions.data) {
+            const existing = groups.get(item.transacted_on);
+
+            const signedCashFlow =
+                item.status === 'posted'
+                    ? item.type === 'income'
+                        ? item.amount
+                        : item.type === 'expense'
+                          ? -item.amount
+                          : 0
+                    : 0;
+            const isCashFlow =
+                item.status === 'posted' &&
+                (item.type === 'income' || item.type === 'expense');
+
+            if (existing) {
+                existing.items.push(item);
+                existing.netAmount += signedCashFlow;
+                existing.hasCashFlow = existing.hasCashFlow || isCashFlow;
+            } else {
+                groups.set(item.transacted_on, {
+                    date: item.transacted_on,
+                    heading: formatGroupDateHeading(item.transacted_on),
+                    netAmount: signedCashFlow,
+                    hasCashFlow: isCashFlow,
+                    items: [item],
+                });
+            }
+        }
+
+        return Array.from(groups.values());
+    }, [transactions.data]);
+
     if (transactions.data.length === 0) {
         return (
             <EmptyState
@@ -53,180 +133,122 @@ export default function TransactionList({
 
     return (
         <div className="grid gap-4">
-            <Card variant="navbar" className="hidden overflow-hidden md:block">
-                <CardContent className="p-0">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="border-b border-border text-left text-xs text-muted-foreground">
-                                <th className="px-5 py-3 font-medium">
-                                    Transaksi
-                                </th>
-                                <th className="px-4 py-3 font-medium">Akun</th>
-                                <th className="px-4 py-3 font-medium">
-                                    Tanggal
-                                </th>
-                                <th className="px-4 py-3 text-right font-medium">
-                                    Nominal
-                                </th>
-                                <th className="px-4 py-3 font-medium">
-                                    Status
-                                </th>
-                                <th className="w-14 px-4 py-3">
-                                    <span className="sr-only">Detail</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border/70">
-                            {transactions.data.map((transaction) => {
+            <div className="grid gap-3">
+                {groupedTransactions.map((group) => (
+                    <Card
+                        key={group.date}
+                        variant="navbar"
+                        className="overflow-hidden"
+                    >
+                        <div className="flex items-center justify-between gap-3 border-b border-border/70 bg-background/40 px-4 py-2.5 sm:px-5">
+                            <span className="text-xs font-medium text-foreground-secondary">
+                                {group.heading}
+                            </span>
+                            {group.hasCashFlow && (
+                                <span
+                                    className={cn(
+                                        'text-xs font-medium',
+                                        group.netAmount > 0
+                                            ? 'text-success'
+                                            : group.netAmount < 0
+                                              ? 'text-danger'
+                                              : 'text-muted-foreground',
+                                    )}
+                                >
+                                    {group.netAmount > 0 ? '+' : ''}
+                                    {formatRupiah(group.netAmount)}
+                                </span>
+                            )}
+                        </div>
+
+                        <CardContent className="divide-y divide-border/60 p-0">
+                            {group.items.map((transaction) => {
                                 const config =
                                     transactionTypeConfig[transaction.type];
                                 const isVoided =
                                     transaction.status === 'voided';
+                                const title =
+                                    transaction.category?.name ?? config.label;
 
                                 return (
-                                    <tr
+                                    <Link
                                         key={transaction.id}
+                                        href={show.url(transaction.id)}
+                                        aria-label={`Lihat detail transaksi ${title} pada ${formatTransactionDate(transaction.transacted_on)}`}
                                         className={cn(
-                                            'transition-colors hover:bg-surface-muted/60',
+                                            'group flex items-center justify-between gap-3 px-4 py-3.5 transition-colors hover:bg-surface-muted/70 sm:px-5',
                                             isVoided && 'opacity-65',
                                         )}
                                     >
-                                        <td className="px-5 py-3.5">
-                                            <div className="flex items-center gap-3">
-                                                <TransactionTypeIcon
-                                                    type={transaction.type}
-                                                />
-                                                <div className="min-w-0">
-                                                    <p className="text-sm font-medium text-foreground">
-                                                        {transaction.category
-                                                            ?.name ??
-                                                            config.label}
-                                                    </p>
-                                                    <p className="max-w-48 truncate text-xs font-light text-muted-foreground">
-                                                        {transaction.note ??
-                                                            config.label}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-4 py-3.5 text-sm text-foreground-secondary">
-                                            {accountLabel(transaction)}
-                                        </td>
-                                        <td className="px-4 py-3.5 text-sm text-foreground-secondary">
-                                            {formatTransactionDate(
-                                                transaction.transacted_on,
-                                            )}
-                                        </td>
-                                        <td
-                                            className={cn(
-                                                'px-4 py-3.5 text-right text-sm font-medium',
-                                                config.amountClass,
-                                                isVoided && 'line-through',
-                                            )}
-                                        >
-                                            {amountLabel(transaction)}
-                                        </td>
-                                        <td className="px-4 py-3.5">
-                                            <Badge
-                                                variant={
-                                                    isVoided
-                                                        ? 'muted'
-                                                        : 'success'
-                                                }
-                                            >
-                                                {isVoided
-                                                    ? 'Dibatalkan'
-                                                    : 'Tercatat'}
-                                            </Badge>
-                                        </td>
-                                        <td className="px-4 py-3.5">
-                                            <Link
-                                                href={show.url(transaction.id)}
-                                                aria-label="Lihat detail transaksi"
-                                                className="inline-flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-primary-soft hover:text-primary"
-                                            >
-                                                <ChevronRight className="h-4 w-4" />
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </CardContent>
-            </Card>
-
-            <div className="grid gap-3 md:hidden">
-                {transactions.data.map((transaction) => {
-                    const config = transactionTypeConfig[transaction.type];
-                    const isVoided = transaction.status === 'voided';
-
-                    return (
-                        <Link
-                            key={transaction.id}
-                            href={show.url(transaction.id)}
-                        >
-                            <Card
-                                variant="navbar"
-                                className={cn(
-                                    'transition-[background-color,border-color,box-shadow,opacity] duration-200',
-                                    'hover:border-[var(--glass-border-strong)] hover:shadow-[var(--glass-shadow-hover)]',
-                                    isVoided && 'opacity-65',
-                                )}
-                            >
-                                <CardContent className="grid gap-3 p-4">
-                                    <div className="flex items-start justify-between gap-3">
-                                        <div className="flex min-w-0 items-center gap-3">
+                                        <div className="flex min-w-0 flex-1 items-center gap-3">
                                             <TransactionTypeIcon
                                                 type={transaction.type}
+                                                category={transaction.category}
                                             />
-                                            <div className="min-w-0">
-                                                <p className="truncate text-sm font-medium text-foreground">
-                                                    {transaction.category
-                                                        ?.name ?? config.label}
-                                                </p>
-                                                <p className="mt-0.5 truncate text-xs font-light text-muted-foreground">
-                                                    {accountLabel(transaction)}
-                                                </p>
+
+                                            <div className="min-w-0 flex-1">
+                                                <div className="flex flex-wrap items-center gap-2">
+                                                    <p className="truncate text-sm font-medium text-foreground group-hover:text-primary">
+                                                        {title}
+                                                    </p>
+                                                    {isVoided && (
+                                                        <Badge variant="muted">
+                                                            Dibatalkan
+                                                        </Badge>
+                                                    )}
+                                                </div>
+
+                                                <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-light text-muted-foreground">
+                                                    <span className="font-normal text-foreground-secondary">
+                                                        {accountLabel(
+                                                            transaction,
+                                                        )}
+                                                    </span>
+                                                    {transaction.note && (
+                                                        <>
+                                                            <span aria-hidden="true">
+                                                                ·
+                                                            </span>
+                                                            <span className="max-w-xs truncate sm:max-w-md">
+                                                                {
+                                                                    transaction.note
+                                                                }
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                        <Badge
-                                            variant={
-                                                isVoided ? 'muted' : 'success'
-                                            }
-                                        >
-                                            {isVoided
-                                                ? 'Dibatalkan'
-                                                : 'Tercatat'}
-                                        </Badge>
-                                    </div>
 
-                                    <div className="flex items-end justify-between gap-3 border-t border-border/70 pt-3">
-                                        <p className="text-xs font-light text-muted-foreground">
-                                            {formatTransactionDate(
-                                                transaction.transacted_on,
-                                            )}
-                                        </p>
-                                        <p
-                                            className={cn(
-                                                'text-sm font-medium',
-                                                config.amountClass,
-                                                isVoided && 'line-through',
-                                            )}
-                                        >
-                                            {amountLabel(transaction)}
-                                        </p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </Link>
-                    );
-                })}
+                                        <div className="flex shrink-0 items-center gap-2.5">
+                                            <div className="text-right">
+                                                <p
+                                                    className={cn(
+                                                        'text-sm font-medium sm:text-base',
+                                                        config.amountClass,
+                                                        isVoided &&
+                                                            'line-through',
+                                                    )}
+                                                >
+                                                    {amountLabel(transaction)}
+                                                </p>
+                                                <p className="text-[11px] font-light text-muted-foreground">
+                                                    {config.label}
+                                                </p>
+                                            </div>
+                                            <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-primary" />
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
 
             <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
                 <p className="text-xs font-light text-muted-foreground">
-                    Menampilkan {transactions.from}-{transactions.to} dari{' '}
+                    Menampilkan {transactions.from}–{transactions.to} dari{' '}
                     {transactions.total} transaksi
                 </p>
                 <Pagination links={transactions.links} />
