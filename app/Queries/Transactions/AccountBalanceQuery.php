@@ -10,6 +10,39 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AccountBalanceQuery
 {
+    /**
+     * @param  Builder<FinancialAccount>  $query
+     * @return Builder<FinancialAccount>
+     */
+    public function addBalanceChange(Builder $query): Builder
+    {
+        $accountIdColumn = 'financial_accounts.id';
+
+        return $query->addSelect([
+            'balance_change' => Transaction::query()
+                ->where('status', TransactionStatus::Posted)
+                ->where(function (Builder $builder) use ($accountIdColumn): void {
+                    $builder->whereColumn('account_id', $accountIdColumn)
+                        ->orWhereColumn('destination_account_id', $accountIdColumn);
+                })
+                ->selectRaw(
+                    "COALESCE(SUM(CASE
+                        WHEN type = ? AND account_id = {$accountIdColumn} THEN amount
+                        WHEN type = ? AND account_id = {$accountIdColumn} THEN -amount
+                        WHEN type = ? AND account_id = {$accountIdColumn} THEN -amount
+                        WHEN type = ? AND destination_account_id = {$accountIdColumn} THEN amount
+                        ELSE 0
+                    END), 0)",
+                    [
+                        TransactionType::Income->value,
+                        TransactionType::Expense->value,
+                        TransactionType::Transfer->value,
+                        TransactionType::Transfer->value,
+                    ],
+                ),
+        ]);
+    }
+
     public function calculate(FinancialAccount $account): int
     {
         $balanceChange = Transaction::query()

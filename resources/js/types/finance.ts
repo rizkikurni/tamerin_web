@@ -25,6 +25,7 @@ export type FinancialAccount = {
     name: string;
     type: 'cash' | 'bank' | 'e_wallet';
     opening_balance: number;
+    current_balance: number;
     opened_on: string;
     status: 'active' | 'archived';
     archived_at: string | null;

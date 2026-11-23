@@ -173,12 +173,20 @@ export default function FinancialAccountsIndex({
 
                                             <div className="grid gap-1 border-y border-border/70 py-3">
                                                 <p className="text-xs font-light text-muted-foreground">
-                                                    Saldo awal
+                                                    Saldo saat ini
                                                 </p>
-                                                <p className="mt-1 text-lg font-medium text-foreground">
+                                                <p className="mt-0.5 text-lg font-medium text-foreground">
                                                     {formatRupiah(
-                                                        account.opening_balance,
+                                                        account.current_balance,
                                                     )}
+                                                </p>
+                                                <p className="mt-1 text-xs font-light text-muted-foreground">
+                                                    Saldo awal:{' '}
+                                                    <span className="font-normal text-foreground-secondary">
+                                                        {formatRupiah(
+                                                            account.opening_balance,
+                                                        )}
+                                                    </span>
                                                 </p>
                                             </div>
 

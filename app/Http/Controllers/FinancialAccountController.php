@@ -9,6 +9,7 @@ use App\Http\Requests\StoreFinancialAccountRequest;
 use App\Http\Requests\UpdateFinancialAccountRequest;
 use App\Models\FinancialAccount;
 use App\Models\User;
+use App\Queries\Transactions\AccountBalanceQuery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -17,14 +18,28 @@ use Inertia\Response;
 
 class FinancialAccountController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, AccountBalanceQuery $balanceQuery): Response
     {
         Gate::authorize('viewAny', FinancialAccount::class);
 
         /** @var User $user */
         $user = $request->user();
 
-        $accounts = $user->financialAccounts()
+        $accounts = $balanceQuery
+            ->addBalanceChange(
+                $user->financialAccounts()
+                    ->select([
+                        'id',
+                        'name',
+                        'type',
+                        'opening_balance',
+                        'opened_on',
+                        'status',
+                        'archived_at',
+                        'created_at',
+                    ])
+                    ->getQuery(),
+            )
             ->latest()
             ->paginate(12)
             ->withQueryString()
@@ -33,6 +48,7 @@ class FinancialAccountController extends Controller
                 'name' => $account->name,
                 'type' => $account->type->value,
                 'opening_balance' => $account->opening_balance,
+                'current_balance' => $account->opening_balance + (int) $account->getAttribute('balance_change'),
                 'opened_on' => $account->opened_on->toDateString(),
                 'status' => $account->status->value,
                 'archived_at' => $account->archived_at?->toISOString(),

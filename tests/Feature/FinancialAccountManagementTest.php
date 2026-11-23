@@ -3,15 +3,33 @@
 use App\Enums\FinancialAccountStatus;
 use App\Enums\FinancialAccountType;
 use App\Models\FinancialAccount;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('users only see their own financial accounts including archived history', function () {
     $user = User::factory()->create();
-    $activeAccount = FinancialAccount::factory()->for($user)->create();
-    $archivedAccount = FinancialAccount::factory()->for($user)->archived()->create();
+    $activeAccount = FinancialAccount::factory()->for($user)->create([
+        'opening_balance' => 1_000_000,
+    ]);
+    $archivedAccount = FinancialAccount::factory()->for($user)->archived()->create([
+        'opening_balance' => 250_000,
+    ]);
     $otherAccount = FinancialAccount::factory()->create();
+
+    Transaction::factory()->income()->for($user)->create([
+        'account_id' => $activeAccount->id,
+        'amount' => 500_000,
+    ]);
+    Transaction::factory()->expense()->for($user)->create([
+        'account_id' => $activeAccount->id,
+        'amount' => 200_000,
+    ]);
+    Transaction::factory()->expense()->voided()->for($user)->create([
+        'account_id' => $activeAccount->id,
+        'amount' => 900_000,
+    ]);
 
     $this->actingAs($user)
         ->get(route('financial-accounts.index'))
@@ -19,7 +37,11 @@ test('users only see their own financial accounts including archived history', f
         ->assertInertia(fn (Assert $page) => $page
             ->component('financial-accounts/index')
             ->has('accounts.data', 2)
-            ->where('accounts.data', fn (Collection $accounts): bool => $accounts->contains('id', $activeAccount->id)
+            ->where('accounts.data', fn (Collection $accounts): bool => $accounts->contains(
+                fn (array $account): bool => $account['id'] === $activeAccount->id
+                    && $account['opening_balance'] === 1_000_000
+                    && $account['current_balance'] === 1_300_000,
+            )
                 && $accounts->contains('id', $archivedAccount->id)
                 && $accounts->doesntContain('id', $otherAccount->id)));
 });
