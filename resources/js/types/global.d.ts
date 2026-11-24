@@ -24,6 +24,7 @@ declare module '@inertiajs/core' {
                 status: string | null;
             };
             theme?: ThemePreferences | null;
+            notificationsCount?: number | null;
             [key: string]: unknown;
         };
     }

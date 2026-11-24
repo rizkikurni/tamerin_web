@@ -5,6 +5,7 @@ use App\Models\Category;
 use App\Models\FinancialAccount;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserPreference;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('report page requires authentication', function () {
@@ -111,4 +112,26 @@ test('report filter rejects invalid dates type and foreign account', function ()
             'account_id' => $foreignAccount->id,
         ]))
         ->assertInvalid(['report_type', 'date_from', 'account_id']);
+});
+
+test('report default date range follows user financial cycle preference', function () {
+    $user = User::factory()->create();
+    UserPreference::factory()->for($user)->create([
+        'financial_cycle_start_day' => 25,
+    ]);
+
+    $period = $user->currentFinancialPeriod();
+    $range = $user->financialCycleRange($period);
+
+    $this->actingAs($user)
+        ->get(route('reports.index'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('reports/index')
+            ->where('filters.date_from', $range['start']->toDateString())
+            ->where('filters.date_to', $range['end']->toDateString())
+            ->where('financialCycle.startDay', 25)
+            ->where('financialCycle.startDate', $range['start']->toDateString())
+            ->where('financialCycle.endDate', $range['end']->toDateString())
+            ->where('financialCycle.label', $range['label']));
 });

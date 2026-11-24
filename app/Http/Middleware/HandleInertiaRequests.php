@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\User;
+use App\Queries\Dashboard\SystemReminderQuery;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -65,6 +66,15 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'status' => fn (): ?string => session('status'),
             ],
+            'notificationsCount' => function () use ($request): ?int {
+                $user = $request->user();
+
+                if (! $user instanceof User) {
+                    return null;
+                }
+
+                return count(app(SystemReminderQuery::class)->get($user, today()));
+            },
             'theme' => function () use ($request): ?array {
                 $user = $request->user();
 

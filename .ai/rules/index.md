@@ -10,3 +10,4 @@ Before planning or editing, find the row whose globs match the file's path and r
 | vite.config.ts | .ai/rules/general.md |
 | resources/js/**/*.{ts,tsx} | .ai/rules/js.md |
 | resources/** | .ai/rules/resources.md |
+| **/* | .ai/rules/ci.md |

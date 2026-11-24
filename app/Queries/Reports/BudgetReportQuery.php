@@ -16,7 +16,7 @@ class BudgetReportQuery
      */
     public function get(User $user, array $filters, int $perPage = 15): array
     {
-        $period = Carbon::parse($filters['date_from'])->startOfMonth();
+        $period = $user->currentFinancialPeriod(Carbon::parse($filters['date_from']));
         $items = collect($this->budgetUsageQuery->reportItems($user, $period, $filters['category_id']))
             ->filter(
                 fn (array $row): bool => $filters['status'] === null

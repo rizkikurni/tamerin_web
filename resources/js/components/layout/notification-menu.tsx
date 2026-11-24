@@ -1,4 +1,4 @@
-import { Link, useHttp } from '@inertiajs/react';
+import { Link, useHttp, usePage } from '@inertiajs/react';
 import {
     AlertTriangle,
     Bell,
@@ -36,6 +36,10 @@ interface NotificationMenuProps {
 export default function NotificationMenu({
     triggerClassName,
 }: NotificationMenuProps = {}) {
+    const { notificationsCount } = usePage().props;
+    const initialCount =
+        typeof notificationsCount === 'number' ? notificationsCount : 0;
+
     const [open, setOpen] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [response, setResponse] = useState<SystemReminderResponse | null>(
@@ -64,10 +68,12 @@ export default function NotificationMenu({
         const nextOpen = !open;
         setOpen(nextOpen);
 
-        if (nextOpen && !loaded && !processing) {
+        if (nextOpen && (!loaded || failed) && !processing) {
             loadReminders();
         }
     };
+
+    const count = response?.count ?? initialCount;
 
     return (
         <div className="relative">
@@ -80,10 +86,10 @@ export default function NotificationMenu({
                 icon={
                     <span className="relative">
                         <Bell className="h-[17px] w-[17px]" />
-                        {(response?.count ?? 0) > 0 && (
+                        {count > 0 && (
                             <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[9px] font-medium text-white">
-                                {Math.min(response?.count ?? 0, 9)}
-                                {(response?.count ?? 0) > 9 ? '+' : ''}
+                                {Math.min(count, 9)}
+                                {count > 9 ? '+' : ''}
                             </span>
                         )}
                     </span>
@@ -117,9 +123,9 @@ export default function NotificationMenu({
                                     Hal yang perlu kamu perhatikan.
                                 </p>
                             </div>
-                            {response && response.count > 0 && (
+                            {count > 0 && (
                                 <span className="rounded-full bg-danger/10 px-2 py-1 text-xs font-medium text-danger">
-                                    {response.count} aktif
+                                    {count} aktif
                                 </span>
                             )}
                         </div>

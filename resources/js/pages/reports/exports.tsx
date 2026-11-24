@@ -1,5 +1,11 @@
 import { Head } from '@inertiajs/react';
-import { FileClock, Filter, History } from 'lucide-react';
+import {
+    FileClock,
+    FileSpreadsheet,
+    FileText,
+    Filter,
+    History,
+} from 'lucide-react';
 
 import ExportHistoryFilters from '@/components/reports/export-history-filters';
 import { ButtonLink } from '@/components/ui/button';
@@ -151,8 +157,19 @@ export default function ExportHistory({
                                                             item.report_type
                                                         ] ?? item.report_type}
                                                     </td>
-                                                    <td className="px-4 py-3 text-foreground uppercase">
-                                                        {item.format}
+                                                    <td className="px-4 py-3">
+                                                        {item.format.toLowerCase() ===
+                                                        'pdf' ? (
+                                                            <span className="inline-flex items-center gap-1 rounded-md bg-danger/10 px-2 py-0.5 text-xs font-semibold text-danger">
+                                                                <FileText className="h-3 w-3" />
+                                                                PDF
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-flex items-center gap-1 rounded-md bg-success/10 px-2 py-0.5 text-xs font-semibold text-success">
+                                                                <FileSpreadsheet className="h-3 w-3" />
+                                                                XLSX
+                                                            </span>
+                                                        )}
                                                     </td>
                                                     <td className="px-4 py-3 text-foreground">
                                                         {new Intl.NumberFormat(

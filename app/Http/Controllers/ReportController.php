@@ -17,6 +17,8 @@ class ReportController extends Controller
         /** @var User $user */
         $user = $request->user();
         $filters = $request->filters();
+        $period = $user->currentFinancialPeriod();
+        $cycleRange = $user->financialCycleRange($period);
 
         return Inertia::render('reports/index', [
             'report' => $query->get($user, $filters),
@@ -24,6 +26,12 @@ class ReportController extends Controller
             'reportOptions' => $query->reportOptions(),
             'filterOptions' => $query->filterOptions($user),
             'statusOptions' => $query->statusOptions($filters['report_type']),
+            'financialCycle' => [
+                'startDay' => $user->financialCycleStartDay(),
+                'startDate' => $cycleRange['start']->toDateString(),
+                'endDate' => $cycleRange['end']->toDateString(),
+                'label' => $cycleRange['label'],
+            ],
             'csrfToken' => csrf_token(),
         ]);
     }

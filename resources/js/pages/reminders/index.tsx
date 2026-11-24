@@ -219,6 +219,13 @@ export default function ReminderIndex({
                             statusOptions={statusOptions}
                             dueFilterOptions={dueFilterOptions}
                             onFilter={applyFilter}
+                            onReset={() =>
+                                router.get(
+                                    index.url(),
+                                    {},
+                                    { preserveScroll: true },
+                                )
+                            }
                         />
 
                         {manualReminders.data.length === 0 ? (

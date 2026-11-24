@@ -415,6 +415,13 @@ export type ReportType =
     | 'net_worth'
     | 'obligations';
 
+export type FinancialCycleInfo = {
+    startDay: number;
+    startDate: string;
+    endDate: string;
+    label: string;
+};
+
 export type ReportFilters = {
     report_type: ReportType;
     date_from: string;

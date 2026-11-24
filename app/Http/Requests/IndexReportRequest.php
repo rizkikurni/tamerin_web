@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\ExportReportType;
 use App\Models\Category;
 use App\Models\FinancialAccount;
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -61,10 +62,21 @@ class IndexReportRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $user = $this->user();
+        if ($user instanceof User) {
+            $period = $user->currentFinancialPeriod();
+            $range = $user->financialCycleRange($period);
+            $defaultDateFrom = $range['start']->toDateString();
+            $defaultDateTo = $range['end']->toDateString();
+        } else {
+            $defaultDateFrom = today()->startOfMonth()->toDateString();
+            $defaultDateTo = today()->endOfMonth()->toDateString();
+        }
+
         $this->merge([
             'report_type' => $this->input('report_type', ExportReportType::Transactions->value),
-            'date_from' => $this->input('date_from', today()->startOfMonth()->toDateString()),
-            'date_to' => $this->input('date_to', today()->endOfMonth()->toDateString()),
+            'date_from' => $this->input('date_from', $defaultDateFrom),
+            'date_to' => $this->input('date_to', $defaultDateTo),
             'account_id' => $this->filled('account_id') ? $this->input('account_id') : null,
             'category_id' => $this->filled('category_id') ? $this->input('category_id') : null,
             'status' => $this->filled('status') ? $this->input('status') : null,

@@ -12,6 +12,7 @@ import AppLayout from '@/layouts/app-layout';
 import { index } from '@/routes/reports';
 import { index as exportsIndex } from '@/routes/reports/exports';
 import type {
+    FinancialCycleInfo,
     FinancialReport,
     ReportFilterOptions,
     ReportFilters,
@@ -24,6 +25,7 @@ type ReportsIndexProps = {
     reportOptions: SelectOption[];
     filterOptions: ReportFilterOptions;
     statusOptions: SelectOption[];
+    financialCycle: FinancialCycleInfo;
     csrfToken: string;
 };
 
@@ -33,6 +35,7 @@ export default function ReportsIndex({
     reportOptions,
     filterOptions,
     statusOptions,
+    financialCycle,
     csrfToken,
 }: ReportsIndexProps) {
     return (
@@ -85,14 +88,23 @@ export default function ReportsIndex({
                             reportOptions={reportOptions}
                             filterOptions={filterOptions}
                             statusOptions={statusOptions}
+                            financialCycle={financialCycle}
                         />
                     </CardContent>
                 </Card>
 
                 <div>
-                    <h2 className="text-xl font-medium text-foreground">
-                        {report.title}
-                    </h2>
+                    <div className="flex flex-wrap items-center gap-2.5">
+                        <h2 className="text-xl font-medium text-foreground">
+                            {report.title}
+                        </h2>
+                        {financialCycle && financialCycle.startDay > 1 && (
+                            <span className="rounded-full border border-primary/25 bg-primary-soft/80 px-2.5 py-0.5 text-xs font-normal text-primary">
+                                Siklus Tgl {financialCycle.startDay} (
+                                {financialCycle.label})
+                            </span>
+                        )}
+                    </div>
                     <p className="mt-1 text-sm font-light text-muted-foreground">
                         Periode {filters.date_from} sampai {filters.date_to}
                     </p>

@@ -46,11 +46,13 @@ type TransactionFormProps = {
 };
 
 const quickAmounts = [
+    { label: '+1rb', value: 1_000 },
+    { label: '+2rb', value: 2_000 },
+    { label: '+5rb', value: 5_000 },
     { label: '+10rb', value: 10_000 },
     { label: '+20rb', value: 20_000 },
     { label: '+50rb', value: 50_000 },
     { label: '+100rb', value: 100_000 },
-    { label: '+500rb', value: 500_000 },
 ];
 
 const typeVisuals: Record<
@@ -359,6 +361,15 @@ export default function TransactionForm({
                                     {quick.label}
                                 </button>
                             ))}
+                            {amount > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={() => setAmount(0)}
+                                    className="rounded-xl border border-danger/30 bg-danger/5 px-2.5 py-1.5 text-xs font-medium text-danger transition-all hover:bg-danger/10 active:scale-95"
+                                >
+                                    Reset
+                                </button>
+                            )}
                         </div>
 
                         {errors.amount && (

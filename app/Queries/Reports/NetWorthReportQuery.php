@@ -23,7 +23,7 @@ class NetWorthReportQuery
     {
         $dashboard = $this->dashboardSummaryQuery->handle(
             $user,
-            Carbon::parse($filters['date_to'])->startOfMonth(),
+            $user->currentFinancialPeriod(Carbon::parse($filters['date_to'])),
         );
         $netWorth = $this->netWorthQuery->calculate($user, $dashboard['summary']['totalBalance']);
         $components = [
