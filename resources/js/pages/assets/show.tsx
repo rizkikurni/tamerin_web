@@ -1,6 +1,7 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import {
     Archive,
+    ArrowLeft,
     CalendarDays,
     CircleDollarSign,
     Coins,
@@ -63,6 +64,7 @@ export default function AssetShow({
                                 href={edit.url(asset.id)}
                                 variant="outline"
                                 size="sm"
+                                className="rounded-full px-3.5"
                             >
                                 <Pencil className="h-4 w-4" />
                                 <span className="hidden sm:inline">Ubah</span>
@@ -73,6 +75,7 @@ export default function AssetShow({
                                 type="button"
                                 variant="danger"
                                 size="sm"
+                                className="rounded-full px-3.5"
                                 onClick={() => setArchiveOpen(true)}
                             >
                                 <Archive className="h-4 w-4" />
@@ -87,8 +90,20 @@ export default function AssetShow({
         >
             <Head title={asset.name} />
 
-            <div className="grid w-full gap-5">
+            <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
+
+                <div>
+                    <ButtonLink
+                        href={index.url()}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-3.5 shadow-[var(--control-shadow)]"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Kembali ke Aset</span>
+                    </ButtonLink>
+                </div>
 
                 <Card variant="navbar">
                     <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-6">

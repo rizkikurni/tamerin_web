@@ -1,6 +1,6 @@
 import { Form } from '@inertiajs/react';
 import { Bell, Save, Sparkles, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TextAreaField, TextField } from '@/components/form-controls';
 import Button from '@/components/ui/button';
@@ -62,9 +62,24 @@ function ReminderFormModal({
     const [title, setTitle] = useState(reminder?.title ?? '');
     const [dueOn, setDueOn] = useState(reminder?.due_on ?? '');
 
+    useEffect(() => {
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
+    }, []);
+
+    const todayString = getTodayString();
+    const tomorrowString = getTomorrowString();
+    const threeDaysString = getDaysAhead(3);
+    const oneWeekString = getDaysAhead(7);
+    const endOfMonthString = getEndOfMonthString();
+
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overscroll-contain bg-[var(--scrim)] p-3 backdrop-blur-sm sm:p-4"
             onMouseDown={(event) => {
                 if (event.currentTarget === event.target) {
                     onClose();
@@ -75,32 +90,37 @@ function ReminderFormModal({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="reminder-form-title"
-                className="w-full max-w-lg rounded-[22px] border border-[var(--glass-border-strong)] bg-surface p-5 shadow-[var(--popup-shadow)]"
+                className="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-[22px] border border-[var(--glass-border-strong)] bg-surface p-4 shadow-[var(--popup-shadow)] sm:max-h-[90dvh] sm:p-6"
             >
-                <div className="flex items-start justify-between gap-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary">
-                        <Bell className="h-5 w-5" />
+                <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary">
+                            <Bell className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <h2
+                                id="reminder-form-title"
+                                className="text-base font-medium text-foreground sm:text-lg"
+                            >
+                                {isEditing
+                                    ? 'Ubah pengingat'
+                                    : 'Pengingat baru'}
+                            </h2>
+                            <p className="mt-0.5 text-xs leading-5 font-light text-muted-foreground sm:text-sm">
+                                Catat hal penting terkait keuangan yang perlu
+                                Anda tindak lanjuti.
+                            </p>
+                        </div>
                     </div>
                     <button
                         type="button"
                         aria-label="Tutup dialog"
                         onClick={onClose}
-                        className="rounded-full p-2 text-muted-foreground transition hover:bg-surface-muted hover:text-foreground"
+                        className="shrink-0 rounded-full p-2 text-muted-foreground transition hover:bg-surface-muted hover:text-foreground"
                     >
                         <X className="h-4 w-4" />
                     </button>
                 </div>
-
-                <h2
-                    id="reminder-form-title"
-                    className="mt-4 text-lg font-medium text-foreground"
-                >
-                    {isEditing ? 'Ubah pengingat' : 'Pengingat baru'}
-                </h2>
-                <p className="mt-1 text-sm leading-6 font-light text-muted-foreground">
-                    Catat hal penting terkait keuangan yang perlu Anda lakukan
-                    atau tindak lanjuti.
-                </p>
 
                 <Form
                     key={reminder?.id ?? 'create-reminder'}
@@ -120,7 +140,6 @@ function ReminderFormModal({
                                     placeholder="Contoh: Bayar tagihan internet bulanan"
                                     maxLength={160}
                                     required
-                                    autoFocus
                                     error={errors.title}
                                 />
                                 <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
@@ -148,24 +167,24 @@ function ReminderFormModal({
 
                             {/* Tanggal & Pintasan Waktu */}
                             <div className="grid gap-1.5">
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
                                     <label
                                         htmlFor="due_on"
                                         className="text-xs font-medium text-foreground"
                                     >
                                         Tanggal pengingat (opsional)
                                     </label>
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex flex-wrap items-center gap-1">
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                setDueOn(getTodayString())
+                                                setDueOn(todayString)
                                             }
                                             className={cn(
-                                                'rounded px-1.5 py-0.5 text-[11px] transition-colors',
-                                                dueOn === getTodayString()
-                                                    ? 'bg-primary-soft font-semibold text-primary'
-                                                    : 'text-muted-foreground hover:text-foreground',
+                                                'rounded-md px-2 py-0.5 text-[11px] transition-colors',
+                                                dueOn === todayString
+                                                    ? 'bg-primary-soft font-medium text-primary'
+                                                    : 'bg-surface-muted text-muted-foreground hover:text-foreground',
                                             )}
                                         >
                                             Hari ini
@@ -173,13 +192,13 @@ function ReminderFormModal({
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                setDueOn(getTomorrowString())
+                                                setDueOn(tomorrowString)
                                             }
                                             className={cn(
-                                                'rounded px-1.5 py-0.5 text-[11px] transition-colors',
-                                                dueOn === getTomorrowString()
-                                                    ? 'bg-primary-soft font-semibold text-primary'
-                                                    : 'text-muted-foreground hover:text-foreground',
+                                                'rounded-md px-2 py-0.5 text-[11px] transition-colors',
+                                                dueOn === tomorrowString
+                                                    ? 'bg-primary-soft font-medium text-primary'
+                                                    : 'bg-surface-muted text-muted-foreground hover:text-foreground',
                                             )}
                                         >
                                             Besok
@@ -187,27 +206,42 @@ function ReminderFormModal({
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                setDueOn(getDaysAhead(3))
+                                                setDueOn(threeDaysString)
                                             }
-                                            className="rounded px-1.5 py-0.5 text-[11px] text-muted-foreground hover:text-foreground"
+                                            className={cn(
+                                                'rounded-md px-2 py-0.5 text-[11px] transition-colors',
+                                                dueOn === threeDaysString
+                                                    ? 'bg-primary-soft font-medium text-primary'
+                                                    : 'bg-surface-muted text-muted-foreground hover:text-foreground',
+                                            )}
                                         >
                                             3 hari
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                setDueOn(getDaysAhead(7))
+                                                setDueOn(oneWeekString)
                                             }
-                                            className="rounded px-1.5 py-0.5 text-[11px] text-muted-foreground hover:text-foreground"
+                                            className={cn(
+                                                'rounded-md px-2 py-0.5 text-[11px] transition-colors',
+                                                dueOn === oneWeekString
+                                                    ? 'bg-primary-soft font-medium text-primary'
+                                                    : 'bg-surface-muted text-muted-foreground hover:text-foreground',
+                                            )}
                                         >
                                             1 minggu
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                setDueOn(getEndOfMonthString())
+                                                setDueOn(endOfMonthString)
                                             }
-                                            className="rounded px-1.5 py-0.5 text-[11px] text-muted-foreground hover:text-foreground"
+                                            className={cn(
+                                                'rounded-md px-2 py-0.5 text-[11px] transition-colors',
+                                                dueOn === endOfMonthString
+                                                    ? 'bg-primary-soft font-medium text-primary'
+                                                    : 'bg-surface-muted text-muted-foreground hover:text-foreground',
+                                            )}
                                         >
                                             Akhir bln
                                         </button>
@@ -215,7 +249,7 @@ function ReminderFormModal({
                                             <button
                                                 type="button"
                                                 onClick={() => setDueOn('')}
-                                                className="rounded px-1.5 py-0.5 text-[11px] text-danger"
+                                                className="rounded-md px-2 py-0.5 text-[11px] text-danger"
                                             >
                                                 Hapus
                                             </button>

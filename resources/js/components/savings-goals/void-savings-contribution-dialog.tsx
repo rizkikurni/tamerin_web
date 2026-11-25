@@ -17,12 +17,12 @@ export default function VoidSavingsContributionDialog({
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overscroll-contain bg-[var(--scrim)] p-4 backdrop-blur-sm">
             <div
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="void-contribution-title"
-                className="w-full max-w-md rounded-3xl border border-[var(--glass-border-strong)] bg-surface p-5 shadow-[var(--popup-shadow)]"
+                className="my-auto max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto overscroll-contain rounded-3xl border border-[var(--glass-border-strong)] bg-surface p-5 shadow-[var(--popup-shadow)]"
             >
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-danger/10 text-danger">

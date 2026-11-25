@@ -25,7 +25,7 @@ class FinancialAccountFactory extends Factory
             'name' => fake()->unique()->words(2, true),
             'type' => fake()->randomElement(FinancialAccountType::cases()),
             'opening_balance' => fake()->numberBetween(0, 50_000_000),
-            'opened_on' => fake()->dateTimeBetween('-5 years')->format('Y-m-d'),
+            'opened_on' => fake()->dateTimeBetween(now()->subYears(5), now())->format('Y-m-d'),
             'status' => FinancialAccountStatus::Active,
             'archived_at' => null,
         ];

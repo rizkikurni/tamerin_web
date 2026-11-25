@@ -89,6 +89,18 @@ export default function TransactionShow({
             <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
 
+                <div>
+                    <ButtonLink
+                        href={index.url()}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-3.5 shadow-[var(--control-shadow)]"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Kembali ke Transaksi</span>
+                    </ButtonLink>
+                </div>
+
                 <Card variant="navbar">
                     <CardContent className="grid gap-5 p-5 sm:p-6">
                         <div className="flex flex-col gap-4 border-b border-border/70 pb-5 sm:flex-row sm:items-start sm:justify-between">
@@ -185,17 +197,8 @@ export default function TransactionShow({
                             </div>
                         )}
 
-                        <div className="flex flex-col-reverse gap-2 border-t border-border/70 pt-5 sm:flex-row sm:justify-between">
-                            <ButtonLink
-                                href={index.url()}
-                                variant="outline"
-                                size="sm"
-                            >
-                                <ArrowLeft className="h-4 w-4" />
-                                Kembali ke Transaksi
-                            </ButtonLink>
-
-                            {transaction.can_void && (
+                        {transaction.can_void && (
+                            <div className="flex justify-end border-t border-border/70 pt-5">
                                 <Button
                                     type="button"
                                     variant="danger"
@@ -205,8 +208,8 @@ export default function TransactionShow({
                                     <Ban className="h-4 w-4" />
                                     Batalkan Transaksi
                                 </Button>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
             </div>

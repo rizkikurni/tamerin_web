@@ -1,6 +1,7 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import {
     Archive,
+    ArrowLeft,
     CalendarDays,
     CheckCircle2,
     Pencil,
@@ -98,6 +99,7 @@ export default function SavingsGoalShow({
                                 href={edit.url(goal.id)}
                                 variant="outline"
                                 size="sm"
+                                className="rounded-full px-3.5"
                             >
                                 <Pencil className="h-4 w-4" />
                                 <span className="hidden sm:inline">Ubah</span>
@@ -108,6 +110,7 @@ export default function SavingsGoalShow({
                                 type="button"
                                 variant="danger"
                                 size="sm"
+                                className="rounded-full px-3.5"
                                 onClick={() => setShowArchiveDialog(true)}
                             >
                                 <Archive className="h-4 w-4" />
@@ -122,8 +125,20 @@ export default function SavingsGoalShow({
         >
             <Head title={goal.name} />
 
-            <div className="grid w-full gap-5">
+            <div className="grid w-full gap-4">
                 <StatusMessage message={flash.status} />
+
+                <div>
+                    <ButtonLink
+                        href={index.url()}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-3.5 shadow-[var(--control-shadow)]"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Kembali ke Target Tabungan</span>
+                    </ButtonLink>
+                </div>
 
                 <Card variant="navbar">
                     <CardContent className="grid gap-5 p-5 sm:p-6">

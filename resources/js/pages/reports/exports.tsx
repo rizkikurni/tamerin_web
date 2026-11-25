@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import {
+    ArrowLeft,
     FileClock,
     FileSpreadsheet,
     FileText,
@@ -55,20 +56,22 @@ export default function ExportHistory({
                 { label: 'Riwayat Export' },
             ]}
             currentPath={index.url()}
-            headerActions={
-                <ButtonLink
-                    href={reportsIndex.url()}
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full px-4"
-                >
-                    Kembali ke Laporan
-                </ButtonLink>
-            }
         >
             <Head title="Riwayat Export" />
 
-            <div className="grid w-full gap-5">
+            <div className="grid w-full gap-4">
+                <div>
+                    <ButtonLink
+                        href={reportsIndex.url()}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-3.5 shadow-[var(--control-shadow)]"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Kembali ke Laporan</span>
+                    </ButtonLink>
+                </div>
+
                 <Card variant="navbar">
                     <CardHeader>
                         <div className="flex items-center gap-3">

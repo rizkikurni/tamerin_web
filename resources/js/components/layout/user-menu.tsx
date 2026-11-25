@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { LogOut, Settings, User } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { logout } from '@/routes';
@@ -48,8 +48,38 @@ interface UserMenuProps {
 }
 
 export default function UserMenu({ triggerClassName }: UserMenuProps = {}) {
+    const containerRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
     const user = usePage().props.auth.user;
+
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        const handlePointerDown = (event: PointerEvent) => {
+            if (
+                containerRef.current &&
+                !containerRef.current.contains(event.target as Node)
+            ) {
+                setOpen(false);
+            }
+        };
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener('pointerdown', handlePointerDown);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('pointerdown', handlePointerDown);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [open]);
 
     if (!user) {
         return null;
@@ -58,7 +88,7 @@ export default function UserMenu({ triggerClassName }: UserMenuProps = {}) {
     const initials = getUserInitials(user.name);
 
     return (
-        <div className="relative z-50">
+        <div ref={containerRef} className="relative z-50">
             <button
                 type="button"
                 onClick={() => setOpen((currentOpen) => !currentOpen)}
@@ -85,58 +115,49 @@ export default function UserMenu({ triggerClassName }: UserMenuProps = {}) {
             </button>
 
             {open && (
-                <>
-                    <div
-                        className="fixed inset-0 z-50"
+                <div
+                    role="menu"
+                    className={cn(
+                        'absolute top-full right-0 z-50 mt-2.5 w-56 max-w-[calc(100vw-1.5rem)] rounded-2xl sm:mt-3',
+                        'border border-[var(--glass-border-strong)] bg-surface p-1.5',
+                        'shadow-[var(--popup-shadow)]',
+                    )}
+                >
+                    <div className="mb-1.5 border-b border-border px-3 py-2.5">
+                        <p className="truncate text-sm font-medium text-foreground">
+                            {user.name}
+                        </p>
+                        <p className="truncate text-xs text-muted-foreground">
+                            {user.email}
+                        </p>
+                    </div>
+
+                    <UserMenuLink
+                        href={editProfile.url()}
+                        icon={User}
+                        label="Profil"
                         onClick={() => setOpen(false)}
-                        aria-hidden="true"
+                    />
+                    <UserMenuLink
+                        href={editPreferences.url()}
+                        icon={Settings}
+                        label="Pengaturan"
+                        onClick={() => setOpen(false)}
                     />
 
-                    <div
-                        role="menu"
-                        className={cn(
-                            'absolute top-full right-0 z-50 mt-4 w-56 rounded-2xl',
-                            'border border-[var(--glass-border)] bg-surface/95 p-1.5',
-                            'shadow-[var(--popup-shadow)]',
-                            'backdrop-blur-xl',
-                        )}
+                    <div className="my-1.5 border-t border-border" />
+
+                    <Link
+                        href={logout()}
+                        as="button"
+                        role="menuitem"
+                        onClick={() => setOpen(false)}
+                        className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-danger transition-colors hover:bg-danger/10"
                     >
-                        <div className="mb-1.5 border-b border-border px-3 py-2.5">
-                            <p className="text-sm font-medium text-foreground">
-                                {user.name}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                                {user.email}
-                            </p>
-                        </div>
-
-                        <UserMenuLink
-                            href={editProfile.url()}
-                            icon={User}
-                            label="Profil"
-                            onClick={() => setOpen(false)}
-                        />
-                        <UserMenuLink
-                            href={editPreferences.url()}
-                            icon={Settings}
-                            label="Pengaturan"
-                            onClick={() => setOpen(false)}
-                        />
-
-                        <div className="my-1.5 border-t border-border" />
-
-                        <Link
-                            href={logout()}
-                            as="button"
-                            role="menuitem"
-                            onClick={() => setOpen(false)}
-                            className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-danger transition-colors hover:bg-danger/10"
-                        >
-                            <LogOut className="h-4 w-4" />
-                            Keluar
-                        </Link>
-                    </div>
-                </>
+                        <LogOut className="h-4 w-4" />
+                        Keluar
+                    </Link>
+                </div>
             )}
         </div>
     );

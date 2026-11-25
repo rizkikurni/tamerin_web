@@ -1,6 +1,8 @@
 import { Head } from '@inertiajs/react';
+import { ArrowLeft } from 'lucide-react';
 
 import AssetForm from '@/components/assets/asset-form';
+import { ButtonLink } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { index, show } from '@/routes/assets';
 import type { AssetFormData, SelectOption } from '@/types';
@@ -25,7 +27,19 @@ export default function AssetEdit({
             currentPath={index.url()}
         >
             <Head title={`Ubah ${asset.name}`} />
-            <div className="w-full">
+            <div className="grid w-full gap-4">
+                <div>
+                    <ButtonLink
+                        href={show.url(asset.id)}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-3.5 shadow-[var(--control-shadow)]"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Kembali ke Detail Aset</span>
+                    </ButtonLink>
+                </div>
+
                 <AssetForm asset={asset} assetTypeOptions={assetTypeOptions} />
             </div>
         </AppLayout>

@@ -1,6 +1,8 @@
 import { Head } from '@inertiajs/react';
+import { ArrowLeft } from 'lucide-react';
 
 import SavingsGoalForm from '@/components/savings-goals/savings-goal-form';
+import { ButtonLink } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { create, index } from '@/routes/savings-goals';
 
@@ -18,7 +20,19 @@ export default function SavingsGoalCreate() {
         >
             <Head title="Buat Target Tabungan" />
 
-            <div className="w-full">
+            <div className="grid w-full gap-4">
+                <div>
+                    <ButtonLink
+                        href={index.url()}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-3.5 shadow-[var(--control-shadow)]"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Kembali ke Target Tabungan</span>
+                    </ButtonLink>
+                </div>
+
                 <SavingsGoalForm />
             </div>
         </AppLayout>

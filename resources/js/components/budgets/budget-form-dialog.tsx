@@ -139,7 +139,7 @@ export default function BudgetFormDialog({
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overscroll-contain bg-[var(--scrim)] p-3 backdrop-blur-sm sm:p-4"
             onMouseDown={(event) => {
                 if (event.currentTarget === event.target) {
                     onClose();
@@ -150,7 +150,7 @@ export default function BudgetFormDialog({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="budget-form-title"
-                className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-[24px] border border-[var(--glass-border-strong)] bg-surface p-5 shadow-[var(--popup-shadow)] sm:p-6"
+                className="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-xl overflow-y-auto overscroll-contain rounded-[24px] border border-[var(--glass-border-strong)] bg-surface p-4 shadow-[var(--popup-shadow)] sm:max-h-[90dvh] sm:p-6"
             >
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">

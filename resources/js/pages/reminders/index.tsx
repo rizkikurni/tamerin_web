@@ -142,6 +142,7 @@ export default function ReminderIndex({
                 >
                     <Plus className="h-4 w-4" />
                     <span className="hidden sm:inline">Tambah Pengingat</span>
+                    <span className="sm:hidden">Tambah</span>
                 </Button>
             }
         >
