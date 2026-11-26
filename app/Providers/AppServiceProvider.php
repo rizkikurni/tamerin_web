@@ -54,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
             Str::lower($request->string('email')->toString()).'|'.$request->ip(),
         ));
 
+        RateLimiter::for('telegram-webhook', fn (Request $request): Limit => Limit::perMinute(120)->by(
+            'telegram-webhook:'.($request->ip() ?? 'unknown'),
+        ));
+
         DB::prohibitDestructiveCommands(
             app()->isProduction(),
         );

@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read UserPreference|null $preference
+ * @property-read TelegramConnection|null $telegramConnection
  */
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -37,6 +38,12 @@ class User extends Authenticatable
     public function preference(): HasOne
     {
         return $this->hasOne(UserPreference::class);
+    }
+
+    /** @return HasOne<TelegramConnection, $this> */
+    public function telegramConnection(): HasOne
+    {
+        return $this->hasOne(TelegramConnection::class);
     }
 
     public function financialCycleStartDay(): int

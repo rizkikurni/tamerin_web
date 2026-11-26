@@ -36,7 +36,7 @@ const settingsMenuItems: SettingsMenuItem[] = [
     },
     {
         label: 'Preferensi',
-        description: 'Tema dan zona waktu',
+        description: 'Tema, siklus, dan Telegram',
         href: preferencesEdit.url(),
         icon: Palette,
     },

@@ -30,6 +30,7 @@ use App\Http\Controllers\SavingsGoalController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\TelegramIntegrationController;
 use App\Http\Controllers\Settings\UserPreferenceController;
 use App\Http\Controllers\SystemReminderController;
 use App\Http\Controllers\TransactionController;
@@ -146,5 +147,12 @@ Route::middleware('auth')->group(function (): void {
 
         Route::get('/preferences', [UserPreferenceController::class, 'edit'])->name('preferences.edit');
         Route::patch('/preferences', [UserPreferenceController::class, 'update'])->name('preferences.update');
+
+        Route::post('/telegram/link-token', [TelegramIntegrationController::class, 'generateLinkToken'])
+            ->name('telegram.link-token');
+        Route::patch('/telegram', [TelegramIntegrationController::class, 'update'])
+            ->name('telegram.update');
+        Route::delete('/telegram', [TelegramIntegrationController::class, 'destroy'])
+            ->name('telegram.destroy');
     });
 });
